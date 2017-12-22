@@ -1,2 +1,5 @@
+mrggsave.Rcheck
+Makefile
+test.R
 ^.*\.Rproj$
 ^\.Rproj\.user$
