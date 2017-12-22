@@ -24,13 +24,13 @@ mrggsave(x, ...)
 \method{mrggsave}{ggplot}(x, script, stem = "Rplot",
   dir = "../deliv/figure", prefix = gsub("^\\\\.\\\\./", "./", dir),
   onefile = TRUE, arrange = FALSE, labsep = "\\n", fontsize = 7,
-  textGrob.x = 0.01, textGrob.y = 1, margin = c(0.1, 0.1, 0.7, 0.1),
+  textGrob.x = 0.01, textGrob.y = 1, margin = c(0.1, 0.2, 0.7, 0.1),
   unit = "cm", draw = FALSE, nosave = FALSE, ...)
 
 \method{mrggsave}{ggmatrix}(x, script, stem = "Rplot",
   dir = "../deliv/figure", prefix = gsub("^\\\\.\\\\./", "./", dir),
   onefile = TRUE, arrange = FALSE, labsep = "\\n", fontsize = 7,
-  textGrob.x = 0.01, textGrob.y = 1, margin = c(0.1, 0.1, 0.7, 0.1),
+  textGrob.x = 0.01, textGrob.y = 1, margin = c(0.1, 0.2, 0.7, 0.1),
   unit = "cm", draw = FALSE, nosave = FALSE, ...)
 
 mrggdraw(...)
@@ -83,9 +83,12 @@ Save plot objects as .pdf file after labeling with Source graphic and Source cod
 }
 }
 \examples{
-
 data(Theoph)
 require(ggplot2)
+
+x <- runif(1000,10,100)
+y <- 0.3*x + rnorm(length(x),0,20)
+data <- data.frame(x = x, y = y)
 
 Script <- "example.R"
 
@@ -106,5 +109,10 @@ mrggsave(list(p1,p2), Script, "separate_files", onefile=FALSE, dir=dir)
 mrggsave(p1, Script, "different_shape", width=10, height=4, dir=dir)
 
 mrggsave(list(p1,p2), Script, "onepage", dir=dir, arrange=TRUE, nrow=1, ncol=2)
+
+require(GGally)
+
+p3 <- ggpairs(data)
+mrggsave(p3, Script, "ggally_plot", dir = dir)
 
 }

@@ -31,9 +31,12 @@ is_glist <- function(x) "gList" %in% class(x)
 ##' }
 ##'
 ##' @examples
-##'
 ##' data(Theoph)
 ##' require(ggplot2)
+##'
+##' x <- runif(1000,10,100)
+##' y <- 0.3*x + rnorm(length(x),0,20)
+##' data <- data.frame(x = x, y = y)
 ##'
 ##' Script <- "example.R"
 ##'
@@ -55,6 +58,11 @@ is_glist <- function(x) "gList" %in% class(x)
 ##'
 ##' mrggsave(list(p1,p2), Script, "onepage", dir=dir, arrange=TRUE, nrow=1, ncol=2)
 ##'
+##' require(GGally)
+##'
+##' p3 <- ggpairs(data)
+##' mrggsave(p3, Script, "ggally_plot", dir = dir)
+##'
 ##' @export
 mrggsave <- function(x,...) UseMethod("mrggsave")
 
@@ -72,7 +80,9 @@ mrggsave.trellis <- function(x,
                              unit = "cm",
                              draw = FALSE,
                              nosave=FALSE,...) {
-  if(arrange) stop("cannon't arrange trellis plots", call. = FALSE)
+
+  if(arrange) warning("cannon't arrange trellis plots")
+
   if(!requireNamespace("grid")) stop("could not load grid", call.=FALSE)
   if(!requireNamespace("gridExtra")) stop("could not load gridExtra package", call.=FALSE)
   if(!requireNamespace("ggplot2")) stop("could not load ggplot package", call.=FALSE)
@@ -160,11 +170,11 @@ mrggsave.ggplot <- function(x,
                             onefile=TRUE,arrange=FALSE,labsep = "\n",
                             fontsize = 7,
                             textGrob.x = 0.01, textGrob.y = 1,
-                            margin = c(0.1, 0.1, 0.7, 0.1),
+                            margin = c(0.1, 0.2, 0.7, 0.1),
                             unit = "cm",
                             draw = FALSE,
                             nosave=FALSE,...) {
-  print("ggplot")
+
   if(!requireNamespace("grid")) stop("could not load grid", call.=FALSE)
   if(!requireNamespace("gridExtra")) stop("could not load gridExtra package", call.=FALSE)
   if(!requireNamespace("ggplot2")) stop("could not load ggplot package", call.=FALSE)
@@ -253,11 +263,12 @@ mrggsave.ggmatrix <- function(x,
                               onefile=TRUE,arrange=FALSE,labsep = "\n",
                               fontsize = 7,
                               textGrob.x = 0.01, textGrob.y = 1,
-                              margin = c(0.1, 0.1, 0.7, 0.1),
+                              margin = c(0.1, 0.2, 0.7, 0.1),
                               unit = "cm",
                               draw = FALSE,
                               nosave=FALSE,...) {
-  print("ggmatrix")
+
+  if(arrange) warning("cannon't arrange trellis plots")
   if(!requireNamespace("grid")) stop("could not load grid", call.=FALSE)
   if(!requireNamespace("gridExtra")) stop("could not load gridExtra package", call.=FALSE)
   if(!requireNamespace("ggplot2")) stop("could not load ggplot package", call.=FALSE)
@@ -274,7 +285,6 @@ mrggsave.ggmatrix <- function(x,
   x <- GGally::ggmatrix_gtable(x)
   x <- gtable::gtable_add_padding(x,unit(margin, unit))
 
-
   if(!inherits(x,"list")) x <- list(x)
 
   n  <- length(x)
@@ -282,12 +292,12 @@ mrggsave.ggmatrix <- function(x,
   if(!onefile) {
     pdffile <- paste(file.path(dir,stem), "%03d.pdf", sep="")
     file <- paste(file.path(prefix,stem), sprintf("%03d", 1:n), ".pdf",sep="")
-    outfile <- sprintf(pdffile, 1:n)
+    outfile <- sprintf(pdffile, seq_len(n))
   } else {
     pdffile <- paste(file.path(dir,stem), ".pdf", sep="")
     file <- paste(file.path(prefix,stem), ".pdf", sep="")
     outfile <- pdffile
-    if(n>1) file <-  paste(file, "page:", 1:n)
+    if(n>1) file <-  paste(file, "page:", seq_len(n))
   }
 
   label <- paste("Source code: ", script, labsep,"Source graphic: ", file,sep="")
