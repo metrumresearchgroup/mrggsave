@@ -18,10 +18,10 @@ is_glist <- function(x) "gList" %in% class(x)
 ##' @param margin numeric vector of length 4 or 1 to set top, right, bottom, left margin
 ##' @param unit unit to go along with margin sizes
 ##' @param nosave logical; if \code{TRUE}, return the labeled objects
-##' @param ... other arguments passed to \code{\link{pdf}} or \code{arrangeGrob}
 ##' @param arrange logical; if \code{TRUE}, arrange the ggplot objects on a single page with \code{arrangeGrob}
 ##' @param labsep character separator (or newline) for Source code and Source graphic labels
 ##' @param draw if \code{TRUE}, the image is printed but not saved
+##' @param ... other arguments passed to \code{\link{pdf}} or \code{arrangeGrob}
 ##'
 ##' @details
 ##' \itemize{

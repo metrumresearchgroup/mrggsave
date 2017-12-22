@@ -1,3 +1,4 @@
+^.*.tar.gz$
 mrggsave.Rcheck
 Makefile
 test.R
