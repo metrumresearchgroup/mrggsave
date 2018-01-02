@@ -44,8 +44,8 @@ mrggsave(p2, Script, "myggpairsplot", dir = dir)
 The saved plot can be seen [here](inst/img/myggpairsplot.pdf) and will look like:
 
 ``` r
-mrggdraw(list(p,p,p), Script,  "myggpairsplot", 
-         arrange = TRUE, ncol = 3, dir = dir, 
+mrggdraw(p2, Script,  "myggpairsplot", 
+         dir = dir, 
          save = TRUE)
 ```
 
