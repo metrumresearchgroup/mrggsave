@@ -18,7 +18,8 @@ Plots get drawn with annotations
 ================================
 
 ``` r
-p <- ggplot(data = data, aes(x,y)) + geom_point()
+p <- ggplot(data = data, aes(x,y)) + geom_point() +
+  xlab("The x-axis title here (units)")
 
 mrggdraw(p, Script, "ggplot")
 ```
