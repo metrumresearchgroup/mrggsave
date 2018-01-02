@@ -41,28 +41,25 @@ p2 <- ggpairs(data)
 mrggsave(p2, Script, "myggpairsplot", dir = dir)
 ```
 
-The saved image
----------------
-
-<img src = "inst/img/myggpairsplot.pdf" width = "500px"></img>
-
-Arrange and save
-================
+The saved plot can be seen [here](inst/img/myggpairsplot.pdf) and will look like:
 
 ``` r
-mrggsave(list(p,p,p), Script,  "arranged", arrange = TRUE, ncol = 3, dir = dir)
+mrggdraw(list(p,p,p), Script,  "myggpairsplot", 
+         arrange = TRUE, ncol = 3, dir = dir, 
+         save = TRUE)
 ```
 
-The saved image
----------------
+![](inst/img/readme-unnamed-chunk-6-1.png)
 
-<img src = "inst/img/arranged.pdf" width = "500px"></img>
+Arrange plots on a page
+=======================
 
-Arrange and save
-----------------
+The saved plot can be seen [here](inst/img/arranged.pdf) and will look like:
 
 ``` r
-mrggdraw(list(p,p,p), Script, arrange = TRUE, ncol = 3, save = TRUE, dir = dir)
+mrggdraw(list(p,p,p), Script,  "arranged", 
+         arrange = TRUE, ncol = 3, dir = dir, 
+         save = TRUE)
 ```
 
 ![](inst/img/readme-unnamed-chunk-7-1.png)
