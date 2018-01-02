@@ -44,11 +44,8 @@ mrggsave(p2, Script, "myggpairsplot", dir = dir)
 The saved image
 ---------------
 
-``` r
-knitr::include_graphics("inst/img/myggpairsplot.pdf")
-```
+<img src = "inst/img/myggpairsplot.pdf", width = "500px"></img>
 
-<embed src="inst/img/myggpairsplot.pdf" width="700" height="700" type="application/pdf" />
 Arrange and save
 ================
 
@@ -59,11 +56,8 @@ mrggsave(list(p,p,p), Script,  "arranged", arrange = TRUE, ncol = 3, dir = dir)
 The saved image
 ---------------
 
-``` r
-knitr::include_graphics("inst/img/arranged.pdf")
-```
+<img src = "inst/img/arranged.pdf", width = "500px"></img>
 
-<embed src="inst/img/arranged.pdf" width="700" height="700" type="application/pdf" />
 Arrange and save
 ----------------
 
@@ -71,4 +65,4 @@ Arrange and save
 mrggdraw(list(p,p,p), Script, arrange = TRUE, ncol = 3, save = TRUE, dir = dir)
 ```
 
-![](inst/img/readme-unnamed-chunk-9-1.png)
+![](inst/img/readme-unnamed-chunk-7-1.png)
