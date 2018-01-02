@@ -330,8 +330,8 @@ mrggsave.ggmatrix <- function(x,
 
 ##' @export
 ##' @rdname mrggsave
-mrggdraw <- function(...) {
-  mrggsave(..., draw=TRUE, save=FALSE)
+mrggdraw <- function(..., save = FALSE) {
+  mrggsave(..., draw=TRUE, save = save)
 }
 
 ##' @rdname mrggsave
