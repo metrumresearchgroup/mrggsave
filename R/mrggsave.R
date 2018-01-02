@@ -308,10 +308,14 @@ mrggsave.ggmatrix <- function(x,
   }
 
   if(draw) {
-    x <- x[[1]]
-    grid.draw(x)
+    if(is_glist(x)) {
+      grid.draw(x)
+    } else {
+      lapply(x,grid.draw)
+    }
     return(invisible(x))
   }
+
 
   if(nosave) return(invisible(x))
 
@@ -331,7 +335,7 @@ mrggsave.ggmatrix <- function(x,
 ##' @export
 ##' @rdname mrggsave
 mrggdraw <- function(..., save = FALSE) {
-  mrggsave(..., draw=TRUE, save = save)
+  mrggsave(..., draw = TRUE, save = save)
 }
 
 ##' @rdname mrggsave
