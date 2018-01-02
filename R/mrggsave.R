@@ -1,33 +1,34 @@
 
 is_glist <- function(x) "gList" %in% class(x)
 
-##' Save plot objects as .pdf file after labeling with Source graphic and Source code labels.
-##'
-##'
-##'
+##' Save plot objects as .pdf file after labeling with Source graphic and
+##' Source code labels
 ##'
 ##' @param x an object or list of objects of class \code{gg}
 ##' @param script the name of the script generating the \code{gg} objects
 ##' @param stem to form the name of the output \code{.pdf} file
 ##' @param dir output directory for \code{.pdf} file
-##' @param prefix gets prepended to the output file path in the Source graphic label
+##' @param prefix gets prepended to the output file path in the Source graphic
+##' label
 ##' @param onefile passed to \code{\link{pdf}}
 ##' @param fontsize for Source graphic and Source code labels
 ##' @param textGrob.x passed to \code{textGrob} (as \code{x})
 ##' @param textGrob.y passed to \code{textGrob} (as \code{y})
-##' @param margin numeric vector of length 4 or 1 to set top, right, bottom, left margin
+##' @param margin numeric vector of length 4 or 1 to set top, right, bottom,
+##' left margin
 ##' @param unit unit to go along with margin sizes
 ##' @param nosave logical; if \code{TRUE}, return the labeled objects
-##' @param arrange logical; if \code{TRUE}, arrange the ggplot objects on a single page with \code{arrangeGrob}
-##' @param labsep character separator (or newline) for Source code and Source graphic labels
+##' @param arrange logical; if \code{TRUE}, arrange the ggplot objects on a
+##' single page with \code{arrangeGrob}
+##' @param labsep character separator (or newline) for Source code and Source
+##' graphic labels
 ##' @param draw if \code{TRUE}, the image is printed but not saved
 ##' @param ... other arguments passed to \code{\link{pdf}} or \code{arrangeGrob}
 ##'
 ##' @details
 ##' \itemize{
-##'   \item This function will \code{\link{require}} the \code{gridExtra} package
-##'
-##'
+##'   \item This function will \code{\link{require}} the \code{gridExtra}
+##'   package
 ##' }
 ##'
 ##' @examples
@@ -40,9 +41,11 @@ is_glist <- function(x) "gList" %in% class(x)
 ##'
 ##' Script <- "example.R"
 ##'
-##' ## NOTE: see default value for dir argument, which should be appropriate for project work
-##' ## Changing it here only for the example
-##' dir <- "."
+##' # NOTE: see default value for dir argument, which should be appropriate
+##' # for project work
+##'
+##' # Changing it here only for the example
+##' dir <- tempdir()
 ##'
 ##'
 ##' p1 <- ggplot(data=Theoph) + geom_line(aes(x=Time, y=conc, group=Subject))
@@ -81,12 +84,6 @@ mrggsave.trellis <- function(x,
                              draw = FALSE,
                              nosave=FALSE,...) {
 
-  if(arrange) warning("cannon't arrange trellis plots")
-
-  if(!requireNamespace("grid")) stop("could not load grid", call.=FALSE)
-  if(!requireNamespace("gridExtra")) stop("could not load gridExtra package", call.=FALSE)
-  if(!requireNamespace("ggplot2")) stop("could not load ggplot package", call.=FALSE)
-
   if(length(margin)!=4) {
     if(length(margin)!=1) {
       stop("margin must be length 4 or length 1")
@@ -97,9 +94,9 @@ mrggsave.trellis <- function(x,
   if(!inherits(x,"list")) x <- list(x)
 
   if(arrange) {
-    #onefile <- TRUE
-    #x <- gridExtra::arrangeGrob(grobs=x,...)
-    #x <- do.call(arrangeGrob,
+    onefile <- TRUE
+    x <- lapply(x, arrangeGrob)
+    x <- gList(arrangeGrob(grobs=x,...))
   }
 
   n  <- length(x)
@@ -116,13 +113,13 @@ mrggsave.trellis <- function(x,
   }
 
   label <- paste("\n\n\n","Source code: ", script,
-                 labsep,"Source graphic: ", file,sep="")
+                 labsep,"Source graphic: ", file, sep="")
 
   for(i in seq_along(x)) {
-    x[[i]] <- gridExtra::arrangeGrob(
+    x[[i]] <- arrangeGrob(
       x[[i]],
-      bottom=grid::textGrob(
-        gp=grid::gpar(fontsize=fontsize),
+      bottom=textGrob(
+        gp=gpar(fontsize=fontsize),
         just='left',
         y=textGrob.y,
         x=textGrob.x,
@@ -132,11 +129,7 @@ mrggsave.trellis <- function(x,
   }
 
   if(draw) {
-    if(is_glist(x)) {
-      grid::grid.draw(x)
-    } else {
-      lapply(x,grid::grid.draw)
-    }
+    lapply(x,grid.draw)
     return(invisible(x))
   }
 
@@ -175,10 +168,6 @@ mrggsave.ggplot <- function(x,
                             draw = FALSE,
                             nosave=FALSE,...) {
 
-  if(!requireNamespace("grid")) stop("could not load grid", call.=FALSE)
-  if(!requireNamespace("gridExtra")) stop("could not load gridExtra package", call.=FALSE)
-  if(!requireNamespace("ggplot2")) stop("could not load ggplot package", call.=FALSE)
-
   if(length(margin)!=4) {
     if(length(margin)!=1) {
       stop("margin must be length 4 or length 1")
@@ -198,7 +187,7 @@ mrggsave.ggplot <- function(x,
 
   if(arrange) {
     onefile <- TRUE
-    x <- grid::gList(gridExtra::arrangeGrob(grobs=x,...))
+    x <- gList(arrangeGrob(grobs=x,...))
   }
 
   n  <- length(x)
@@ -217,10 +206,10 @@ mrggsave.ggplot <- function(x,
   label <- paste("Source code: ", script, labsep,"Source graphic: ", file,sep="")
 
   for(i in seq_along(x)) {
-    x[[i]] <- gridExtra::arrangeGrob(
+    x[[i]] <- arrangeGrob(
       x[[i]],
-      bottom=grid::textGrob(
-        gp=grid::gpar(fontsize=fontsize),
+      bottom=textGrob(
+        gp=gpar(fontsize=fontsize),
         just='left',
         y=textGrob.y,
         x=textGrob.x,
@@ -231,9 +220,9 @@ mrggsave.ggplot <- function(x,
 
   if(draw) {
     if(is_glist(x)) {
-      grid::grid.draw(x)
+      grid.draw(x)
     } else {
-      lapply(x,grid::grid.draw)
+      lapply(x,grid.draw)
     }
     return(invisible(x))
   }
@@ -246,7 +235,7 @@ mrggsave.ggplot <- function(x,
   args <- args[names(args) %in% names(formals(grDevices::pdf))]
 
   do.call(grDevices::pdf, args)
-  for(i in seq_along(x)) gridExtra::grid.arrange(x[[i]])
+  for(i in seq_along(x)) grid.arrange(x[[i]])
   grDevices::dev.off()
 
   return(invisible(outfile))
@@ -268,10 +257,9 @@ mrggsave.ggmatrix <- function(x,
                               draw = FALSE,
                               nosave=FALSE,...) {
 
-  if(arrange) warning("cannon't arrange trellis plots")
-  if(!requireNamespace("grid")) stop("could not load grid", call.=FALSE)
-  if(!requireNamespace("gridExtra")) stop("could not load gridExtra package", call.=FALSE)
-  if(!requireNamespace("ggplot2")) stop("could not load ggplot package", call.=FALSE)
+  if(arrange) {
+    warning("cannon't arrange ggmatrix objects")
+  }
 
   if(length(margin)!=4) {
     if(length(margin)!=1) {
@@ -280,8 +268,12 @@ mrggsave.ggmatrix <- function(x,
     margin <- rep(margin,4)
   }
 
-  if(!requireNamespace("GGally")) stop("could not load GGally package.", call.=FALSE)
-  if(!requireNamespace("gtable")) stop("could not load gtable package.", call.=FALSE)
+  if(!requireNamespace("GGally")) {
+    stop("could not load GGally package", call.=FALSE)
+  }
+  if(!requireNamespace("gtable")) {
+    stop("could not load gtable package", call.=FALSE)
+  }
   x <- GGally::ggmatrix_gtable(x)
   x <- gtable::gtable_add_padding(x,unit(margin, unit))
 
@@ -303,10 +295,10 @@ mrggsave.ggmatrix <- function(x,
   label <- paste("Source code: ", script, labsep,"Source graphic: ", file,sep="")
 
   for(i in seq_along(x)) {
-    x[[i]] <- gridExtra::arrangeGrob(
+    x[[i]] <- arrangeGrob(
       x[[i]],
-      bottom=grid::textGrob(
-        gp=grid::gpar(fontsize=fontsize),
+      bottom = textGrob(
+        gp = gpar(fontsize=fontsize),
         just='left',
         y=textGrob.y,
         x=textGrob.x,
@@ -344,18 +336,34 @@ mrggdraw <- function(...) {
 
 ##' @rdname mrggsave
 ##' @export
-mrggsave.list <- function(x,...) {
-  cl <- class(x[[1]])
-  if(identical(cl, c("gg", "ggplot"))) {
-    return(mrggsave.ggplot(x,...))
+mrggsave.list <- function(x, ..., arrange = FALSE) {
+
+  cl <- lapply(x, class)
+  cl <- unlist(lapply(cl, paste, collapse = "-"), use.names=FALSE)
+  if(any(cl == "gg-ggmatrix")) {
+    stop("gg-ggmatrix objects are not allowed in list", call. = FALSE)
   }
-  if(identical(cl, c("gg", "ggmatrix"))) {
-    return(mrggsave.ggmatrix(x,...))
+  if(arrange) {
+    if(!all(cl==cl[1])) {
+      stop("not all objects are of the same class", call. = FALSE)
+    }
+  } else {
+    if(any(cl=="trellis")) {
+      cl <- "trellis"
+    }
   }
+
+  cl <- cl[1]
+
+  if(identical(cl, "gg-ggplot")) {
+    return(mrggsave.ggplot(x,arrange = arrange,...))
+  }
+
   if(identical(cl, "trellis")) {
-    return(mrggsave.trellis(x,...))
+    return(mrggsave.trellis(x,arrange = arrange,...))
   }
-  stop("invalid object")
+
+  stop("invalid object of class: ", cl, call. = FALSE)
 }
 
 

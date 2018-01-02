@@ -35,7 +35,7 @@ mrggsave(x, ...)
 
 mrggdraw(...)
 
-\method{mrggsave}{list}(x, ...)
+\method{mrggsave}{list}(x, ..., arrange = FALSE)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
@@ -48,13 +48,16 @@ mrggdraw(...)
 
 \item{dir}{output directory for \code{.pdf} file}
 
-\item{prefix}{gets prepended to the output file path in the Source graphic label}
+\item{prefix}{gets prepended to the output file path in the Source graphic
+label}
 
 \item{onefile}{passed to \code{\link{pdf}}}
 
-\item{arrange}{logical; if \code{TRUE}, arrange the ggplot objects on a single page with \code{arrangeGrob}}
+\item{arrange}{logical; if \code{TRUE}, arrange the ggplot objects on a
+single page with \code{arrangeGrob}}
 
-\item{labsep}{character separator (or newline) for Source code and Source graphic labels}
+\item{labsep}{character separator (or newline) for Source code and Source
+graphic labels}
 
 \item{fontsize}{for Source graphic and Source code labels}
 
@@ -62,7 +65,8 @@ mrggdraw(...)
 
 \item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
 
-\item{margin}{numeric vector of length 4 or 1 to set top, right, bottom, left margin}
+\item{margin}{numeric vector of length 4 or 1 to set top, right, bottom,
+left margin}
 
 \item{unit}{unit to go along with margin sizes}
 
@@ -73,13 +77,13 @@ mrggdraw(...)
 \description{
 Save annotated plots.
 
-Save plot objects as .pdf file after labeling with Source graphic and Source code labels.
+Save plot objects as .pdf file after labeling with Source graphic and
+Source code labels
 }
 \details{
 \itemize{
-  \item This function will \code{\link{require}} the \code{gridExtra} package
-
-
+  \item This function will \code{\link{require}} the \code{gridExtra}
+  package
 }
 }
 \examples{
@@ -92,9 +96,11 @@ data <- data.frame(x = x, y = y)
 
 Script <- "example.R"
 
-## NOTE: see default value for dir argument, which should be appropriate for project work
-## Changing it here only for the example
-dir <- "."
+# NOTE: see default value for dir argument, which should be appropriate
+# for project work
+
+# Changing it here only for the example
+dir <- tempdir()
 
 
 p1 <- ggplot(data=Theoph) + geom_line(aes(x=Time, y=conc, group=Subject))
