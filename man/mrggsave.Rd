@@ -7,8 +7,8 @@
 \alias{mrggsave.gg}
 \alias{mrggsave.ggplot}
 \alias{mrggsave.ggmatrix}
-\alias{mrggdraw}
 \alias{mrggsave.list}
+\alias{mrggdraw}
 \title{Save annotated plots.}
 \usage{
 mrggsave(x, ...)
@@ -24,23 +24,24 @@ mrggsave(x, ...)
 \method{mrggsave}{ggplot}(x, script, stem = "Rplot",
   dir = "../deliv/figure", prefix = gsub("^\\\\.\\\\./", "./", dir),
   onefile = TRUE, arrange = FALSE, labsep = "\\n", fontsize = 7,
-  textGrob.x = 0.01, textGrob.y = 1, margin = c(0.1, 0.2, 0.7, 0.1),
+  textGrob.x = 0.01, textGrob.y = 0.6, margin = c(0.1, 0.2, 0.7, 0.1),
   unit = "cm", draw = FALSE, nosave = FALSE, ...)
 
 \method{mrggsave}{ggmatrix}(x, script, stem = "Rplot",
   dir = "../deliv/figure", prefix = gsub("^\\\\.\\\\./", "./", dir),
   onefile = TRUE, arrange = FALSE, labsep = "\\n", fontsize = 7,
-  textGrob.x = 0.01, textGrob.y = 1, margin = c(0.1, 0.2, 0.7, 0.1),
+  textGrob.x = 0.01, textGrob.y = 0.6, margin = c(0.1, 0.2, 0.7, 0.1),
   unit = "cm", draw = FALSE, nosave = FALSE, ...)
 
-mrggdraw(...)
-
 \method{mrggsave}{list}(x, ..., arrange = FALSE)
+
+mrggdraw(..., nosave = TRUE)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
 
-\item{...}{other arguments passed to \code{\link{pdf}} or \code{arrangeGrob}}
+\item{...}{other arguments passed to \code{\link{pdf}} or
+\code{arrangeGrob}}
 
 \item{script}{the name of the script generating the \code{gg} objects}
 
@@ -48,16 +49,16 @@ mrggdraw(...)
 
 \item{dir}{output directory for \code{.pdf} file}
 
-\item{prefix}{gets prepended to the output file path in the Source graphic
-label}
+\item{prefix}{gets prepended to the output file path in the Source
+graphic, label}
 
 \item{onefile}{passed to \code{\link{pdf}}}
 
 \item{arrange}{logical; if \code{TRUE}, arrange the ggplot objects on a
 single page with \code{arrangeGrob}}
 
-\item{labsep}{character separator (or newline) for Source code and Source
-graphic labels}
+\item{labsep}{character separator (or newline) for Source code and
+Source graphic labels}
 
 \item{fontsize}{for Source graphic and Source code labels}
 
@@ -65,14 +66,17 @@ graphic labels}
 
 \item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
 
-\item{margin}{numeric vector of length 4 or 1 to set top, right, bottom,
-left margin}
+\item{margin}{numeric vector of length 4 or 1 to set top, right,
+bottom, left margin}
 
 \item{unit}{unit to go along with margin sizes}
 
 \item{draw}{if \code{TRUE}, the image is printed but not saved}
 
 \item{nosave}{logical; if \code{TRUE}, return the labeled objects}
+}
+\value{
+The name of the output file.
 }
 \description{
 Save annotated plots.
@@ -81,10 +85,8 @@ Save plot objects as .pdf file after labeling with Source graphic and
 Source code labels
 }
 \details{
-\itemize{
-  \item This function will \code{\link{require}} the \code{gridExtra}
-  package
-}
+Methods are provided for \code{ggplot} output, \code{lattice}
+output, and \code{GGally} output.
 }
 \examples{
 data(Theoph)

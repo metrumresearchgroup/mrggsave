@@ -7,9 +7,6 @@ PKGDIR=.
 CHKDIR=.
 
 
-pkgdown:
-	Rscript -e 'library(pkgdown)' -e 'build_home()' -e 'build_reference(examples=FALSE)' -e 'build_news()'
-
 cran:
 	make doc
 	make build
@@ -21,7 +18,7 @@ travis_build:
 	make install
 
 readme:
-	Rscript -e 'library(rmarkdown); render("README.Rmd")'
+	Rscript -e 'rmarkdown::render("README.Rmd")'
 
 all:
 	make doc
@@ -47,8 +44,8 @@ check:
 	make build
 	R CMD check ${TARBALL} -o ${CHKDIR}
 
-
 test:
-	R CMD INSTALL ${PKGDIR}
-	make test-all
+	make install
+	Rscript -e 'testthat::test_dir("tests")'
+
 

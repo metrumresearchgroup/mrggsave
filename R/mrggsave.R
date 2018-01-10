@@ -8,28 +8,30 @@ is_glist <- function(x) "gList" %in% class(x)
 ##' @param script the name of the script generating the \code{gg} objects
 ##' @param stem to form the name of the output \code{.pdf} file
 ##' @param dir output directory for \code{.pdf} file
-##' @param prefix gets prepended to the output file path in the Source graphic
-##' label
+##' @param prefix gets prepended to the output file path in the Source
+##' graphic, label
 ##' @param onefile passed to \code{\link{pdf}}
 ##' @param fontsize for Source graphic and Source code labels
 ##' @param textGrob.x passed to \code{textGrob} (as \code{x})
 ##' @param textGrob.y passed to \code{textGrob} (as \code{y})
-##' @param margin numeric vector of length 4 or 1 to set top, right, bottom,
-##' left margin
+##' @param margin numeric vector of length 4 or 1 to set top, right,
+##' bottom, left margin
 ##' @param unit unit to go along with margin sizes
 ##' @param nosave logical; if \code{TRUE}, return the labeled objects
 ##' @param arrange logical; if \code{TRUE}, arrange the ggplot objects on a
 ##' single page with \code{arrangeGrob}
-##' @param labsep character separator (or newline) for Source code and Source
-##' graphic labels
+##' @param labsep character separator (or newline) for Source code and
+##' Source graphic labels
 ##' @param draw if \code{TRUE}, the image is printed but not saved
-##' @param ... other arguments passed to \code{\link{pdf}} or \code{arrangeGrob}
+##' @param ... other arguments passed to \code{\link{pdf}} or
+##' \code{arrangeGrob}
 ##'
 ##' @details
-##' \itemize{
-##'   \item This function will \code{\link{require}} the \code{gridExtra}
-##'   package
-##' }
+##' Methods are provided for \code{ggplot} output, \code{lattice}
+##' output, and \code{GGally} output.
+##'
+##' @return
+##' The name of the output file.
 ##'
 ##' @examples
 ##' data(Theoph)
@@ -67,7 +69,9 @@ is_glist <- function(x) "gList" %in% class(x)
 ##' mrggsave(p3, Script, "ggally_plot", dir = dir)
 ##'
 ##' @export
-mrggsave <- function(x,...) UseMethod("mrggsave")
+mrggsave <- function(x, ...) {
+  UseMethod("mrggsave")
+}
 
 ##' @rdname mrggsave
 ##' @export
@@ -82,7 +86,7 @@ mrggsave.trellis <- function(x,
                              margin = c(0.1, 0.1, 0.7, 0.1),
                              unit = "cm",
                              draw = FALSE,
-                             nosave=FALSE,...) {
+                             nosave = FALSE,...) {
 
   if(length(margin)!=4) {
     if(length(margin)!=1) {
@@ -103,7 +107,8 @@ mrggsave.trellis <- function(x,
 
   if(!onefile) {
     pdffile <- paste(file.path(dir,stem), "%03d.pdf", sep="")
-    file <- paste(file.path(prefix,stem), sprintf("%03d", 1:n), ".pdf",sep="")
+    file <- paste(file.path(prefix,stem),
+                  sprintf("%03d", 1:n), ".pdf",sep="")
     outfile <- sprintf(pdffile, seq_len(n))
   } else {
     pdffile <- paste(file.path(dir,stem), ".pdf", sep="")
@@ -157,16 +162,16 @@ mrggsave.gg <- function(x,...) {
 ##' @export
 mrggsave.ggplot <- function(x,
                             script,
-                            stem="Rplot",
-                            dir="../deliv/figure",
-                            prefix=gsub("^\\.\\./","./",dir),
+                            stem = "Rplot",
+                            dir = "../deliv/figure",
+                            prefix = gsub("^\\.\\./","./",dir),
                             onefile=TRUE,arrange=FALSE,labsep = "\n",
                             fontsize = 7,
                             textGrob.x = 0.01, textGrob.y = 0.6,
                             margin = c(0.1, 0.2, 0.7, 0.1),
                             unit = "cm",
                             draw = FALSE,
-                            nosave=FALSE,...) {
+                            nosave = FALSE,...) {
 
   if(length(margin)!=4) {
     if(length(margin)!=1) {
@@ -194,7 +199,8 @@ mrggsave.ggplot <- function(x,
 
   if(!onefile) {
     pdffile <- paste(file.path(dir,stem), "%03d.pdf", sep="")
-    file <- paste(file.path(prefix,stem), sprintf("%03d", 1:n), ".pdf",sep="")
+    file <- paste(file.path(prefix,stem),
+                  sprintf("%03d", 1:n), ".pdf",sep="")
     outfile <- sprintf(pdffile, 1:n)
   } else {
     pdffile <- paste(file.path(dir,stem), ".pdf", sep="")
@@ -203,7 +209,8 @@ mrggsave.ggplot <- function(x,
     if(n>1) file <-  paste(file, "page:", 1:n)
   }
 
-  label <- paste("Source code: ", script, labsep,"Source graphic: ", file,sep="")
+  label <- paste("Source code: ", script, labsep,
+                 "Source graphic: ", file,sep="")
 
   for(i in seq_along(x)) {
     x[[i]] <- arrangeGrob(
@@ -246,16 +253,17 @@ mrggsave.ggplot <- function(x,
 ##' @export
 mrggsave.ggmatrix <- function(x,
                               script,
-                              stem="Rplot",
-                              dir="../deliv/figure",
-                              prefix=gsub("^\\.\\./","./",dir),
-                              onefile=TRUE,arrange=FALSE,labsep = "\n",
+                              stem = "Rplot",
+                              dir = "../deliv/figure",
+                              prefix = gsub("^\\.\\./","./",dir),
+                              onefile = TRUE, arrange = FALSE,
+                              labsep = "\n",
                               fontsize = 7,
                               textGrob.x = 0.01, textGrob.y = 0.6,
                               margin = c(0.1, 0.2, 0.7, 0.1),
                               unit = "cm",
                               draw = FALSE,
-                              nosave=FALSE,...) {
+                              nosave = FALSE,...) {
 
   if(arrange) {
     warning("cannon't arrange ggmatrix objects")
@@ -283,7 +291,8 @@ mrggsave.ggmatrix <- function(x,
 
   if(!onefile) {
     pdffile <- paste(file.path(dir,stem), "%03d.pdf", sep="")
-    file <- paste(file.path(prefix,stem), sprintf("%03d", 1:n), ".pdf",sep="")
+    file <- paste(file.path(prefix,stem),
+                  sprintf("%03d", 1:n), ".pdf",sep="")
     outfile <- sprintf(pdffile, seq_len(n))
   } else {
     pdffile <- paste(file.path(dir,stem), ".pdf", sep="")
@@ -292,7 +301,8 @@ mrggsave.ggmatrix <- function(x,
     if(n>1) file <-  paste(file, "page:", seq_len(n))
   }
 
-  label <- paste("Source code: ", script, labsep,"Source graphic: ", file,sep="")
+  label <- paste("Source code: ", script, labsep,
+                 "Source graphic: ", file,sep="")
 
   for(i in seq_along(x)) {
     x[[i]] <- arrangeGrob(
@@ -316,7 +326,6 @@ mrggsave.ggmatrix <- function(x,
     return(invisible(x))
   }
 
-
   if(nosave) return(invisible(x))
 
   args <- list(...)
@@ -329,13 +338,6 @@ mrggsave.ggmatrix <- function(x,
   dev.off()
 
   return(invisible(outfile))
-}
-
-
-##' @export
-##' @rdname mrggsave
-mrggdraw <- function(..., save = FALSE) {
-  mrggsave(..., draw = TRUE, save = save)
 }
 
 ##' @rdname mrggsave
@@ -370,6 +372,9 @@ mrggsave.list <- function(x, ..., arrange = FALSE) {
   stop("invalid object of class: ", cl, call. = FALSE)
 }
 
-
-
+##' @export
+##' @rdname mrggsave
+mrggdraw <- function(..., nosave = TRUE) {
+  mrggsave(..., draw = TRUE, nosave = nosave)
+}
 
