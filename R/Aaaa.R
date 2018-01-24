@@ -6,10 +6,3 @@
 ##'
 NULL
 
-
-##' Save annotated plots.
-##'
-##'
-##' @name mrggsave
-##' @rdname mrggsave
-NULL

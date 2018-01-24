@@ -6,8 +6,12 @@ make_stem <- function(script,tag) {
   paste0(base,tag)
 }
 
+##' Save, arrange, and label plot graphics
+##'
 ##' Save plot objects as .pdf file after labeling with Source graphic and
-##' Source code labels
+##' Source code labels.
+##'
+##'
 ##'
 ##' @param x an object or list of objects of class \code{gg}
 ##' @param script the name of the script generating the \code{gg} objects
@@ -184,12 +188,6 @@ mrggsave.trellis <- function(x,
   grDevices::dev.off()
 
   return(invisible(outfile))
-}
-
-##' @rdname mrggsave
-##' @export
-mrggsave.gg <- function(x,...) {
-  NextMethod()
 }
 
 ##' @rdname mrggsave
@@ -435,6 +433,12 @@ mrggsave.list <- function(x, ..., arrange = FALSE) {
   }
 
   stop("Invalid object of class: ", cl, call. = FALSE)
+}
+
+##' @rdname mrggsave
+##' @export
+mrggsave.gg <- function(x,...) {
+  NextMethod()
 }
 
 ##' @export
