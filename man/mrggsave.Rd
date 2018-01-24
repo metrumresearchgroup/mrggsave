@@ -13,25 +13,28 @@
 \usage{
 mrggsave(x, ...)
 
-\method{mrggsave}{trellis}(x, script, stem = "Rplot",
-  dir = "../deliv/figure", prefix = gsub("^\\\\.\\\\./", "./", dir),
-  onefile = TRUE, arrange = FALSE, labsep = "\\n", fontsize = 7,
-  textGrob.x = 0.0025, textGrob.y = 1, margin = c(0.1, 0.1, 0.7, 0.1),
-  unit = "cm", draw = FALSE, nosave = FALSE, ...)
+\method{mrggsave}{trellis}(x, script, tag = NULL, stem = "Rplot",
+  dir = getOption("mrggsave_dir", "../deliv/figure"),
+  prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
+  arrange = FALSE, labsep = "\\n", fontsize = 7, textGrob.x = 0.0025,
+  textGrob.y = 0.6, width = 5.5, height = 8, draw = FALSE,
+  nosave = FALSE, ...)
 
 \method{mrggsave}{gg}(x, ...)
 
-\method{mrggsave}{ggplot}(x, script, stem = "Rplot",
-  dir = "../deliv/figure", prefix = gsub("^\\\\.\\\\./", "./", dir),
-  onefile = TRUE, arrange = FALSE, labsep = "\\n", fontsize = 7,
-  textGrob.x = 0.01, textGrob.y = 0.6, margin = c(0.1, 0.2, 0.7, 0.1),
-  unit = "cm", draw = FALSE, nosave = FALSE, ...)
+\method{mrggsave}{ggplot}(x, script, tag = NULL, stem = "Rplot",
+  dir = getOption("mrggsave_dir", "../deliv/figure"),
+  prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
+  arrange = FALSE, labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
+  textGrob.y = 0.6, margin = c(0.1, 0.2, 0.7, 0.1), unit = "cm",
+  width = 5.5, height = 8, draw = FALSE, nosave = FALSE, ...)
 
-\method{mrggsave}{ggmatrix}(x, script, stem = "Rplot",
-  dir = "../deliv/figure", prefix = gsub("^\\\\.\\\\./", "./", dir),
-  onefile = TRUE, arrange = FALSE, labsep = "\\n", fontsize = 7,
-  textGrob.x = 0.01, textGrob.y = 0.6, margin = c(0.1, 0.2, 0.7, 0.1),
-  unit = "cm", draw = FALSE, nosave = FALSE, ...)
+\method{mrggsave}{ggmatrix}(x, script, tag = NULL, stem = "Rplot",
+  dir = getOption("mrggsave_dir", "../deliv/figure"),
+  prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
+  arrange = FALSE, labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
+  textGrob.y = 0.6, margin = c(0.1, 0.2, 0.7, 0.1), unit = "cm",
+  width = 5.5, height = 8, draw = FALSE, nosave = FALSE, ...)
 
 \method{mrggsave}{list}(x, ..., arrange = FALSE)
 
@@ -44,6 +47,9 @@ mrggdraw(..., nosave = TRUE)
 \code{arrangeGrob}}
 
 \item{script}{the name of the script generating the \code{gg} objects}
+
+\item{tag}{if specified, stem is overwritten by pasting \code{script}
+and \code{tag} together}
 
 \item{stem}{to form the name of the output \code{.pdf} file}
 
@@ -66,14 +72,18 @@ Source graphic labels}
 
 \item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
 
-\item{margin}{numeric vector of length 4 or 1 to set top, right,
-bottom, left margin}
+\item{width}{passed to \code{\link{pdf}}}
 
-\item{unit}{unit to go along with margin sizes}
+\item{height}{passed to \code{\link{pdf}}}
 
 \item{draw}{if \code{TRUE}, the image is printed but not saved}
 
 \item{nosave}{logical; if \code{TRUE}, return the labeled objects}
+
+\item{margin}{numeric vector of length 4 or 1 to set top, right,
+bottom, left margin}
+
+\item{unit}{unit to go along with margin sizes}
 }
 \value{
 The name of the output file.
@@ -86,7 +96,24 @@ Source code labels
 }
 \details{
 Methods are provided for \code{ggplot} output, \code{lattice}
-output, and \code{GGally} output.
+output, and \code{ggmatrix} objects (produced by
+\code{GGally::ggpairs}).  Either a single plot object
+or a list of objects can be passed in.  If a list of objects
+are passed in, the plots may be written to a single file (default)
+or multiple files (if \code{onefile} is \code{FALSE}).
+Alternatively, \code{ggplots} and \code{lattice plots}
+can be arranged on a single page when
+\code{arrange} is \code{TRUE}.  \code{ggmatrix} objects
+cannot be arranged.  An error is generated if different
+object types are passed in a single list.
+
+By default, the output file name is generated from
+the script name and the value in \code{tag}.  For example,
+when the script is named \code{vpc_figures} and the tag
+is passed as \code{_by_dose_group}, the output file name
+will be \code{vpc_figures_by_dose_group.pdf}.  Alternatively,
+the user can specify the complete stem of the file
+name with the \code{stem} argument.
 }
 \examples{
 data(Theoph)
@@ -102,25 +129,30 @@ Script <- "example.R"
 # for project work
 
 # Changing it here only for the example
-dir <- tempdir()
+options(mrggsave_dir = tempdir())
 
 
-p1 <- ggplot(data=Theoph) + geom_line(aes(x=Time, y=conc, group=Subject))
-p2 <- ggplot(data=Theoph) + geom_line(aes(x=Time, y=conc)) + facet_wrap(~Subject)
+p1 <- ggplot(data=Theoph) +
+  geom_line(aes(x=Time, y=conc, group=Subject))
 
-mrggsave(p1, Script, "plot1", dir=dir)
-mrggsave(p2, Script, "plot2", dir=dir)
+p2 <- ggplot(data=Theoph) +
+  geom_line(aes(x=Time, y=conc)) +
+  facet_wrap(~Subject)
 
-mrggsave(list(p1,p2), Script, "both_plots", dir=dir)
-mrggsave(list(p1,p2), Script, "separate_files", onefile=FALSE, dir=dir)
+mrggsave(p1, Script, "_plot1")
+mrggsave(p2, Script, "_plot2")
 
-mrggsave(p1, Script, "different_shape", width=10, height=4, dir=dir)
+mrggsave(list(p1,p2), Script, "_both_plots")
+mrggsave(list(p1,p2), Script, "_separate_files", onefile=FALSE)
 
-mrggsave(list(p1,p2), Script, "onepage", dir=dir, arrange=TRUE, nrow=1, ncol=2)
+mrggsave(p1, Script, "_different_shape", width=10, height=4)
 
-require(GGally)
+mrggsave(list(p1,p2), Script, "_onepage", arrange=TRUE, ncol=2)
+
+stopifnot(require(GGally))
 
 p3 <- ggpairs(data)
-mrggsave(p3, Script, "ggally_plot", dir = dir)
+
+mrggsave(p3, Script, "_ggally_plot")
 
 }
