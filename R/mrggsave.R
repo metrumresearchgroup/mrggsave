@@ -2,11 +2,25 @@
 is_glist <- function(x) "gList" %in% class(x)
 
 make_stem <- function(script,tag) {
-  base <- gsub("\\.[rR]$", "", script)
+  base <- gsub("\\.(r|R|Rmd|rmd)$", "", script)
   paste0(base,tag)
 }
 
-##' Save, arrange, and label plot graphics
+##' Draw an annotated plot
+##'
+##' @param x a table grob object
+##'
+##' @details
+##' This function calls \code{grid::grid.newpage} and
+##' then \code{grid::grid.draw}.
+##'
+##' @export
+draw_newpage <- function(x) {
+  grid.newpage()
+  grid.draw(x)
+}
+
+##' Label, arrange, and save graphics
 ##'
 ##' Save plot objects as .pdf file after labeling with Source graphic and
 ##' Source code labels.
@@ -25,9 +39,8 @@ make_stem <- function(script,tag) {
 ##' @param fontsize for Source graphic and Source code labels
 ##' @param textGrob.x passed to \code{textGrob} (as \code{x})
 ##' @param textGrob.y passed to \code{textGrob} (as \code{y})
-##' @param margin numeric vector of length 4 or 1 to set top, right,
-##' bottom, left margin
-##' @param unit unit to go along with margin sizes
+##' @param ypad integer number of newlines to separate annotation
+##' from x-axis title
 ##' @param width passed to \code{\link{pdf}}
 ##' @param height passed to \code{\link{pdf}}
 ##' @param nosave logical; if \code{TRUE}, return the labeled objects
@@ -35,7 +48,7 @@ make_stem <- function(script,tag) {
 ##' single page with \code{arrangeGrob}
 ##' @param labsep character separator (or newline) for Source code and
 ##' Source graphic labels
-##' @param draw if \code{TRUE}, the image is printed but not saved
+##' @param draw if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}
 ##' @param ... other arguments passed to \code{\link{pdf}} or
 ##' \code{arrangeGrob}
 ##'
@@ -59,6 +72,13 @@ make_stem <- function(script,tag) {
 ##' will be \code{vpc_figures_by_dose_group.pdf}.  Alternatively,
 ##' the user can specify the complete stem of the file
 ##' name with the \code{stem} argument.
+##'
+##' \code{mrggdraw} calls \code{mrggsave} and draws
+##' the plot but does not save it.
+##'
+##' \code{mrgglabel} calls \code{mrggsave} and
+##' neither draws nor saves the plot, but
+##' returns the annotated plots as table grob.
 ##'
 ##' @return
 ##' The name of the output file.
@@ -108,6 +128,200 @@ mrggsave <- function(x, ...) {
   UseMethod("mrggsave")
 }
 
+
+##' @rdname mrggsave
+##' @export
+mrggsave.ggplot <- function(x,
+                            script,
+                            tag = NULL,
+                            stem = "Rplot",
+                            dir = getOption("mrggsave_dir","../deliv/figure"),
+                            prefix = gsub("^\\.\\./","./",dir),
+                            onefile=TRUE,arrange=FALSE,labsep = "\n",
+                            fontsize = 7,
+                            textGrob.x = 0.01, textGrob.y = 0.25,
+                            ypad  = 2,
+                            width = 5, height = 5,
+                            draw = FALSE,
+                            nosave = FALSE,...) {
+
+  if(!inherits(x,"list")) x <- list(x)
+
+  if(!is.null(tag)) {
+    stem <- make_stem(script,tag)
+  }
+
+  if(arrange) {
+    onefile <- TRUE
+    x <- gList(arrangeGrob(grobs=x,...))
+  }
+
+  n  <- length(x)
+
+  if(!onefile) {
+    pdffile <- paste0(file.path(dir,stem), "%03d.pdf")
+    file <- paste0(file.path(prefix,stem),
+                   sprintf("%03d", seq(n)), ".pdf")
+    outfile <- sprintf(pdffile, seq(n))
+  } else {
+    pdffile <- paste0(file.path(dir,stem), ".pdf")
+    file <- paste0(file.path(prefix,stem), ".pdf")
+    outfile <- pdffile
+    if(n>1) file <-  paste(file, "page:", seq(n))
+  }
+
+  label <- paste0(paste0(rep("\n",as.integer(ypad)), collapse = ""),
+                  "Source code: ", script,
+                  labsep,
+                  "Source graphic: ", file)
+
+  for(i in seq_along(x)) {
+    x[[i]] <- arrangeGrob(
+      x[[i]],
+      bottom=textGrob(
+        gp=gpar(fontsize=fontsize),
+        just=c('left','bottom'),
+        y=textGrob.y,
+        x=textGrob.x,
+        label=label[[i]]
+      )
+    )
+  }
+
+  if(draw) {
+    if(is_glist(x)) {
+      draw_newpage(x)
+    } else {
+      .foo <- lapply(x,draw_newpage)
+    }
+  }
+
+  if(nosave) {
+    if(length(x)==1) {
+      x <- x[[1]]
+    }
+    return(invisible(x))
+  }
+
+  args <- list(...)
+  args$file <- pdffile
+  args$onefile <- onefile
+  args$width <- width
+  args$height <- height
+  args <- args[names(args) %in% names(formals(grDevices::pdf))]
+
+  do.call(grDevices::pdf, args)
+  for(i in seq_along(x)) {
+    grid.arrange(x[[i]])
+  }
+  grDevices::dev.off()
+
+  return(invisible(outfile))
+}
+
+
+##' @rdname mrggsave
+##' @export
+mrggsave.ggmatrix <- function(x,
+                              script,
+                              tag = NULL,
+                              stem = "Rplot",
+                              dir = getOption("mrggsave_dir","../deliv/figure"),
+                              prefix = gsub("^\\.\\./","./",dir),
+                              onefile = TRUE, arrange = FALSE,
+                              labsep = "\n",
+                              fontsize = 7,
+                              textGrob.x = 0.01, textGrob.y = 0.25,
+                              ypad = 4,
+                              width = 5, height = 5,
+                              draw = FALSE,
+                              nosave = FALSE, ...) {
+
+  if(arrange) {
+    stop("Cannot arrange ggmatrix objects", call. = FALSE)
+  }
+
+  if(!is.null(tag)) {
+    stem <- make_stem(script,tag)
+  }
+
+  if(!requireNamespace("GGally")) {
+    stop("could not load GGally package", call.=FALSE)
+  }
+  if(!requireNamespace("gtable")) {
+    stop("could not load gtable package", call.=FALSE)
+  }
+
+  if(!inherits(x,"list")) {
+    x <- list(x)
+  }
+
+  x <- lapply(x, GGally::ggmatrix_gtable)
+
+  n  <- length(x)
+
+  if(!onefile) {
+    pdffile <- paste0(file.path(dir,stem), "%03d.pdf")
+    file <- paste0(file.path(prefix,stem),
+                   sprintf("%03d", seq(n)), ".pdf")
+    outfile <- sprintf(pdffile, seq(n))
+  } else {
+    pdffile <- paste0(file.path(dir,stem), ".pdf")
+    file <- paste0(file.path(prefix,stem), ".pdf")
+    outfile <- pdffile
+    if(n>1) file <-  paste(file, "page:", seq(n))
+  }
+
+  label <- paste0(paste0(rep("\n",as.integer(ypad)), collapse = ""),
+                  "Source code: ", script,
+                  labsep,
+                  "Source graphic: ", file)
+
+  for(i in seq_along(x)) {
+    x[[i]] <- arrangeGrob(
+      x[[i]],
+      bottom = textGrob(
+        gp = gpar(fontsize=fontsize),
+        just=c('left','bottom'),
+        y=textGrob.y,
+        x=textGrob.x,
+        label=label[[i]]
+      )
+    )
+  }
+
+  if(draw) {
+    if(is_glist(x)) {
+      draw_newpage(x)
+    } else {
+      .foo <- lapply(x,draw_newpage)
+    }
+    return(invisible(x))
+  }
+
+  if(nosave) {
+    if(length(x)==1) {
+      x <- x[[1]]
+    }
+    return(invisible(x))
+  }
+
+  args <- list(...)
+  args$file <- pdffile
+  args$onefile <- onefile
+  args$width <- width
+  args$height <- height
+  args <- args[names(args) %in% names(formals(grDevices::pdf))]
+
+  do.call(grDevices::pdf, args)
+  for(i in seq_along(x)) {
+    grid.arrange(x[[i]])
+  }
+  dev.off()
+
+  return(invisible(outfile))
+}
+
 ##' @rdname mrggsave
 ##' @export
 mrggsave.trellis <- function(x,
@@ -119,7 +333,7 @@ mrggsave.trellis <- function(x,
                              onefile=TRUE,arrange=FALSE,labsep = "\n",
                              fontsize = 7,
                              textGrob.x = 0.0025, textGrob.y = 0.6,
-                             width = 5.5, height = 8,
+                             ypad = 3,
                              draw = FALSE,
                              nosave = FALSE,...) {
 
@@ -149,7 +363,7 @@ mrggsave.trellis <- function(x,
     if(n>1) file <-  paste(file, "page:", seq(n))
   }
 
-  label <- paste0("\n\n\n",
+  label <- paste0(paste0(rep("\n",as.integer(ypad)), collapse = ""),
                   "Source code: ", script,
                   labsep,
                   "Source graphic: ", file)
@@ -159,7 +373,7 @@ mrggsave.trellis <- function(x,
       x[[i]],
       bottom=textGrob(
         gp=gpar(fontsize=fontsize),
-        just='left',
+        just=c('left','bottom'),
         y=textGrob.y,
         x=textGrob.x,
         label=label[[i]]
@@ -168,113 +382,13 @@ mrggsave.trellis <- function(x,
   }
 
   if(draw) {
-    .foo <- lapply(x,grid.draw)
-    return(invisible(x))
+    .foo <- lapply(x,draw_newpage)
   }
 
   if(nosave) {
-    return(invisible(x))
-  }
-
-  args <- list(...)
-  args$file <- pdffile
-  args$onefile <- onefile
-  args <- args[names(args) %in% names(formals(grDevices::pdf))]
-
-  do.call(grDevices::pdf, args)
-  for(i in seq_along(x)) {
-    grid.arrange(x[[i]])
-  }
-  grDevices::dev.off()
-
-  return(invisible(outfile))
-}
-
-##' @rdname mrggsave
-##' @export
-mrggsave.ggplot <- function(x,
-                            script,
-                            tag = NULL,
-                            stem = "Rplot",
-                            dir = getOption("mrggsave_dir","../deliv/figure"),
-                            prefix = gsub("^\\.\\./","./",dir),
-                            onefile=TRUE,arrange=FALSE,labsep = "\n",
-                            fontsize = 7,
-                            textGrob.x = 0.01, textGrob.y = 0.6,
-                            margin = c(0.1, 0.2, 0.7, 0.1),
-                            unit = "cm",
-                            width = 5.5, height = 8,
-                            draw = FALSE,
-                            nosave = FALSE,...) {
-
-  if(length(margin)!=4) {
-    if(length(margin)!=1) {
-      stop("margin must be length 4 or length 1")
+    if(length(x)==1) {
+      x <- x[[1]]
     }
-    margin <- rep(margin,4)
-  }
-
-  if(!inherits(x,"list")) x <- list(x)
-
-  if(!is.null(tag)) {
-    stem <- make_stem(script,tag)
-  }
-
-  x <- lapply(x, function(xx) {
-    xx + theme(
-      plot.margin = margin(
-        margin[1],margin[2],margin[3],margin[4],unit
-      )
-    )
-  })
-
-  if(arrange) {
-    onefile <- TRUE
-    x <- gList(arrangeGrob(grobs=x,...))
-  }
-
-  n  <- length(x)
-
-  if(!onefile) {
-    pdffile <- paste0(file.path(dir,stem), "%03d.pdf")
-    file <- paste0(file.path(prefix,stem),
-                  sprintf("%03d", seq(n)), ".pdf")
-    outfile <- sprintf(pdffile, seq(n))
-  } else {
-    pdffile <- paste0(file.path(dir,stem), ".pdf")
-    file <- paste0(file.path(prefix,stem), ".pdf")
-    outfile <- pdffile
-    if(n>1) file <-  paste(file, "page:", seq(n))
-  }
-
-  label <- paste0("\n\n\n",
-                  "Source code: ", script,
-                  labsep,
-                  "Source graphic: ", file)
-
-  for(i in seq_along(x)) {
-    x[[i]] <- arrangeGrob(
-      x[[i]],
-      bottom=textGrob(
-        gp=gpar(fontsize=fontsize),
-        just='left',
-        y=textGrob.y,
-        x=textGrob.x,
-        label=label[[i]]
-      )
-    )
-  }
-
-  if(draw) {
-    if(is_glist(x)) {
-      grid.draw(x)
-    } else {
-      .foo <- lapply(x,grid.draw)
-    }
-    return(invisible(x))
-  }
-
-  if(nosave) {
     return(invisible(x))
   }
 
@@ -293,113 +407,6 @@ mrggsave.ggplot <- function(x,
 }
 
 
-##' @rdname mrggsave
-##' @export
-mrggsave.ggmatrix <- function(x,
-                              script,
-                              tag = NULL,
-                              stem = "Rplot",
-                              dir = getOption("mrggsave_dir","../deliv/figure"),
-                              prefix = gsub("^\\.\\./","./",dir),
-                              onefile = TRUE, arrange = FALSE,
-                              labsep = "\n",
-                              fontsize = 7,
-                              textGrob.x = 0.01, textGrob.y = 0.6,
-                              margin = c(0.1, 0.2, 0.7, 0.1),
-                              unit = "cm",
-                              width = 5.5, height = 8,
-                              draw = FALSE,
-                              nosave = FALSE, ...) {
-
-  if(arrange) {
-    stop("Cannot arrange ggmatrix objects", call. = FALSE)
-  }
-
-  if(!is.null(tag)) {
-    stem <- make_stem(script,tag)
-  }
-
-  if(length(margin)!=4) {
-    if(length(margin)!=1) {
-      stop("margin must be length 4 or length 1")
-    }
-    margin <- rep(margin,4)
-  }
-
-  if(!requireNamespace("GGally")) {
-    stop("could not load GGally package", call.=FALSE)
-  }
-  if(!requireNamespace("gtable")) {
-    stop("could not load gtable package", call.=FALSE)
-  }
-
-  if(!inherits(x,"list")) {
-    x <- list(x)
-  }
-
-  x <- lapply(x, GGally::ggmatrix_gtable)
-
-  x <- lapply(x, gtable::gtable_add_padding,
-              padding = unit(margin,unit))
-
-  n  <- length(x)
-
-  if(!onefile) {
-    pdffile <- paste0(file.path(dir,stem), "%03d.pdf")
-    file <- paste0(file.path(prefix,stem),
-                  sprintf("%03d", seq(n)), ".pdf")
-    outfile <- sprintf(pdffile, seq(n))
-  } else {
-    pdffile <- paste0(file.path(dir,stem), ".pdf")
-    file <- paste0(file.path(prefix,stem), ".pdf")
-    outfile <- pdffile
-    if(n>1) file <-  paste(file, "page:", seq(n))
-  }
-
-  label <- paste0("\n\n\n",
-                  "Source code: ", script,
-                  labsep,
-                  "Source graphic: ", file)
-
-  for(i in seq_along(x)) {
-    x[[i]] <- arrangeGrob(
-      x[[i]],
-      bottom = textGrob(
-        gp = gpar(fontsize=fontsize),
-        just='left',
-        y=textGrob.y,
-        x=textGrob.x,
-        label=label[[i]]
-      )
-    )
-  }
-
-  if(draw) {
-    if(is_glist(x)) {
-      grid.draw(x)
-    } else {
-      .foo <- lapply(x,grid.draw)
-    }
-    return(invisible(x))
-  }
-
-  if(nosave) {
-    return(invisible(x))
-  }
-
-  args <- list(...)
-  args$file <- pdffile
-  args$onefile <- onefile
-  args <- args[names(args) %in% names(formals(grDevices::pdf))]
-
-  do.call(grDevices::pdf, args)
-  for(i in seq_along(x)) {
-    grid.arrange(x[[i]])
-  }
-  dev.off()
-
-  return(invisible(outfile))
-}
 
 ##' @rdname mrggsave
 ##' @export
@@ -443,7 +450,12 @@ mrggsave.gg <- function(x,...) {
 
 ##' @export
 ##' @rdname mrggsave
-mrggdraw <- function(..., nosave = TRUE) {
-  mrggsave(..., draw = TRUE, nosave = nosave)
+mrggdraw <- function(..., draw = TRUE, nosave = TRUE) {
+  mrggsave(..., draw = TRUE, nosave = TRUE)
 }
 
+##' @export
+##' @rdname mrggsave
+mrgglabel <- function(..., draw = FALSE, nosave = TRUE) {
+  mrggsave(..., draw = FALSE, nosave = TRUE)
+}

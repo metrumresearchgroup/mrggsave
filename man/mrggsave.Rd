@@ -2,42 +2,44 @@
 % Please edit documentation in R/mrggsave.R
 \name{mrggsave}
 \alias{mrggsave}
-\alias{mrggsave.trellis}
 \alias{mrggsave.ggplot}
 \alias{mrggsave.ggmatrix}
+\alias{mrggsave.trellis}
 \alias{mrggsave.list}
 \alias{mrggsave.gg}
 \alias{mrggdraw}
-\title{Save, arrange, and label plot graphics}
+\alias{mrgglabel}
+\title{Label, arrange, and save graphics}
 \usage{
 mrggsave(x, ...)
-
-\method{mrggsave}{trellis}(x, script, tag = NULL, stem = "Rplot",
-  dir = getOption("mrggsave_dir", "../deliv/figure"),
-  prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
-  arrange = FALSE, labsep = "\\n", fontsize = 7, textGrob.x = 0.0025,
-  textGrob.y = 0.6, width = 5.5, height = 8, draw = FALSE,
-  nosave = FALSE, ...)
 
 \method{mrggsave}{ggplot}(x, script, tag = NULL, stem = "Rplot",
   dir = getOption("mrggsave_dir", "../deliv/figure"),
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
   arrange = FALSE, labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
-  textGrob.y = 0.6, margin = c(0.1, 0.2, 0.7, 0.1), unit = "cm",
-  width = 5.5, height = 8, draw = FALSE, nosave = FALSE, ...)
+  textGrob.y = 0.25, ypad = 2, width = 5, height = 5, draw = FALSE,
+  nosave = FALSE, ...)
 
 \method{mrggsave}{ggmatrix}(x, script, tag = NULL, stem = "Rplot",
   dir = getOption("mrggsave_dir", "../deliv/figure"),
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
   arrange = FALSE, labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
-  textGrob.y = 0.6, margin = c(0.1, 0.2, 0.7, 0.1), unit = "cm",
-  width = 5.5, height = 8, draw = FALSE, nosave = FALSE, ...)
+  textGrob.y = 0.25, ypad = 4, width = 5, height = 5, draw = FALSE,
+  nosave = FALSE, ...)
+
+\method{mrggsave}{trellis}(x, script, tag = NULL, stem = "Rplot",
+  dir = getOption("mrggsave_dir", "../deliv/figure"),
+  prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
+  arrange = FALSE, labsep = "\\n", fontsize = 7, textGrob.x = 0.0025,
+  textGrob.y = 0.6, ypad = 3, draw = FALSE, nosave = FALSE, ...)
 
 \method{mrggsave}{list}(x, ..., arrange = FALSE)
 
 \method{mrggsave}{gg}(x, ...)
 
-mrggdraw(..., nosave = TRUE)
+mrggdraw(..., draw = TRUE, nosave = TRUE)
+
+mrgglabel(..., draw = FALSE, nosave = TRUE)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
@@ -71,18 +73,16 @@ Source graphic labels}
 
 \item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
 
+\item{ypad}{integer number of newlines to separate annotation
+from x-axis title}
+
 \item{width}{passed to \code{\link{pdf}}}
 
 \item{height}{passed to \code{\link{pdf}}}
 
-\item{draw}{if \code{TRUE}, the image is printed but not saved}
+\item{draw}{if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}}
 
 \item{nosave}{logical; if \code{TRUE}, return the labeled objects}
-
-\item{margin}{numeric vector of length 4 or 1 to set top, right,
-bottom, left margin}
-
-\item{unit}{unit to go along with margin sizes}
 }
 \value{
 The name of the output file.
@@ -111,6 +111,13 @@ is passed as \code{_by_dose_group}, the output file name
 will be \code{vpc_figures_by_dose_group.pdf}.  Alternatively,
 the user can specify the complete stem of the file
 name with the \code{stem} argument.
+
+\code{mrggdraw} calls \code{mrggsave} and draws
+the plot but does not save it.
+
+\code{mrgglabel} calls \code{mrggsave} and
+neither draws nor saves the plot, but
+returns the annotated plots as table grob.
 }
 \examples{
 data(Theoph)

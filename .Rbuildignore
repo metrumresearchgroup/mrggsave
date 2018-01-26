@@ -1,3 +1,5 @@
+^README\.Rmd$
+^README\.html$
 ^.*\.pdf$
 ^.*.tar.gz$
 mrggsave.Rcheck
