@@ -81,7 +81,7 @@ mrggsave(list(p,p,p), Script, "_multiple")
 Save as multiple files
 
 ``` r
-mrggsave(list(p,p), Script, "_multiple")
+mrggsave(list(p,p), Script, "_multiple", onefile = FALSE)
 ```
 
 Output [here](inst/img/README_multiple001.pdf) and [here](inst/img/README_multiple002.pdf).
