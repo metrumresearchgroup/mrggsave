@@ -23,18 +23,20 @@ y <- 10 + 0.2*x + rnorm(length(x),1)
 data <- data.frame(x = x, y = y)
 ```
 
-Plots get drawn with annotations
-================================
-
 ``` r
 p <- ggplot(data = data, aes(x,y)) + 
   geom_point() +
   xlab("The x-axis title here (units)")
+```
 
+Plots get drawn with annotations
+================================
+
+``` r
 mrggsave(p, Script, "_annotation", draw = TRUE)
 ```
 
-![](inst/img/readme-unnamed-chunk-5-1.png)
+![](inst/img/readme-unnamed-chunk-6-1.png)
 
 The saved plot can be seen [here](inst/img/README_annotation.pdf).
 
@@ -49,7 +51,7 @@ p2 <- ggpairs(data)
 mrggsave(p2, Script, "_pairs", draw = TRUE)
 ```
 
-![](inst/img/readme-unnamed-chunk-6-1.png)
+![](inst/img/readme-unnamed-chunk-7-1.png)
 
 The saved plot can be seen [here](inst/img/README_pairs.pdf).
 
@@ -63,7 +65,7 @@ mrggsave(list(p,p,p), Script, "_arranged",
          arrange = TRUE, ncol = 2, draw = TRUE)
 ```
 
-![](inst/img/readme-unnamed-chunk-7-1.png)
+![](inst/img/readme-unnamed-chunk-8-1.png)
 
 The saved plot can be seen [here](inst/img/README_arranged.pdf).
 

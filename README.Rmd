@@ -28,13 +28,15 @@ y <- 10 + 0.2*x + rnorm(length(x),1)
 data <- data.frame(x = x, y = y)
 ```
 
-
-# Plots get drawn with annotations
 ```{r}
 p <- ggplot(data = data, aes(x,y)) + 
   geom_point() +
   xlab("The x-axis title here (units)")
+```
 
+
+# Plots get drawn with annotations
+```{r}
 mrggsave(p, Script, "_annotation", draw = TRUE)
 ```
 
