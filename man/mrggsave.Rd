@@ -5,6 +5,7 @@
 \alias{mrggsave.ggplot}
 \alias{mrggsave.ggmatrix}
 \alias{mrggsave.trellis}
+\alias{mrggsave_common}
 \alias{mrggsave.list}
 \alias{mrggsave.gg}
 \alias{mrggdraw}
@@ -13,33 +14,29 @@
 \usage{
 mrggsave(x, ...)
 
-\method{mrggsave}{ggplot}(x, script, tag = NULL, stem = "Rplot",
-  dir = getOption("mrggsave_dir", "../deliv/figure"),
-  prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
-  arrange = FALSE, labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
-  textGrob.y = 0.25, ypad = 2, width = 5, height = 5, draw = FALSE,
-  nosave = FALSE, ...)
+\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE,
+  onefile = TRUE)
 
-\method{mrggsave}{ggmatrix}(x, script, tag = NULL, stem = "Rplot",
-  dir = getOption("mrggsave_dir", "../deliv/figure"),
-  prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
-  arrange = FALSE, labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
-  textGrob.y = 0.25, ypad = 4, width = 5, height = 5, draw = FALSE,
-  nosave = FALSE, ...)
+\method{mrggsave}{ggmatrix}(x, ..., ypad = 4, arrange = FALSE,
+  onefile = TRUE)
 
-\method{mrggsave}{trellis}(x, script, tag = NULL, stem = "Rplot",
-  dir = getOption("mrggsave_dir", "../deliv/figure"),
+\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE,
+  onefile = TRUE)
+
+mrggsave_common(x, script, tag = NULL, width = 5, height = 5,
+  stem = "Rplot", dir = getOption("mrggsave_dir", "../deliv/figure"),
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
-  arrange = FALSE, labsep = "\\n", fontsize = 7, textGrob.x = 0.0025,
-  textGrob.y = 0.6, ypad = 3, draw = FALSE, nosave = FALSE, ...)
+  arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
+  labsep = "\\n", fontsize = 7, textGrob.x = 0.01, textGrob.y = 0.25,
+  ...)
 
 \method{mrggsave}{list}(x, ..., arrange = FALSE)
 
 \method{mrggsave}{gg}(x, ...)
 
-mrggdraw(..., draw = TRUE, nosave = TRUE)
+mrggdraw(..., draw = TRUE, .save = FALSE)
 
-mrgglabel(..., draw = FALSE, nosave = TRUE)
+mrgglabel(..., draw = FALSE, .save = FALSE)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
@@ -47,10 +44,22 @@ mrgglabel(..., draw = FALSE, nosave = TRUE)
 \item{...}{other arguments passed to \code{\link{pdf}} or
 \code{arrangeGrob}}
 
+\item{ypad}{integer number of newlines to separate annotation
+from x-axis title}
+
+\item{arrange}{logical; if \code{TRUE}, arrange the ggplot objects on a
+single page with \code{arrangeGrob}}
+
+\item{onefile}{passed to \code{\link{pdf}}}
+
 \item{script}{the name of the script generating the \code{gg} objects}
 
 \item{tag}{if specified, stem is overwritten by pasting \code{script}
 and \code{tag} together}
+
+\item{width}{passed to \code{\link{pdf}}}
+
+\item{height}{passed to \code{\link{pdf}}}
 
 \item{stem}{to form the name of the output \code{.pdf} file}
 
@@ -59,10 +68,9 @@ and \code{tag} together}
 \item{prefix}{gets prepended to the output file path in the Source
 graphic, label}
 
-\item{onefile}{passed to \code{\link{pdf}}}
+\item{draw}{if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}}
 
-\item{arrange}{logical; if \code{TRUE}, arrange the ggplot objects on a
-single page with \code{arrangeGrob}}
+\item{.save}{logical; if \code{FALSE}, return the labeled objects}
 
 \item{labsep}{character separator (or newline) for Source code and
 Source graphic labels}
@@ -72,17 +80,6 @@ Source graphic labels}
 \item{textGrob.x}{passed to \code{textGrob} (as \code{x})}
 
 \item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
-
-\item{ypad}{integer number of newlines to separate annotation
-from x-axis title}
-
-\item{width}{passed to \code{\link{pdf}}}
-
-\item{height}{passed to \code{\link{pdf}}}
-
-\item{draw}{if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}}
-
-\item{nosave}{logical; if \code{TRUE}, return the labeled objects}
 }
 \value{
 The name of the output file.
