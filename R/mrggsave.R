@@ -41,16 +41,18 @@ draw_newpage <- function(x) {
 ##' @param textGrob.y passed to \code{textGrob} (as \code{y})
 ##' @param ypad integer number of newlines to separate annotation
 ##' from x-axis title
-##' @param width passed to \code{\link{pdf}}
-##' @param height passed to \code{\link{pdf}}
+##' @param width passed to \code{\link{pdf}}; should be less than 5 in.
+##' for portrait figure
+##' @param height passed to \code{\link{pdf}}; should be less than 7 in.
+##' for portrait figure
 ##' @param .save logical; if \code{FALSE}, return the labeled objects
 ##' @param arrange logical; if \code{TRUE}, arrange the ggplot objects on a
 ##' single page with \code{arrangeGrob}
 ##' @param labsep character separator (or newline) for Source code and
 ##' Source graphic labels
 ##' @param draw if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}
-##' @param ... other arguments passed to \code{\link{pdf}} or
-##' \code{arrangeGrob}
+##' @param ... other arguments passed to \code{mrggsave_common} and then
+##' on to \code{\link{pdf}} and \code{arrangeGrob}
 ##'
 ##' @details
 ##' Methods are provided for \code{ggplot} output, \code{lattice}
@@ -79,9 +81,6 @@ draw_newpage <- function(x) {
 ##' \code{mrgglabel} calls \code{mrggsave} and
 ##' neither draws nor saves the plot, but
 ##' returns the annotated plots as table grob.
-##'
-##' @return
-##' The name of the output file.
 ##'
 ##' @examples
 ##' data(Theoph)

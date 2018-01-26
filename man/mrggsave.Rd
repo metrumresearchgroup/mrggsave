@@ -41,8 +41,8 @@ mrgglabel(..., draw = FALSE, .save = FALSE)
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
 
-\item{...}{other arguments passed to \code{\link{pdf}} or
-\code{arrangeGrob}}
+\item{...}{other arguments passed to \code{mrggsave_common} and then
+on to \code{\link{pdf}} and \code{arrangeGrob}}
 
 \item{ypad}{integer number of newlines to separate annotation
 from x-axis title}
@@ -57,9 +57,11 @@ single page with \code{arrangeGrob}}
 \item{tag}{if specified, stem is overwritten by pasting \code{script}
 and \code{tag} together}
 
-\item{width}{passed to \code{\link{pdf}}}
+\item{width}{passed to \code{\link{pdf}}; should be less than 5 in.
+for portrait figure}
 
-\item{height}{passed to \code{\link{pdf}}}
+\item{height}{passed to \code{\link{pdf}}; should be less than 7 in.
+for portrait figure}
 
 \item{stem}{to form the name of the output \code{.pdf} file}
 
@@ -80,9 +82,6 @@ Source graphic labels}
 \item{textGrob.x}{passed to \code{textGrob} (as \code{x})}
 
 \item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
-}
-\value{
-The name of the output file.
 }
 \description{
 Save plot objects as .pdf file after labeling with Source graphic and
