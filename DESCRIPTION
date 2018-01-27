@@ -1,7 +1,7 @@
 Package: mrggsave
 Type: Package
 Title: Save and Arrange Annotated Plots
-Version: 0.1.0.9001
+Version: 0.0.1.9001
 Authors@R: c(
        person("Kyle T", "Baron", "", "kyleb@metrumrg.com", c("aut", "cre")),
        person("Metrum Research Group LLC", role =  c("cph"))
