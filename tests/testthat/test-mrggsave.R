@@ -52,4 +52,16 @@ test_that("arranged lattice plots", {
   expect_equal(basename(out), "test-mrggsave_lat-arranged.pdf")
 })
 
+if(requireNamespace("patchwork") ) {
+  test_that("ggarrange", {
+    p <- pg + pg + pg
+    out <- mrggsave(p, Script, "_ggarranged")
+    expect_equal(basename(out), "test-mrggsave_ggarranged.pdf")
 
+    p <- list(p, p, p)
+    out <- mrggsave(p, Script, "_ggarranged_list")
+    expect_equal(basename(out), "test-mrggsave_ggarranged_list.pdf")
+
+  })
+
+}
