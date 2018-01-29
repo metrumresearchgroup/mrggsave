@@ -34,6 +34,12 @@ test_that("list of ggplots", {
   expect_equal(basename(out), "test-mrggsave_list.pdf")
 })
 
+test_that("list of ggpairs", {
+  p <- list(pG,pG,pG)
+  out <- mrggsave(p, Script, "_list_pairs")
+  expect_equal(basename(out), "test-mrggsave_list_pairs.pdf")
+})
+
 test_that("arranged ggplots", {
   p <- list(pg,pg,pg)
   out <- mrggsave(p, Script, "_arranged", arrange = TRUE)
