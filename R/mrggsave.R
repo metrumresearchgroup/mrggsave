@@ -75,6 +75,11 @@ draw_newpage <- function(x) {
 ##' the user can specify the complete stem of the file
 ##' name with the \code{stem} argument.
 ##'
+##' When \code{.save} is \code{FALSE}, \code{mrggsave}
+##' always returns a list of table grobs.  If a single
+##' plot was passed, the return value in this case
+##' is a list of length 1.
+##'
 ##' \code{mrggdraw} calls \code{mrggsave} and draws
 ##' the plot but does not save it.
 ##'
@@ -132,7 +137,9 @@ mrggsave <- function(x, ...) {
 ##' @export
 mrggsave.ggplot <- function(x, ..., ypad = 2, arrange = FALSE, onefile = TRUE) {
 
-  if(!inherits(x,"list")) x <- list(x)
+  if(!inherits(x,"list")) {
+    x <- list(x)
+  }
 
   if(arrange) {
     onefile <- TRUE
@@ -174,7 +181,9 @@ mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
 mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE,
                              onefile = TRUE) {
 
-  if(!inherits(x,"list")) x <- list(x)
+  if(!inherits(x,"list")) {
+    x <- list(x)
+  }
 
   if(arrange) {
     onefile <- TRUE
@@ -250,9 +259,6 @@ mrggsave_common <- function(x,
   }
 
   if(!.save) {
-    if(length(x)==1) {
-      x <- x[[1]]
-    }
     return(invisible(x))
   }
 

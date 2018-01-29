@@ -108,6 +108,11 @@ will be \code{vpc_figures_by_dose_group.pdf}.  Alternatively,
 the user can specify the complete stem of the file
 name with the \code{stem} argument.
 
+When \code{.save} is \code{FALSE}, \code{mrggsave}
+always returns a list of table grobs.  If a single
+plot was passed, the return value in this case
+is a list of length 1.
+
 \code{mrggdraw} calls \code{mrggsave} and draws
 the plot but does not save it.
 
