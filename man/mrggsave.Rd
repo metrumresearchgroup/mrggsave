@@ -5,6 +5,7 @@
 \alias{mrggsave.ggplot}
 \alias{mrggsave.ggmatrix}
 \alias{mrggsave.trellis}
+\alias{mrggsave.ggassemble}
 \alias{mrggsave_common}
 \alias{mrggsave.list}
 \alias{mrggsave.gg}
@@ -22,6 +23,8 @@ mrggsave(x, ...)
 
 \method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE,
   onefile = TRUE)
+
+\method{mrggsave}{ggassemble}(x, ...)
 
 mrggsave_common(x, script, tag = NULL, width = 5, height = 5,
   stem = "Rplot", dir = getOption("mrggsave_dir", "../deliv/figure"),

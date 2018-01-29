@@ -197,6 +197,24 @@ mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE,
                          onefile = onefile, ...))
 }
 
+
+##' @rdname mrggsave
+##' @export
+mrggsave.ggassemble <- function(x, ...) {
+
+  if(!requireNamespace("patchwork")) {
+    stop("Could not load patchwork package", call.=FALSE)
+  }
+
+  if(!inherits(x, "list")) {
+    x <- list(x)
+  }
+
+  x <- lapply(x, patchwork::patchworkGrob)
+
+  return(mrggsave.ggplot(x, ...))
+}
+
 ##' @rdname mrggsave
 mrggsave_common <- function(x,
                             script,
@@ -301,11 +319,16 @@ mrggsave.list <- function(x, ..., arrange = FALSE) {
     return(mrggsave.ggmatrix(x, arrange = arrange, ...))
   }
 
-  if(any(cl=="lattice")) {
+  if(all(cl == "ggassemble-gg-ggplot")) {
+    return(mrggsave.ggassemble(x, arrange = arrange, ...))
+  }
+
+  if(any(cl=="trellis")) {
     stop("Found lattice plot in mixed list", call. = FALSE)
   }
 
   is_ggmat <- cl == "gg-ggmatrix"
+  is_ggassemble <- cl == "ggassemble-gg-ggplot"
 
   if(any(is_ggmat)) {
 
@@ -319,8 +342,19 @@ mrggsave.list <- function(x, ..., arrange = FALSE) {
 
     x[is_ggmat] <- lapply(x[is_ggmat],  GGally::ggmatrix_gtable)
 
-    return(mrggsave.ggplot(x, arrange = arrange, ...))
   }
+
+  if(any(is_ggassemble)) {
+
+    if(!requireNamespace("patchwork")) {
+      stop("Could not load patchwork package", call.=FALSE)
+    }
+
+    x[is_ggassemble] <- lapply(x[is_ggassemble], patchwork::patchworkGrob)
+
+  }
+
+  return(mrggsave.ggplot(x, arrange = arrange, ...))
 
   stop("Invalid object of class: ",
        paste0(cl, collapse = ", "),
