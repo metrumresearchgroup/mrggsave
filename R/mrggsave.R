@@ -247,7 +247,6 @@ mrggsave_common <- function(x,
     } else {
       .foo <- lapply(x,draw_newpage)
     }
-    return(invisible(x))
   }
 
   if(!.save) {
@@ -260,6 +259,8 @@ mrggsave_common <- function(x,
   args <- list(...)
   args$file <- pdffile
   args$onefile <- onefile
+  args$width <- width
+  args$height <- height
   args <- args[names(args) %in% names(formals(grDevices::pdf))]
 
   do.call(grDevices::pdf, args)
