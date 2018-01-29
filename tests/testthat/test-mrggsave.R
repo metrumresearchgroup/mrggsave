@@ -52,10 +52,4 @@ test_that("arranged lattice plots", {
   expect_equal(basename(out), "test-mrggsave_lat-arranged.pdf")
 })
 
-test_that("error if arranged ggmatrix", {
-  p <- list(pG,pG,pG)
-  expect_error(
-    mrggsave(p, Script, arrange = TRUE, "_list")
-  )
-})
 

@@ -156,13 +156,10 @@ mrggsave.ggplot <- function(x, ..., ypad = 2, arrange = FALSE, onefile = TRUE) {
 mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
                               onefile = TRUE) {
 
-  if(arrange) {
-    stop("Cannot arrange ggmatrix objects", call. = FALSE)
-  }
-
   if(!requireNamespace("GGally")) {
     stop("could not load GGally package", call.=FALSE)
   }
+
   if(!requireNamespace("gtable")) {
     stop("could not load gtable package", call.=FALSE)
   }
@@ -173,7 +170,12 @@ mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
 
   x <- lapply(x, GGally::ggmatrix_gtable)
 
-  return(mrggsave_common(x = x, ypad = ypad, arrange = FALSE, ...))
+  if(arrange) {
+    onefile <- TRUE
+    x <- gList(arrangeGrob(grobs=x,...))
+  }
+
+  return(mrggsave_common(x = x, ypad = ypad, arrange = arrange, ...))
 }
 
 ##' @rdname mrggsave
@@ -284,33 +286,45 @@ mrggsave_common <- function(x,
 mrggsave.list <- function(x, ..., arrange = FALSE) {
 
   cl <- lapply(x, class)
+
   cl <- unlist(lapply(cl, paste, collapse = "-"), use.names=FALSE)
 
-  if(arrange) {
-    if(!all(cl==cl[1])) {
-      stop("All objects are not of the same class", call. = FALSE)
-    }
-  } else {
-    if(any(cl=="trellis")) {
-      cl <- "trellis"
-    }
-  }
-
-  cl <- cl[1]
-
-  if(identical(cl, "gg-ggplot")) {
+  if(all(cl == "gg-ggplot")) {
     return(mrggsave.ggplot(x, arrange = arrange,...))
   }
 
-  if(identical(cl, "trellis")) {
+  if(all(cl == "trellis")) {
     return(mrggsave.trellis(x, arrange = arrange,...))
   }
 
-  if(identical(cl, "gg-ggmatrix")) {
+  if(all(cl ==  "gg-ggmatrix")) {
     return(mrggsave.ggmatrix(x, arrange = arrange, ...))
   }
 
-  stop("Invalid object of class: ", cl, call. = FALSE)
+  if(any(cl=="lattice")) {
+    stop("Found lattice plot in mixed list", call. = FALSE)
+  }
+
+  is_ggmat <- cl == "gg-ggmatrix"
+
+  if(any(is_ggmat)) {
+
+    if(!requireNamespace("GGally")) {
+      stop("Could not load GGally package", call.=FALSE)
+    }
+
+    if(!requireNamespace("gtable")) {
+      stop("Could not load gtable package", call.=FALSE)
+    }
+
+    x[is_ggmat] <- lapply(x[is_ggmat],  GGally::ggmatrix_gtable)
+
+    return(mrggsave.ggplot(x, arrange = arrange, ...))
+  }
+
+  stop("Invalid object of class: ",
+       paste0(cl, collapse = ", "),
+       call. = FALSE)
 }
 
 ##' @rdname mrggsave
