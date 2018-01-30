@@ -355,10 +355,6 @@ mrggsave.list <- function(x, ..., arrange = FALSE) {
   }
 
   return(mrggsave.ggplot(x, arrange = arrange, ...))
-
-  stop("Invalid object of class: ",
-       paste0(cl, collapse = ", "),
-       call. = FALSE)
 }
 
 ##' @rdname mrggsave
