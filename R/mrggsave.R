@@ -48,6 +48,7 @@ draw_newpage <- function(x) {
 ##' @param .save logical; if \code{FALSE}, return the labeled objects
 ##' @param arrange logical; if \code{TRUE}, arrange the ggplot objects on a
 ##' single page with \code{arrangeGrob}
+##' @param ncol passed to \code{\link{arrangeGrob}}
 ##' @param labsep character separator (or newline) for Source code and
 ##' Source graphic labels
 ##' @param draw if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}
@@ -135,7 +136,12 @@ mrggsave <- function(x, ...) {
 
 ##' @rdname mrggsave
 ##' @export
-mrggsave.ggplot <- function(x, ..., ypad = 2, arrange = FALSE, onefile = TRUE) {
+mrggsave.ggplot <- function(x, ..., ypad = 2,
+                            arrange = FALSE,
+                            ncol = 1,
+                            onefile = TRUE) {
+
+  if(ncol > 1) arrange <- TRUE
 
   if(!inherits(x,"list")) {
     x <- list(x)
@@ -143,7 +149,7 @@ mrggsave.ggplot <- function(x, ..., ypad = 2, arrange = FALSE, onefile = TRUE) {
 
   if(arrange) {
     onefile <- TRUE
-    x <- gList(arrangeGrob(grobs=x,...))
+    x <- gList(arrangeGrob(grobs=x, ncol = ncol, ...))
   }
 
   return(mrggsave_common(x = x, ypad = ypad,
@@ -180,8 +186,12 @@ mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
 
 ##' @rdname mrggsave
 ##' @export
-mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE,
+mrggsave.trellis <- function(x, ..., ypad = 3,
+                             arrange = FALSE,
+                             ncol = 1,
                              onefile = TRUE) {
+
+  if(ncol > 1) arrange <- TRUE
 
   if(!inherits(x,"list")) {
     x <- list(x)
@@ -190,7 +200,7 @@ mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE,
   if(arrange) {
     onefile <- TRUE
     x <- lapply(x, arrangeGrob)
-    x <- gList(arrangeGrob(grobs=x,...))
+    x <- gList(arrangeGrob(grobs=x,ncol = ncol, ...))
   }
 
   return(mrggsave_common(x = x, ypad = ypad, arrange = arrange,
@@ -365,9 +375,14 @@ mrggsave.gg <- function(x,...) {
 
 ##' @export
 ##' @rdname mrggsave
-mrggdraw <- function(..., draw = TRUE, .save = FALSE) {
+mrggdraw <- function(..., draw = TRUE, .save = FALSE,
+                     script = "", stem = "") {
   mrggsave(..., draw = TRUE, .save = .save)
 }
+
+##' @export
+##' @rdname
+
 
 ##' @export
 ##' @rdname mrggsave
