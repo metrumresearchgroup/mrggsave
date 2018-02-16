@@ -375,13 +375,10 @@ mrggsave.gg <- function(x,...) {
 
 ##' @export
 ##' @rdname mrggsave
-mrggdraw <- function(..., draw = TRUE, .save = FALSE,
-                     script = "", stem = "") {
-  mrggsave(..., draw = TRUE, .save = .save)
+mrggdraw <- function(x, script = "AAA", tag = "_ZZZ", stem,
+                     ..., draw = TRUE, .save = FALSE) {
+  mrggsave(x,script,tag,stem, ..., draw = draw, .save = .save)
 }
-
-##' @export
-##' @rdname
 
 
 ##' @export

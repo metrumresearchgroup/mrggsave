@@ -15,13 +15,13 @@
 \usage{
 mrggsave(x, ...)
 
-\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE,
+\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE, ncol = 1,
   onefile = TRUE)
 
 \method{mrggsave}{ggmatrix}(x, ..., ypad = 4, arrange = FALSE,
   onefile = TRUE)
 
-\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE,
+\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
   onefile = TRUE)
 
 \method{mrggsave}{ggassemble}(x, ...)
@@ -37,7 +37,8 @@ mrggsave_common(x, script, tag = NULL, width = 5, height = 5,
 
 \method{mrggsave}{gg}(x, ...)
 
-mrggdraw(..., draw = TRUE, .save = FALSE)
+mrggdraw(x, script = "AAA", tag = "_ZZZ", stem, ..., draw = TRUE,
+  .save = FALSE)
 
 mrgglabel(..., draw = FALSE, .save = FALSE)
 }
@@ -52,6 +53,8 @@ from x-axis title}
 
 \item{arrange}{logical; if \code{TRUE}, arrange the ggplot objects on a
 single page with \code{arrangeGrob}}
+
+\item{ncol}{passed to \code{\link{arrangeGrob}}}
 
 \item{onefile}{passed to \code{\link{pdf}}}
 
