@@ -313,34 +313,29 @@ mrggsave_common <- function(x,
 ##' @export
 mrggsave.list <- function(x, ..., arrange = FALSE) {
 
-  cl <- lapply(x, class)
+  cl <- scan_list_cl(x)
 
-  cl <- unlist(lapply(cl, paste, collapse = "-"), use.names=FALSE)
-
-  if(all(cl == "gg-ggplot")) {
+  if(all(cl$cl == "gg-ggplot")) {
     return(mrggsave.ggplot(x, arrange = arrange,...))
   }
 
-  if(all(cl == "trellis")) {
+  if(all(cl$cl == "trellis")) {
     return(mrggsave.trellis(x, arrange = arrange,...))
   }
 
-  if(all(cl ==  "gg-ggmatrix")) {
+  if(all(cl$ggmatrix)) {
     return(mrggsave.ggmatrix(x, arrange = arrange, ...))
   }
 
-  if(all(cl == "ggassemble-gg-ggplot")) {
+  if(all(cl$ggassemble)) {
     return(mrggsave.ggassemble(x, arrange = arrange, ...))
   }
 
-  if(any(cl=="trellis")) {
+  if(any(cl$cl=="trellis")) {
     stop("Found lattice plot in mixed list", call. = FALSE)
   }
 
-  is_ggmat <- cl == "gg-ggmatrix"
-  is_ggassemble <- cl == "ggassemble-gg-ggplot"
-
-  if(any(is_ggmat)) {
+  if(any(cl$ggmatrix)) {
 
     if(!requireNamespace("GGally")) {
       stop("Could not load GGally package", call.=FALSE)
@@ -350,17 +345,17 @@ mrggsave.list <- function(x, ..., arrange = FALSE) {
       stop("Could not load gtable package", call.=FALSE)
     }
 
-    x[is_ggmat] <- lapply(x[is_ggmat],  GGally::ggmatrix_gtable)
+    x[cl$ggmatrix] <- lapply(x[cl$ggmatrix],  GGally::ggmatrix_gtable)
 
   }
 
-  if(any(is_ggassemble)) {
+  if(any(cl$ggassemble)) {
 
     if(!requireNamespace("patchwork")) {
       stop("Could not load patchwork package", call.=FALSE)
     }
 
-    x[is_ggassemble] <- lapply(x[is_ggassemble], patchwork::patchworkGrob)
+    x[cl$ggassemble] <- lapply(x[cl$ggassemble], patchwork::patchworkGrob)
 
   }
 
@@ -386,3 +381,59 @@ mrggdraw <- function(x, script = "AAA", tag = "_ZZZ", stem,
 mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
   mrggsave(..., draw = FALSE, .save = FALSE)
 }
+
+
+##' Arrange plots on a single page
+##'
+##' This function is just a convenience wrapper for
+##' \code{gridExtra::arrangeGrob}.
+##'
+##' @param x a list of plots
+##' @param ncol passed to \code{gridExtra::arrangeGrob}
+##' @export
+mrggpage <- function(x, ncol = 2) {
+  if(!inherits(x,"list")) x <- list(x)
+  gridExtra::arrangeGrob(grobs=x, ncol = ncol)
+}
+
+##' Label and save a list of objects
+##'
+##' @param x passed to \code{\link{mrggsave_common}}
+##' @param ... passed to \code{\link{mrggsave_common}}
+##'
+##' @details
+##' No arrangement is done; the objects are just
+##' labeldd and save.
+##'
+##' The objects could be ggplot objects or ggplot
+##' objects that have been arranged on a page
+##' with \code{\link{mrggpage}}.
+##'
+##' @export
+mrggsave_list <- function(x,...) {
+  if(!inherits(x, "list")) {
+    stop("x must be a list", call. = FALSE)
+  }
+
+  cl <- scan_list_cl(x)
+
+  if(any(cl$ggmatrix)) {
+    assert_that(requireNamespace("GGally"))
+    x[cl$ggmatrix] <- lapply(x[cl$ggmatrix],
+                             GGally::ggmatrix_gtable)
+  }
+  if(any(cl$ggassemble)) {
+    assert_that(requireNamespace("patchwork"))
+    x[cl$ggassemble] <- lapply(x[cl$ggassemble], patchwork::patchworkGrob)
+  }
+  mrggsave_common(x,...)
+}
+
+scan_list_cl <- function(x) {
+  cl <- lapply(x, class)
+  cl <- unlist(lapply(cl, paste, collapse = "-"), use.names=FALSE)
+  list(ggmatrix = cl == "gg-ggmatrix",
+       ggassemble = cl=="ggassemble-gg-ggplot",
+       cl = cl)
+}
+
