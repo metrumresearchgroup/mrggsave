@@ -10,6 +10,10 @@ mrggsave_prep_object.default <- function(x,...) {
   return(x)
 }
 ##' @export
+mrggsave_prep_object.ggplot <- function(x,...) {
+  return(ggplotGrob(x))
+}
+##' @export
 mrggsave_prep_object.ggmatrix <- function(x,...) {
   assert_that(requireNamespace("GGally"))
   return(GGally::ggmatrix_gtable(x))
