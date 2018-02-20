@@ -4,10 +4,12 @@
 \alias{mrggpage}
 \title{Arrange plots on a single page}
 \usage{
-mrggpage(x, ncol = 2)
+mrggpage(x, ..., ncol = 2)
 }
 \arguments{
 \item{x}{a list of plots}
+
+\item{...}{additional plot objects}
 
 \item{ncol}{passed to \code{gridExtra::arrangeGrob}}
 }

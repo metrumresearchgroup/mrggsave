@@ -1,7 +1,5 @@
 # 0.1.0.9002
-- Added ncol as a formal argument; when ncol > 1, we set arrange to TRUE
-- Added defaults for script and stem for mrggdraw so that 
-plots could be drawn without adding this information
+- Added `ncol` as a formal argument; when `ncol` > 1, we set arrange to `TRUE`
 - Added `mrggpage` function as a wrapper around `gridExtra::arrangeGrob`
 - Added `mrggsave_list`, which takes in a list of objects that are ready 
 to label and to save without arrangement
@@ -11,7 +9,7 @@ possibly after arranging
 be passed into `mrggsave`
 - Added internal generic `mrggsave_prep_object` and methods so 
 that plots of different types can be passed directly to `mrggsave_common`
-- Added `mrggsave.gList`
+- Added `mrggsave.gList` for saving `gList` objects
 - When `tag` or `stem` are given as a vector, the vector is collapsed
 using `_` as a separator first prior to forming any output file names
 - When a file name is formed from `tag`, a `_` separator is automatically

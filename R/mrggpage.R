@@ -4,6 +4,7 @@
 ##' \code{gridExtra::arrangeGrob}.
 ##'
 ##' @param x a list of plots
+##' @param ... additional plot objects
 ##' @param ncol passed to \code{gridExtra::arrangeGrob}
 ##' @export
 mrggpage <- function(x, ..., ncol = 2) {

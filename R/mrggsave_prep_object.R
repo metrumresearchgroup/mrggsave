@@ -9,7 +9,6 @@ mrggsave_prep_object.gg <- function(x,...) {
 mrggsave_prep_object.default <- function(x,...) {
   return(gridExtra::arrangeGrob(x))
 }
-
 ##' @export
 mrggsave_prep_object.ggplot <- function(x,...) {
   return(ggplotGrob(x))
