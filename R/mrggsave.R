@@ -213,7 +213,6 @@ mrggsave.trellis <- function(x, ..., ypad = 3,
                          onefile = onefile, ...))
 }
 
-
 ##' @rdname mrggsave
 ##' @export
 mrggsave.ggassemble <- function(x, ...) {
@@ -357,64 +356,10 @@ mrggsave.gg <- function(x,...) {
 
 ##' @export
 ##' @rdname mrggsave
-mrggdraw <- function(x,  ncol = 1, arrange = FALSE, ...) {
-  if(!inherits(x,"list")) x <- list(x)
-  x <- lapply(x,mrggsave_prep_object)
-  if(ncol > 1 | (arrange)) {
-    x <- arrangeGrob(grobs = x, ncol = ncol, ...)
-    x <- gList(x)
-  }
-  foo <- lapply(x,draw_newpage)
-  return(invisible(x))
-}
-
-
-##' @export
-##' @rdname mrggsave
 mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
   mrggsave(..., draw = FALSE, .save = FALSE)
 }
 
-
-##' Arrange plots on a single page
-##'
-##' This function is just a convenience wrapper for
-##' \code{gridExtra::arrangeGrob}.
-##'
-##' @param x a list of plots
-##' @param ncol passed to \code{gridExtra::arrangeGrob}
-##' @export
-mrggpage <- function(x, ncol = 2) {
-  if(!inherits(x,"list")) x <- list(x)
-  gridExtra::arrangeGrob(grobs=x, ncol = ncol)
-}
-
-##' Label and save a list of objects
-##'
-##' @param x passed to \code{\link{mrggsave_common}}
-##' @param ... passed to \code{\link{mrggsave_common}}
-##'
-##' @details
-##' No arrangement is done; the objects are just
-##' labeldd and save.
-##'
-##' The objects could be ggplot objects or ggplot
-##' objects that have been arranged on a page
-##' with \code{\link{mrggpage}}.
-##'
-##' @export
-mrggsave_list <- function(x,...) {
-
-  if(!inherits(x, "list")) {
-    stop("x must be a list", call. = FALSE)
-  }
-
-  x <- flatten_if(x, function(.x) inherits(.x,"list"))
-
-  x <- lapply(x,mrggsave_prep_object)
-
-  mrggsave_common(x,...)
-}
 
 scan_list_cl <- function(x) {
   cl <- lapply(x, class)

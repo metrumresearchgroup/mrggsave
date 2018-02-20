@@ -10,7 +10,6 @@
 \alias{mrggsave_common}
 \alias{mrggsave.list}
 \alias{mrggsave.gg}
-\alias{mrggdraw}
 \alias{mrgglabel}
 \title{Label, arrange, and save graphics}
 \usage{
@@ -39,8 +38,6 @@ mrggsave_common(x, script, tag = NULL, width = 5, height = 5,
 \method{mrggsave}{list}(x, ..., arrange = FALSE)
 
 \method{mrggsave}{gg}(x, ...)
-
-mrggdraw(x, ncol = 1, arrange = FALSE, ...)
 
 mrgglabel(..., draw = FALSE, .save = FALSE)
 }
