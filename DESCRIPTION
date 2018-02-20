@@ -12,7 +12,7 @@ Description: Plots are annotated with the name of the generating
 License: GPL (>=2)
 Encoding: UTF-8
 LazyData: true
-Imports: ggplot2, grid, gridExtra, grDevices,assertthat
+Imports: ggplot2, grid, gridExtra, grDevices,assertthat,rlang
 Suggests: GGally, gtable, testthat, lattice, patchwork
 RoxygenNote: 6.0.1
 Remotes: thomasp85/patchwork

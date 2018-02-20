@@ -14,52 +14,52 @@ pg <- ggplot(data, aes(x = x, y = y)) + geom_point()
 pG <- GGally::ggpairs(data[,c(1,2)])
 
 test_that("lattice plot", {
-  out <- mrggsave(pl, Script, "_lattice_plot")
+  out <- mrggsave(pl, Script, "lattice_plot")
   expect_equal(basename(out), "test-mrggsave_lattice_plot.pdf")
 })
 
 test_that("ggplot", {
-  out <- mrggsave(pg, Script, "_ggplot")
+  out <- mrggsave(pg, Script, "ggplot")
   expect_equal(basename(out), "test-mrggsave_ggplot.pdf")
 })
 
 test_that("ggpairs", {
-  out <- mrggsave(pG, Script, "_ggpairs")
+  out <- mrggsave(pG, Script, "ggpairs")
   expect_equal(basename(out), "test-mrggsave_ggpairs.pdf")
 })
 
 test_that("list of ggplots", {
   p <- list(pg,pg,pg)
-  out <- mrggsave(p, Script, "_list")
+  out <- mrggsave(p, Script, "list")
   expect_equal(basename(out), "test-mrggsave_list.pdf")
 })
 
 test_that("list of ggpairs", {
   p <- list(pG,pG,pG)
-  out <- mrggsave(p, Script, "_list_pairs")
+  out <- mrggsave(p, Script, "list_pairs")
   expect_equal(basename(out), "test-mrggsave_list_pairs.pdf")
 })
 
 test_that("arranged ggplots", {
   p <- list(pg,pg,pg)
-  out <- mrggsave(p, Script, "_arranged", arrange = TRUE)
+  out <- mrggsave(p, Script, "arranged", arrange = TRUE)
   expect_equal(basename(out), "test-mrggsave_arranged.pdf")
 })
 
 test_that("arranged lattice plots", {
   p <- list(pl,pl,pl)
-  out <- mrggsave(p, Script, "_lat-arranged", arrange = TRUE)
+  out <- mrggsave(p, Script, "lat-arranged", arrange = TRUE)
   expect_equal(basename(out), "test-mrggsave_lat-arranged.pdf")
 })
 
 if(requireNamespace("patchwork") ) {
   test_that("ggarrange", {
     p <- pg + pg + pg
-    out <- mrggsave(p, Script, "_ggarranged")
+    out <- mrggsave(p, Script, "ggarranged")
     expect_equal(basename(out), "test-mrggsave_ggarranged.pdf")
 
     p <- list(p, p, p)
-    out <- mrggsave(p, Script, "_ggarranged_list")
+    out <- mrggsave(p, Script, "ggarranged_list")
     expect_equal(basename(out), "test-mrggsave_ggarranged_list.pdf")
 
   })

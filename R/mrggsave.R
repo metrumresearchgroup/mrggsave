@@ -3,7 +3,7 @@ is_glist <- function(x) "gList" %in% class(x)
 
 make_stem <- function(script,tag) {
   base <- gsub("\\.(r|R|Rmd|rmd)$", "", script)
-  paste0(base,tag)
+  paste0(base,"_",paste0(tag,collapse = "_"))
 }
 
 ##' Draw an annotated plot
@@ -186,6 +186,12 @@ mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
 
 ##' @rdname mrggsave
 ##' @export
+mrggsave.gList <- function(...) {
+  mrggsave_common(...)
+}
+
+##' @rdname mrggsave
+##' @export
 mrggsave.trellis <- function(x, ..., ypad = 3,
                              arrange = FALSE,
                              ncol = 1,
@@ -226,6 +232,7 @@ mrggsave.ggassemble <- function(x, ...) {
 }
 
 ##' @rdname mrggsave
+##' @export
 mrggsave_common <- function(x,
                             script,
                             tag = NULL,
@@ -246,6 +253,8 @@ mrggsave_common <- function(x,
 
   if(!is.null(tag)) {
     stem <- make_stem(script,tag)
+  } else {
+    stem <- paste0(stem,collapse = "_")
   }
 
   n  <- length(x)
@@ -335,29 +344,7 @@ mrggsave.list <- function(x, ..., arrange = FALSE) {
     stop("Found lattice plot in mixed list", call. = FALSE)
   }
 
-  if(any(cl$ggmatrix)) {
-
-    if(!requireNamespace("GGally")) {
-      stop("Could not load GGally package", call.=FALSE)
-    }
-
-    if(!requireNamespace("gtable")) {
-      stop("Could not load gtable package", call.=FALSE)
-    }
-
-    x[cl$ggmatrix] <- lapply(x[cl$ggmatrix],  GGally::ggmatrix_gtable)
-
-  }
-
-  if(any(cl$ggassemble)) {
-
-    if(!requireNamespace("patchwork")) {
-      stop("Could not load patchwork package", call.=FALSE)
-    }
-
-    x[cl$ggassemble] <- lapply(x[cl$ggassemble], patchwork::patchworkGrob)
-
-  }
+  x <- lapply(x, mrggsave_prep_object)
 
   return(mrggsave.ggplot(x, arrange = arrange, ...))
 }
@@ -370,9 +357,15 @@ mrggsave.gg <- function(x,...) {
 
 ##' @export
 ##' @rdname mrggsave
-mrggdraw <- function(x, script = "AAA", tag = "_ZZZ", stem,
-                     ..., draw = TRUE, .save = FALSE) {
-  mrggsave(x,script,tag,stem, ..., draw = draw, .save = .save)
+mrggdraw <- function(x,  ncol = 1, arrange = FALSE, ...) {
+  if(!inherits(x,"list")) x <- list(x)
+  x <- lapply(x,mrggsave_prep_object)
+  if(ncol > 1 | (arrange)) {
+    x <- arrangeGrob(grobs = x, ncol = ncol, ...)
+    x <- gList(x)
+  }
+  foo <- lapply(x,draw_newpage)
+  return(invisible(x))
 }
 
 
@@ -411,21 +404,15 @@ mrggpage <- function(x, ncol = 2) {
 ##'
 ##' @export
 mrggsave_list <- function(x,...) {
+
   if(!inherits(x, "list")) {
     stop("x must be a list", call. = FALSE)
   }
 
-  cl <- scan_list_cl(x)
+  x <- flatten_if(x, function(.x) inherits(.x,"list"))
 
-  if(any(cl$ggmatrix)) {
-    assert_that(requireNamespace("GGally"))
-    x[cl$ggmatrix] <- lapply(x[cl$ggmatrix],
-                             GGally::ggmatrix_gtable)
-  }
-  if(any(cl$ggassemble)) {
-    assert_that(requireNamespace("patchwork"))
-    x[cl$ggassemble] <- lapply(x[cl$ggassemble], patchwork::patchworkGrob)
-  }
+  x <- lapply(x,mrggsave_prep_object)
+
   mrggsave_common(x,...)
 }
 
@@ -436,4 +423,5 @@ scan_list_cl <- function(x) {
        ggassemble = cl=="ggassemble-gg-ggplot",
        cl = cl)
 }
+
 

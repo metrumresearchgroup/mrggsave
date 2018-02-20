@@ -4,6 +4,7 @@
 \alias{mrggsave}
 \alias{mrggsave.ggplot}
 \alias{mrggsave.ggmatrix}
+\alias{mrggsave.gList}
 \alias{mrggsave.trellis}
 \alias{mrggsave.ggassemble}
 \alias{mrggsave_common}
@@ -21,6 +22,8 @@ mrggsave(x, ...)
 \method{mrggsave}{ggmatrix}(x, ..., ypad = 4, arrange = FALSE,
   onefile = TRUE)
 
+\method{mrggsave}{gList}(...)
+
 \method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
   onefile = TRUE)
 
@@ -37,8 +40,7 @@ mrggsave_common(x, script, tag = NULL, width = 5, height = 5,
 
 \method{mrggsave}{gg}(x, ...)
 
-mrggdraw(x, script = "AAA", tag = "_ZZZ", stem, ..., draw = TRUE,
-  .save = FALSE)
+mrggdraw(x, ncol = 1, arrange = FALSE, ...)
 
 mrgglabel(..., draw = FALSE, .save = FALSE)
 }
