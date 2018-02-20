@@ -201,6 +201,8 @@ mrggsave.ggassemble <- function(x, ...) {
 ##' @export
 mrggsave.list <- function(x, ..., arrange = FALSE) {
 
+  x <- flatten_if(x, function(.x) inherits(.x,"list"))
+
   cl <- scan_list_cl(x)
 
   if(all(cl$cl == "gg-ggplot")) {
