@@ -140,19 +140,11 @@ mrggsave.ggplot <- function(x, ..., ypad = 2,
 mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
                               onefile = TRUE) {
 
-  if(!requireNamespace("GGally")) {
-    stop("could not load GGally package", call.=FALSE)
-  }
-
-  if(!requireNamespace("gtable")) {
-    stop("could not load gtable package", call.=FALSE)
-  }
-
   if(!inherits(x,"list")) {
     x <- list(x)
   }
 
-  x <- lapply(x, GGally::ggmatrix_gtable)
+  x <- lapply(x, mrggsave_prep_object.ggmatrix)
 
   if(arrange) {
     onefile <- TRUE
@@ -195,15 +187,11 @@ mrggsave.trellis <- function(x, ..., ypad = 3,
 ##' @export
 mrggsave.ggassemble <- function(x, ...) {
 
-  if(!requireNamespace("patchwork")) {
-    stop("Could not load patchwork package", call.=FALSE)
-  }
-
   if(!inherits(x, "list")) {
     x <- list(x)
   }
 
-  x <- lapply(x, patchwork::patchworkGrob)
+  x <- lapply(x, mrggsave_prep_object.ggassemble)
 
   return(mrggsave.ggplot(x, ...))
 }
@@ -229,10 +217,6 @@ mrggsave.list <- function(x, ..., arrange = FALSE) {
 
   if(all(cl$ggassemble)) {
     return(mrggsave.ggassemble(x, arrange = arrange, ...))
-  }
-
-  if(any(cl$cl=="trellis")) {
-    stop("Found lattice plot in mixed list", call. = FALSE)
   }
 
   x <- lapply(x, mrggsave_prep_object)
