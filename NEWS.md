@@ -12,7 +12,10 @@ be passed into `mrggsave`
 - Added internal generic `mrggsave_prep_object` and methods so 
 that plots of different types can be passed directly to `mrggsave_common`
 - Added `mrggsave.gList`
-
+- When `tag` or `stem` are given as a vector, the vector is collapsed
+using `_` as a separator first prior to forming any output file names
+- When a file name is formed from `tag`, a `_` separator is automatically
+placed between `script` and the (possibly collapsed) `tag` value
 
 # 0.1.0
 - Initial validation

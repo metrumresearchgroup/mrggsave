@@ -93,18 +93,18 @@
 ##' mrggsave(p1, Script, "_plot1")
 ##' mrggsave(p2, Script, "_plot2")
 ##'
-##' mrggsave(list(p1,p2), Script, "_both_plots")
-##' mrggsave(list(p1,p2), Script, "_separate_files", onefile=FALSE)
+##' mrggsave(list(p1,p2), Script, "both_plots")
+##' mrggsave(list(p1,p2), Script, "separate_files", onefile=FALSE)
 ##'
-##' mrggsave(p1, Script, "_different_shape", width=10, height=4)
+##' mrggsave(p1, Script, "different_shape", width=10, height=4)
 ##'
-##' mrggsave(list(p1,p2), Script, "_onepage", arrange=TRUE, ncol=2)
+##' mrggsave(list(p1,p2), Script, "onepage", arrange=TRUE, ncol=2)
 ##'
 ##' stopifnot(require(GGally))
 ##'
 ##' p3 <- ggpairs(data)
 ##'
-##' mrggsave(p3, Script, "_ggally_plot")
+##' mrggsave(p3, Script, "ggally_plot")
 ##'
 ##' @export
 mrggsave <- function(x, ...) {
