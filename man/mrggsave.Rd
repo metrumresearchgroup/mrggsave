@@ -7,10 +7,10 @@
 \alias{mrggsave.gList}
 \alias{mrggsave.trellis}
 \alias{mrggsave.ggassemble}
-\alias{mrggsave_common}
 \alias{mrggsave.list}
 \alias{mrggsave.gg}
 \alias{mrgglabel}
+\alias{mrggsave_common}
 \title{Label, arrange, and save graphics}
 \usage{
 mrggsave(x, ...)
@@ -28,18 +28,18 @@ mrggsave(x, ...)
 
 \method{mrggsave}{ggassemble}(x, ...)
 
+\method{mrggsave}{list}(x, ..., arrange = FALSE)
+
+\method{mrggsave}{gg}(x, ...)
+
+mrgglabel(..., draw = FALSE, .save = FALSE)
+
 mrggsave_common(x, script, tag = NULL, width = 5, height = 5,
   stem = "Rplot", dir = getOption("mrggsave_dir", "../deliv/figure"),
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
   arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
   labsep = "\\n", fontsize = 7, textGrob.x = 0.01, textGrob.y = 0.25,
   ...)
-
-\method{mrggsave}{list}(x, ..., arrange = FALSE)
-
-\method{mrggsave}{gg}(x, ...)
-
-mrgglabel(..., draw = FALSE, .save = FALSE)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
@@ -56,6 +56,10 @@ single page with \code{arrangeGrob}}
 \item{ncol}{passed to \code{\link{arrangeGrob}}}
 
 \item{onefile}{passed to \code{\link{pdf}}}
+
+\item{draw}{if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}}
+
+\item{.save}{logical; if \code{FALSE}, return the labeled objects}
 
 \item{script}{the name of the script generating the \code{gg} objects}
 
@@ -74,10 +78,6 @@ for portrait figure}
 
 \item{prefix}{gets prepended to the output file path in the Source
 graphic, label}
-
-\item{draw}{if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}}
-
-\item{.save}{logical; if \code{FALSE}, return the labeled objects}
 
 \item{labsep}{character separator (or newline) for Source code and
 Source graphic labels}
@@ -117,9 +117,6 @@ When \code{.save} is \code{FALSE}, \code{mrggsave}
 always returns a list of table grobs.  If a single
 plot was passed, the return value in this case
 is a list of length 1.
-
-\code{mrggdraw} calls \code{mrggsave} and draws
-the plot but does not save it.
 
 \code{mrgglabel} calls \code{mrggsave} and
 neither draws nor saves the plot, but
@@ -165,4 +162,7 @@ p3 <- ggpairs(data)
 
 mrggsave(p3, Script, "_ggally_plot")
 
+}
+\seealso{
+\code{\link{mrggdraw}}, \code{\link{mrggsave_list}}
 }

@@ -1,25 +1,4 @@
 
-is_glist <- function(x) "gList" %in% class(x)
-
-make_stem <- function(script,tag) {
-  base <- gsub("\\.(r|R|Rmd|rmd)$", "", script)
-  paste0(base,"_",paste0(tag,collapse = "_"))
-}
-
-##' Draw an annotated plot
-##'
-##' @param x a table grob object
-##'
-##' @details
-##' This function calls \code{grid::grid.newpage} and
-##' then \code{grid::grid.draw}.
-##'
-##' @export
-draw_newpage <- function(x) {
-  grid.newpage()
-  grid.draw(x)
-}
-
 ##' Label, arrange, and save graphics
 ##'
 ##' Save plot objects as .pdf file after labeling with Source graphic and
@@ -81,12 +60,11 @@ draw_newpage <- function(x) {
 ##' plot was passed, the return value in this case
 ##' is a list of length 1.
 ##'
-##' \code{mrggdraw} calls \code{mrggsave} and draws
-##' the plot but does not save it.
-##'
 ##' \code{mrgglabel} calls \code{mrggsave} and
 ##' neither draws nor saves the plot, but
 ##' returns the annotated plots as table grob.
+##'
+##' @seealso \code{\link{mrggdraw}}, \code{\link{mrggsave_list}}
 ##'
 ##' @examples
 ##' data(Theoph)
@@ -230,6 +208,50 @@ mrggsave.ggassemble <- function(x, ...) {
   return(mrggsave.ggplot(x, ...))
 }
 
+
+##' @rdname mrggsave
+##' @export
+mrggsave.list <- function(x, ..., arrange = FALSE) {
+
+  cl <- scan_list_cl(x)
+
+  if(all(cl$cl == "gg-ggplot")) {
+    return(mrggsave.ggplot(x, arrange = arrange,...))
+  }
+
+  if(all(cl$cl == "trellis")) {
+    return(mrggsave.trellis(x, arrange = arrange,...))
+  }
+
+  if(all(cl$ggmatrix)) {
+    return(mrggsave.ggmatrix(x, arrange = arrange, ...))
+  }
+
+  if(all(cl$ggassemble)) {
+    return(mrggsave.ggassemble(x, arrange = arrange, ...))
+  }
+
+  if(any(cl$cl=="trellis")) {
+    stop("Found lattice plot in mixed list", call. = FALSE)
+  }
+
+  x <- lapply(x, mrggsave_prep_object)
+
+  return(mrggsave.ggplot(x, arrange = arrange, ...))
+}
+
+##' @rdname mrggsave
+##' @export
+mrggsave.gg <- function(x,...) {
+  NextMethod()
+}
+
+##' @export
+##' @rdname mrggsave
+mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
+  mrggsave(..., draw = FALSE, .save = FALSE)
+}
+
 ##' @rdname mrggsave
 ##' @export
 mrggsave_common <- function(x,
@@ -316,49 +338,6 @@ mrggsave_common <- function(x,
   return(invisible(outfile))
 }
 
-
-##' @rdname mrggsave
-##' @export
-mrggsave.list <- function(x, ..., arrange = FALSE) {
-
-  cl <- scan_list_cl(x)
-
-  if(all(cl$cl == "gg-ggplot")) {
-    return(mrggsave.ggplot(x, arrange = arrange,...))
-  }
-
-  if(all(cl$cl == "trellis")) {
-    return(mrggsave.trellis(x, arrange = arrange,...))
-  }
-
-  if(all(cl$ggmatrix)) {
-    return(mrggsave.ggmatrix(x, arrange = arrange, ...))
-  }
-
-  if(all(cl$ggassemble)) {
-    return(mrggsave.ggassemble(x, arrange = arrange, ...))
-  }
-
-  if(any(cl$cl=="trellis")) {
-    stop("Found lattice plot in mixed list", call. = FALSE)
-  }
-
-  x <- lapply(x, mrggsave_prep_object)
-
-  return(mrggsave.ggplot(x, arrange = arrange, ...))
-}
-
-##' @rdname mrggsave
-##' @export
-mrggsave.gg <- function(x,...) {
-  NextMethod()
-}
-
-##' @export
-##' @rdname mrggsave
-mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
-  mrggsave(..., draw = FALSE, .save = FALSE)
-}
 
 
 scan_list_cl <- function(x) {
