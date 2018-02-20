@@ -16,6 +16,7 @@ mrggsave_prep_object.ggplot <- function(x,...) {
 ##' @export
 mrggsave_prep_object.ggmatrix <- function(x,...) {
   assert_that(requireNamespace("GGally"))
+  assert_that(requireNamespace("gtable"))
   return(GGally::ggmatrix_gtable(x))
 }
 ##' @export
