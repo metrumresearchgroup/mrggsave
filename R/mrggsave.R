@@ -1,25 +1,4 @@
 
-is_glist <- function(x) "gList" %in% class(x)
-
-make_stem <- function(script,tag) {
-  base <- gsub("\\.(r|R|Rmd|rmd)$", "", script)
-  paste0(base,tag)
-}
-
-##' Draw an annotated plot
-##'
-##' @param x a table grob object
-##'
-##' @details
-##' This function calls \code{grid::grid.newpage} and
-##' then \code{grid::grid.draw}.
-##'
-##' @export
-draw_newpage <- function(x) {
-  grid.newpage()
-  grid.draw(x)
-}
-
 ##' Label, arrange, and save graphics
 ##'
 ##' Save plot objects as .pdf file after labeling with Source graphic and
@@ -48,6 +27,7 @@ draw_newpage <- function(x) {
 ##' @param .save logical; if \code{FALSE}, return the labeled objects
 ##' @param arrange logical; if \code{TRUE}, arrange the ggplot objects on a
 ##' single page with \code{arrangeGrob}
+##' @param ncol passed to \code{\link{arrangeGrob}}
 ##' @param labsep character separator (or newline) for Source code and
 ##' Source graphic labels
 ##' @param draw if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}
@@ -75,12 +55,16 @@ draw_newpage <- function(x) {
 ##' the user can specify the complete stem of the file
 ##' name with the \code{stem} argument.
 ##'
-##' \code{mrggdraw} calls \code{mrggsave} and draws
-##' the plot but does not save it.
+##' When \code{.save} is \code{FALSE}, \code{mrggsave}
+##' always returns a list of table grobs.  If a single
+##' plot was passed, the return value in this case
+##' is a list of length 1.
 ##'
 ##' \code{mrgglabel} calls \code{mrggsave} and
 ##' neither draws nor saves the plot, but
 ##' returns the annotated plots as table grob.
+##'
+##' @seealso \code{\link{mrggdraw}}, \code{\link{mrggsave_list}}
 ##'
 ##' @examples
 ##' data(Theoph)
@@ -109,18 +93,18 @@ draw_newpage <- function(x) {
 ##' mrggsave(p1, Script, "_plot1")
 ##' mrggsave(p2, Script, "_plot2")
 ##'
-##' mrggsave(list(p1,p2), Script, "_both_plots")
-##' mrggsave(list(p1,p2), Script, "_separate_files", onefile=FALSE)
+##' mrggsave(list(p1,p2), Script, "both_plots")
+##' mrggsave(list(p1,p2), Script, "separate_files", onefile=FALSE)
 ##'
-##' mrggsave(p1, Script, "_different_shape", width=10, height=4)
+##' mrggsave(p1, Script, "different_shape", width=10, height=4)
 ##'
-##' mrggsave(list(p1,p2), Script, "_onepage", arrange=TRUE, ncol=2)
+##' mrggsave(list(p1,p2), Script, "onepage", arrange=TRUE, ncol=2)
 ##'
 ##' stopifnot(require(GGally))
 ##'
 ##' p3 <- ggpairs(data)
 ##'
-##' mrggsave(p3, Script, "_ggally_plot")
+##' mrggsave(p3, Script, "ggally_plot")
 ##'
 ##' @export
 mrggsave <- function(x, ...) {
@@ -130,13 +114,20 @@ mrggsave <- function(x, ...) {
 
 ##' @rdname mrggsave
 ##' @export
-mrggsave.ggplot <- function(x, ..., ypad = 2, arrange = FALSE, onefile = TRUE) {
+mrggsave.ggplot <- function(x, ..., ypad = 2,
+                            arrange = FALSE,
+                            ncol = 1,
+                            onefile = TRUE) {
 
-  if(!inherits(x,"list")) x <- list(x)
+  if(ncol > 1) arrange <- TRUE
+
+  if(!inherits(x,"list")) {
+    x <- list(x)
+  }
 
   if(arrange) {
     onefile <- TRUE
-    x <- gList(arrangeGrob(grobs=x,...))
+    x <- gList(arrangeGrob(grobs=x, ncol = ncol, ...))
   }
 
   return(mrggsave_common(x = x, ypad = ypad,
@@ -149,37 +140,43 @@ mrggsave.ggplot <- function(x, ..., ypad = 2, arrange = FALSE, onefile = TRUE) {
 mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
                               onefile = TRUE) {
 
-  if(arrange) {
-    stop("Cannot arrange ggmatrix objects", call. = FALSE)
+  if(!inherits(x,"list")) {
+    x <- list(x)
   }
 
-  if(!requireNamespace("GGally")) {
-    stop("could not load GGally package", call.=FALSE)
+  x <- lapply(x, mrggsave_prep_object.ggmatrix)
+
+  if(arrange) {
+    onefile <- TRUE
+    x <- gList(arrangeGrob(grobs=x,...))
   }
-  if(!requireNamespace("gtable")) {
-    stop("could not load gtable package", call.=FALSE)
-  }
+
+  return(mrggsave_common(x = x, ypad = ypad, arrange = arrange, ...))
+}
+
+##' @rdname mrggsave
+##' @export
+mrggsave.gList <- function(...) {
+  mrggsave_common(...)
+}
+
+##' @rdname mrggsave
+##' @export
+mrggsave.trellis <- function(x, ..., ypad = 3,
+                             arrange = FALSE,
+                             ncol = 1,
+                             onefile = TRUE) {
+
+  if(ncol > 1) arrange <- TRUE
 
   if(!inherits(x,"list")) {
     x <- list(x)
   }
 
-  x <- lapply(x, GGally::ggmatrix_gtable)
-
-  return(mrggsave_common(x = x, ypad = ypad, arrange = FALSE, ...))
-}
-
-##' @rdname mrggsave
-##' @export
-mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE,
-                             onefile = TRUE) {
-
-  if(!inherits(x,"list")) x <- list(x)
-
   if(arrange) {
     onefile <- TRUE
     x <- lapply(x, arrangeGrob)
-    x <- gList(arrangeGrob(grobs=x,...))
+    x <- gList(arrangeGrob(grobs=x,ncol = ncol, ...))
   }
 
   return(mrggsave_common(x = x, ypad = ypad, arrange = arrange,
@@ -187,6 +184,62 @@ mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE,
 }
 
 ##' @rdname mrggsave
+##' @export
+mrggsave.ggassemble <- function(x, ...) {
+
+  if(!inherits(x, "list")) {
+    x <- list(x)
+  }
+
+  x <- lapply(x, mrggsave_prep_object.ggassemble)
+
+  return(mrggsave.ggplot(x, ...))
+}
+
+
+##' @rdname mrggsave
+##' @export
+mrggsave.list <- function(x, ..., arrange = FALSE) {
+
+  x <- flatten_if(x, function(.x) inherits(.x,"list"))
+
+  cl <- scan_list_cl(x)
+
+  if(all(cl$cl == "gg-ggplot")) {
+    return(mrggsave.ggplot(x, arrange = arrange,...))
+  }
+
+  if(all(cl$cl == "trellis")) {
+    return(mrggsave.trellis(x, arrange = arrange,...))
+  }
+
+  if(all(cl$ggmatrix)) {
+    return(mrggsave.ggmatrix(x, arrange = arrange, ...))
+  }
+
+  if(all(cl$ggassemble)) {
+    return(mrggsave.ggassemble(x, arrange = arrange, ...))
+  }
+
+  x <- lapply(x, mrggsave_prep_object)
+
+  return(mrggsave.ggplot(x, arrange = arrange, ...))
+}
+
+##' @rdname mrggsave
+##' @export
+mrggsave.gg <- function(x,...) {
+  NextMethod()
+}
+
+##' @export
+##' @rdname mrggsave
+mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
+  mrggsave(..., draw = FALSE, .save = FALSE)
+}
+
+##' @rdname mrggsave
+##' @export
 mrggsave_common <- function(x,
                             script,
                             tag = NULL,
@@ -207,6 +260,8 @@ mrggsave_common <- function(x,
 
   if(!is.null(tag)) {
     stem <- make_stem(script,tag)
+  } else {
+    stem <- paste0(stem,collapse = "_")
   }
 
   n  <- length(x)
@@ -247,19 +302,17 @@ mrggsave_common <- function(x,
     } else {
       .foo <- lapply(x,draw_newpage)
     }
-    return(invisible(x))
   }
 
   if(!.save) {
-    if(length(x)==1) {
-      x <- x[[1]]
-    }
     return(invisible(x))
   }
 
   args <- list(...)
   args$file <- pdffile
   args$onefile <- onefile
+  args$width <- width
+  args$height <- height
   args <- args[names(args) %in% names(formals(grDevices::pdf))]
 
   do.call(grDevices::pdf, args)
@@ -272,54 +325,13 @@ mrggsave_common <- function(x,
 }
 
 
-##' @rdname mrggsave
-##' @export
-mrggsave.list <- function(x, ..., arrange = FALSE) {
 
+scan_list_cl <- function(x) {
   cl <- lapply(x, class)
   cl <- unlist(lapply(cl, paste, collapse = "-"), use.names=FALSE)
-
-  if(arrange) {
-    if(!all(cl==cl[1])) {
-      stop("All objects are not of the same class", call. = FALSE)
-    }
-  } else {
-    if(any(cl=="trellis")) {
-      cl <- "trellis"
-    }
-  }
-
-  cl <- cl[1]
-
-  if(identical(cl, "gg-ggplot")) {
-    return(mrggsave.ggplot(x, arrange = arrange,...))
-  }
-
-  if(identical(cl, "trellis")) {
-    return(mrggsave.trellis(x, arrange = arrange,...))
-  }
-
-  if(identical(cl, "gg-ggmatrix")) {
-    return(mrggsave.ggmatrix(x, arrange = arrange, ...))
-  }
-
-  stop("Invalid object of class: ", cl, call. = FALSE)
+  list(ggmatrix = cl == "gg-ggmatrix",
+       ggassemble = cl=="ggassemble-gg-ggplot",
+       cl = cl)
 }
 
-##' @rdname mrggsave
-##' @export
-mrggsave.gg <- function(x,...) {
-  NextMethod()
-}
 
-##' @export
-##' @rdname mrggsave
-mrggdraw <- function(..., draw = TRUE, .save = FALSE) {
-  mrggsave(..., draw = TRUE, .save = .save)
-}
-
-##' @export
-##' @rdname mrggsave
-mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
-  mrggsave(..., draw = FALSE, .save = FALSE)
-}

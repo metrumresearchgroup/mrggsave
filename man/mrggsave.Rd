@@ -4,24 +4,35 @@
 \alias{mrggsave}
 \alias{mrggsave.ggplot}
 \alias{mrggsave.ggmatrix}
+\alias{mrggsave.gList}
 \alias{mrggsave.trellis}
-\alias{mrggsave_common}
+\alias{mrggsave.ggassemble}
 \alias{mrggsave.list}
 \alias{mrggsave.gg}
-\alias{mrggdraw}
 \alias{mrgglabel}
+\alias{mrggsave_common}
 \title{Label, arrange, and save graphics}
 \usage{
 mrggsave(x, ...)
 
-\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE,
+\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE, ncol = 1,
   onefile = TRUE)
 
 \method{mrggsave}{ggmatrix}(x, ..., ypad = 4, arrange = FALSE,
   onefile = TRUE)
 
-\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE,
+\method{mrggsave}{gList}(...)
+
+\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
   onefile = TRUE)
+
+\method{mrggsave}{ggassemble}(x, ...)
+
+\method{mrggsave}{list}(x, ..., arrange = FALSE)
+
+\method{mrggsave}{gg}(x, ...)
+
+mrgglabel(..., draw = FALSE, .save = FALSE)
 
 mrggsave_common(x, script, tag = NULL, width = 5, height = 5,
   stem = "Rplot", dir = getOption("mrggsave_dir", "../deliv/figure"),
@@ -29,14 +40,6 @@ mrggsave_common(x, script, tag = NULL, width = 5, height = 5,
   arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
   labsep = "\\n", fontsize = 7, textGrob.x = 0.01, textGrob.y = 0.25,
   ...)
-
-\method{mrggsave}{list}(x, ..., arrange = FALSE)
-
-\method{mrggsave}{gg}(x, ...)
-
-mrggdraw(..., draw = TRUE, .save = FALSE)
-
-mrgglabel(..., draw = FALSE, .save = FALSE)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
@@ -50,7 +53,13 @@ from x-axis title}
 \item{arrange}{logical; if \code{TRUE}, arrange the ggplot objects on a
 single page with \code{arrangeGrob}}
 
+\item{ncol}{passed to \code{\link{arrangeGrob}}}
+
 \item{onefile}{passed to \code{\link{pdf}}}
+
+\item{draw}{if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}}
+
+\item{.save}{logical; if \code{FALSE}, return the labeled objects}
 
 \item{script}{the name of the script generating the \code{gg} objects}
 
@@ -69,10 +78,6 @@ for portrait figure}
 
 \item{prefix}{gets prepended to the output file path in the Source
 graphic, label}
-
-\item{draw}{if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}}
-
-\item{.save}{logical; if \code{FALSE}, return the labeled objects}
 
 \item{labsep}{character separator (or newline) for Source code and
 Source graphic labels}
@@ -108,8 +113,10 @@ will be \code{vpc_figures_by_dose_group.pdf}.  Alternatively,
 the user can specify the complete stem of the file
 name with the \code{stem} argument.
 
-\code{mrggdraw} calls \code{mrggsave} and draws
-the plot but does not save it.
+When \code{.save} is \code{FALSE}, \code{mrggsave}
+always returns a list of table grobs.  If a single
+plot was passed, the return value in this case
+is a list of length 1.
 
 \code{mrgglabel} calls \code{mrggsave} and
 neither draws nor saves the plot, but
@@ -142,17 +149,20 @@ p2 <- ggplot(data=Theoph) +
 mrggsave(p1, Script, "_plot1")
 mrggsave(p2, Script, "_plot2")
 
-mrggsave(list(p1,p2), Script, "_both_plots")
-mrggsave(list(p1,p2), Script, "_separate_files", onefile=FALSE)
+mrggsave(list(p1,p2), Script, "both_plots")
+mrggsave(list(p1,p2), Script, "separate_files", onefile=FALSE)
 
-mrggsave(p1, Script, "_different_shape", width=10, height=4)
+mrggsave(p1, Script, "different_shape", width=10, height=4)
 
-mrggsave(list(p1,p2), Script, "_onepage", arrange=TRUE, ncol=2)
+mrggsave(list(p1,p2), Script, "onepage", arrange=TRUE, ncol=2)
 
 stopifnot(require(GGally))
 
 p3 <- ggpairs(data)
 
-mrggsave(p3, Script, "_ggally_plot")
+mrggsave(p3, Script, "ggally_plot")
 
+}
+\seealso{
+\code{\link{mrggdraw}}, \code{\link{mrggsave_list}}
 }

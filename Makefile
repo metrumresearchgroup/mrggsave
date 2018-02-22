@@ -6,6 +6,9 @@ TARBALL=${PACKAGE}_${VERSION}.tar.gz
 PKGDIR=.
 CHKDIR=.
 
+release:
+	make all
+	cp ${TARBALL} ~/ghe/software-qualification/mrggsave_qualification/testing/
 
 cran:
 	make doc
