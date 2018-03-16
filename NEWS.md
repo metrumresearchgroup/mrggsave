@@ -14,6 +14,9 @@ that plots of different types can be passed directly to `mrggsave_common`
 using `_` as a separator first prior to forming any output file names
 - When a file name is formed from `tag`, a `_` separator is automatically
 placed between `script` and the (possibly collapsed) `tag` value
+- Added argument to `mrggpage` to allow a list of plots to be arranged
+across multiple pages; added methods for handling `arrangelist` objects
+coming out of `gridExtra::marrangeGrob`
 
 # 0.1.0
 - Initial validation

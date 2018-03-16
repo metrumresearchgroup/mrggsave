@@ -4,14 +4,24 @@
 \alias{mrggpage}
 \title{Arrange plots on a single page}
 \usage{
-mrggpage(x, ..., ncol = 2)
+mrggpage(x, ..., ncol = 2, nrow = NULL, multiple = FALSE,
+  top = quote(NULL))
 }
 \arguments{
 \item{x}{a list of plots}
 
 \item{...}{additional plot objects}
 
-\item{ncol}{passed to \code{gridExtra::arrangeGrob}}
+\item{ncol}{passed to \code{gridExtra::arrangeGrob} or
+\code{gridExtra::marrangeGrob}}
+
+\item{nrow}{passed to \code{gridExtra::arrangeGrob} or
+\code{gridExtra::marrangeGrob}}
+
+\item{multiple}{if \code{TRUE}, multiple pages will (potentially)
+be produced with \code{gridExtra::marrangeGrob}}
+
+\item{top}{passed to \code{gridExtra::marrangeGrob}}
 }
 \description{
 This function is just a convenience wrapper for

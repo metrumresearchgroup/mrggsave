@@ -1,6 +1,8 @@
 ##' Label and save a list of objects
 ##'
 ##' @param x passed to \code{\link{mrggsave_common}}
+##' @param flatten if \code{TRUE}, flatten if an object is a list; this
+##' should be \code{TRUE} unless you really don't want to flatten here
 ##' @param ... passed to \code{\link{mrggsave_common}}
 ##'
 ##' @details
@@ -12,13 +14,15 @@
 ##' with \code{\link{mrggpage}}.
 ##'
 ##' @export
-mrggsave_list <- function(x,...) {
+mrggsave_list <- function(x, flatten = TRUE, ...) {
 
   if(!inherits(x, "list")) {
     stop("x must be a list", call. = FALSE)
   }
 
-  x <- flatten_if(x, function(.x) inherits(.x,"list"))
+  if(flatten) {
+    x <- flatten_if(x, function(.x) inherits(.x,"list"))
+  }
 
   x <- lapply(x,mrggsave_prep_object)
 

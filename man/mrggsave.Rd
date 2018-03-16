@@ -5,6 +5,7 @@
 \alias{mrggsave.ggplot}
 \alias{mrggsave.ggmatrix}
 \alias{mrggsave.gList}
+\alias{mrggsave.gtable}
 \alias{mrggsave.trellis}
 \alias{mrggsave.ggassemble}
 \alias{mrggsave.list}
@@ -22,6 +23,8 @@ mrggsave(x, ...)
   onefile = TRUE)
 
 \method{mrggsave}{gList}(...)
+
+\method{mrggsave}{gtable}(...)
 
 \method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
   onefile = TRUE)

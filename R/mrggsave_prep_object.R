@@ -1,3 +1,9 @@
+##' Prepare any object for use with mrggsave
+##'
+##' @param x a plot object
+##' @param ... not currently used
+##'
+##' @export
 mrggsave_prep_object <- function(x,...) {
   UseMethod("mrggsave_prep_object")
 }
@@ -23,4 +29,12 @@ mrggsave_prep_object.ggmatrix <- function(x,...) {
 mrggsave_prep_object.ggassemble <- function(x,...) {
   assert_that(requireNamespace("patchwork"))
   return(patchwork::patchworkGrob(x))
+}
+##' @export
+mrggsave_prep_object.gtable <- function(x,...) {
+  return(x)
+}
+##' @export
+mrggsave_prep_object.arrangelist <- function(x,...) {
+  return(x)
 }

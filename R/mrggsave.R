@@ -111,7 +111,6 @@ mrggsave <- function(x, ...) {
   UseMethod("mrggsave")
 }
 
-
 ##' @rdname mrggsave
 ##' @export
 mrggsave.ggplot <- function(x, ..., ypad = 2,
@@ -133,7 +132,6 @@ mrggsave.ggplot <- function(x, ..., ypad = 2,
   return(mrggsave_common(x = x, ypad = ypad,
                          onefile = onefile, arrange = arrange, ...))
 }
-
 
 ##' @rdname mrggsave
 ##' @export
@@ -158,6 +156,12 @@ mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
 ##' @export
 mrggsave.gList <- function(...) {
   mrggsave_common(...)
+}
+
+##' @rdname mrggsave
+##' @export
+mrggsave.gtable <- function(...) {
+  mrggsave.ggplot(...)
 }
 
 ##' @rdname mrggsave
