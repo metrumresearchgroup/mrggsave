@@ -21,7 +21,7 @@ mrggsave_list <- function(x, flatten = TRUE, ...) {
   }
 
   if(flatten) {
-    x <- flatten_if(x, function(.x) inherits(.x,"list"))
+    x <- flatten_plots(x)
   }
 
   x <- lapply(x,mrggsave_prep_object)
