@@ -4,10 +4,13 @@
 \alias{mrggsave_list}
 \title{Label and save a list of objects}
 \usage{
-mrggsave_list(x, ...)
+mrggsave_list(x, flatten = TRUE, ...)
 }
 \arguments{
 \item{x}{passed to \code{\link{mrggsave_common}}}
+
+\item{flatten}{if \code{TRUE}, flatten if an object is a list; this
+should be \code{TRUE} unless you really don't want to flatten here}
 
 \item{...}{passed to \code{\link{mrggsave_common}}}
 }
