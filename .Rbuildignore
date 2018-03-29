@@ -1,4 +1,5 @@
 ^README\.Rmd$
+^NEXT_RELEASE.*$
 ^README\.html$
 ^.*\.pdf$
 ^.*.tar.gz$

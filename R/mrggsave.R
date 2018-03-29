@@ -205,7 +205,7 @@ mrggsave.ggassemble <- function(x, ...) {
 ##' @export
 mrggsave.list <- function(x, ..., arrange = FALSE) {
 
-  x <- flatten_if(x, function(.x) inherits(.x,"list"))
+  x <- flatten_plots(x)
 
   cl <- scan_list_cl(x)
 

@@ -1,0 +1,162 @@
+---
+title: Planned changes / new features 
+output: 
+  github_document:
+    toc: true
+---
+```{r,echo = FALSE}
+knitr::opts_chunk$set(fig.path = "inst/img/next-release-")
+```
+
+# About
+The next version will be `0.2.0`. The major changes are 
+demonstrated here.
+
+# Setup
+```{r}
+library(mrggsave)
+library(pmplots)
+library(dplyr)
+
+data <- pmplots_data_obs()
+ids <- distinct(data, ID, .keep_all = TRUE)
+```
+
+
+# Create some plots
+```{r}
+etas <- c("ETA1//ETA-CL", "ETA2//ETA-Vc", "ETA3//ETA-Ka")
+
+x <- eta_hist(ids, x = etas, bins = 20)
+
+p1 <- dv_pred(data)
+p2 <- dv_ipred(data)
+p3 <- cwres_time(data)
+p4 <- cwres_q(data)
+p5 <- cwres_pred(data)
+p6 <- eta_pairs(ids,etas)
+p7 <- eta_cat(ids, x = "STUDYc//Study", y = etas)
+```
+
+Make a list of plots to save out
+
+```{r}
+px <- list(x,p1,p2,p3,p4,p5,p6,p7)
+```
+
+# Examples
+
+## mrggpage puts plots into a grid
+```{r}
+mrggpage(x) 
+```
+
+## Pipe the output to `mrggdraw` to see what it looks like
+```{r}
+mrggpage(x) %>% mrggdraw()
+```
+
+## Control number of rows and columns
+
+```{r}
+mrggpage(x, ncol = 3) %>% mrggdraw()
+```
+
+## Distribute plots across several pages
+
+This looks like one big grid of plots, but it is paginated 
+so that it will create several pages when saved to pdf.
+
+```{r}
+mrggpage(px, ncol = 2, nrow = 2, multiple = TRUE) %>% mrggdraw()
+```
+
+# Get finer control of arrangement
+
+Instead of doing this
+```{r}
+px <- list(x,p1,p2,p3,p4,p5,p6,p7)
+```
+
+try arranging the plots page by page as you want to arrange them
+
+```{r}
+
+px2 <- list(
+  mrggpage(x),
+  mrggpage(p1,p2,p3,p4),
+  mrggpage(p7,ncol = 3),
+  p5
+)
+
+mrggdraw(px2)
+```
+
+
+# New stem and tag behavior
+
+## Previous behavior
+
+```{r}
+a <- mrggsave(p1, script = "foo.R", stem = "myplot", dir = tempdir())
+
+basename(a)
+```
+
+## Stem is collapsed with `_`
+
+Just pass in `stem` as a vector argument
+
+```{r}
+runno <- 101
+b <- mrggsave(p1, script = "foo.R", stem = c("myplot", runno), dir = tempdir())
+basename(b)
+
+```
+# Support for gtable objects
+
+
+```{r}
+
+```
+
+## tag is also collapsed
+```{r}
+c <- mrggsave(p1, script = "diagnostics.R", tag = c("dv_pred","run",runno), dir = tempdir())
+
+basename(c)
+```
+
+# Support for gtable and gList objects
+
+- Also added a `mrggsave.default` method to try an handle 
+anything that might come through. 
+
+```{r}
+gt <- gridExtra::arrangeGrob(grobs=x)
+
+gtable::is.gtable(gt)
+
+mrggdraw(gt)
+
+d <- mrggsave(gt, script = "diagnostics.R", tag = "foo", dir = tempdir())
+
+basename(d)
+```
+
+- Save a `gList` object
+
+```{r}
+library(grid)
+
+gr <- lapply(list(p1,p2,p3), ggplotGrob)
+
+gl <- gList(gr[[1]], gr[[2]], gr[[3]])
+
+class(gl)
+
+e <- mrggsave(gl, script = "diagnostics.R", stem = "foo", dir = tempdir())
+
+basename(e)
+```
+
