@@ -1,6 +1,7 @@
 library(testthat)
 library(mrggsave)
 library(ggplot2)
+library(grid)
 
 context("test-mrggsave")
 
@@ -12,6 +13,7 @@ options(mrggsave_dir = tempdir())
 pl <- lattice::xyplot(y~x, data = data)
 pg <- ggplot(data, aes(x = x, y = y)) + geom_point()
 pG <- GGally::ggpairs(data[,c(1,2)])
+gt <- gridExtra::arrangeGrob(grobs = list(pg,pg,pg))
 
 test_that("lattice plot", {
   out <- mrggsave(pl, Script, "lattice_plot")
@@ -52,16 +54,38 @@ test_that("arranged lattice plots", {
   expect_equal(basename(out), "test-mrggsave_lat-arranged.pdf")
 })
 
-if(requireNamespace("patchwork") ) {
-  test_that("ggarrange", {
-    p <- pg + pg + pg
-    out <- mrggsave(p, Script, "ggarranged")
-    expect_equal(basename(out), "test-mrggsave_ggarranged.pdf")
+# if(requireNamespace("patchwork") ) {
+#   test_that("ggarrange", {
+#     p <- pg + pg + pg
+#     out <- mrggsave(p, Script, "ggarranged")
+#     expect_equal(basename(out), "test-mrggsave_ggarranged.pdf")
+#
+#     p <- list(p, p, p)
+#     out <- mrggsave(p, Script, "ggarranged_list")
+#     expect_equal(basename(out), "test-mrggsave_ggarranged_list.pdf")
+#   })
+# }
 
-    p <- list(p, p, p)
-    out <- mrggsave(p, Script, "ggarranged_list")
-    expect_equal(basename(out), "test-mrggsave_ggarranged_list.pdf")
+test_that("gtable", {
+  out <- mrggsave(gt, Script, stem = "gtable")
+  expect_equal(basename(out), "gtable.pdf")
+})
 
-  })
+test_that("gList", {
+  l <- list(pg,pg,pg)
+  l <- lapply(l, ggplotGrob)
+  gl <- do.call("gList", l)
+  ans <- mrggsave(gl, Script, stem = "gList")
+  expect_equal(basename(ans), "gList.pdf")
+})
 
-}
+test_that("mixed list", {
+  l1 <- list(pg,pg,pg)
+  l2 <- list(pg,pl)
+  p3 <- mrggpage(l1)
+  p4 <- mrggpage(l1, nrow = 1, ncol = 2, multiple = TRUE)
+  plots <- list(pg,l1,l2,pG,gt,p3,p4)
+  ans <- mrggsave(plots, Script, stem = "mixed")
+  expect_equal(basename(ans), "mixed.pdf")
+})
+

@@ -113,12 +113,7 @@ b <- mrggsave(p1, script = "foo.R", stem = c("myplot", runno), dir = tempdir())
 basename(b)
 
 ```
-# Support for gtable objects
 
-
-```{r}
-
-```
 
 ## tag is also collapsed
 ```{r}
