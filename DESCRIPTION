@@ -1,7 +1,7 @@
 Package: mrggsave
 Type: Package
 Title: Save and Arrange Annotated Plots
-Version: 0.1.0.9002
+Version: 0.2.0
 Authors@R: c(
        person("Kyle T", "Baron", "", "kyleb@metrumrg.com", c("aut", "cre")),
        person("Metrum Research Group LLC", role =  c("cph"))
@@ -12,7 +12,13 @@ Description: Plots are annotated with the name of the generating
 License: GPL (>=2)
 Encoding: UTF-8
 LazyData: true
-Imports: ggplot2, grid, gridExtra, grDevices, assertthat, rlang
+Imports: 
+  ggplot2 (>= 2.2.1), 
+  grid, 
+  gridExtra, 
+  grDevices, 
+  assertthat, 
+  rlang (>= 0.1.1)
 Suggests: GGally, gtable, testthat, lattice, patchwork
 RoxygenNote: 6.0.1
 Remotes: thomasp85/patchwork
