@@ -13,7 +13,6 @@ Planned changes / new features
 -   [New stem and tag behavior](#new-stem-and-tag-behavior)
     -   [Previous behavior](#previous-behavior)
     -   [Stem is collapsed with `_`](#stem-is-collapsed-with-_)
--   [Support for gtable objects](#support-for-gtable-objects)
     -   [tag is also collapsed](#tag-is-also-collapsed)
 -   [Support for gtable and gList objects](#support-for-gtable-and-glist-objects)
 
@@ -176,9 +175,6 @@ basename(b)
 
     ## [1] "myplot_101.pdf"
 
-Support for gtable objects
-==========================
-
 tag is also collapsed
 ---------------------
 
@@ -207,7 +203,7 @@ gtable::is.gtable(gt)
 mrggdraw(gt)
 ```
 
-![](inst/img/next-release-unnamed-chunk-15-1.png)
+![](inst/img/next-release-unnamed-chunk-14-1.png)
 
 ``` r
 d <- mrggsave(gt, script = "diagnostics.R", tag = "foo", dir = tempdir())
