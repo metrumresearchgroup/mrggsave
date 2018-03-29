@@ -1,4 +1,5 @@
 ^README\.Rmd$
+inst/img
 ^NEXT_RELEASE.*$
 ^README\.html$
 ^.*\.pdf$
