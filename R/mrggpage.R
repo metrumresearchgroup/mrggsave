@@ -21,6 +21,7 @@ mrggpage <- function(x, ..., ncol = 2, nrow = NULL, multiple = FALSE,
     x <- list(x)
   }
   x <- c(x,list(...))
+  x <- lapply(x, mrggsave_prep_object)
   if(multiple) {
     if(is.null(nrow)) nrow <- 2
     gridExtra::marrangeGrob(grobs=x, ncol = ncol, nrow = nrow, top = top)
