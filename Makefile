@@ -5,6 +5,10 @@ VERSION=$(shell grep Version DESCRIPTION |awk '{print $$2}')
 TARBALL=${PACKAGE}_${VERSION}.tar.gz
 PKGDIR=.
 CHKDIR=.
+TESTDIR=../../software-qualification/mrggsave_qualification/testing/
+
+move-testing:
+	cp ${TARBALL} ${TESTDIR}
 
 release:
 	make all
