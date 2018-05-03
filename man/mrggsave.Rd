@@ -37,8 +37,9 @@ mrggsave(x, ...)
 
 mrgglabel(..., draw = FALSE, .save = FALSE)
 
-mrggsave_common(x, script, tag = NULL, width = 5, height = 5,
-  stem = "Rplot", dir = getOption("mrggsave_dir", "../deliv/figure"),
+mrggsave_common(x, script = getOption("mrggsave_script_name", NULL),
+  tag = NULL, width = 5, height = 5, stem = "Rplot",
+  dir = getOption("mrggsave_dir", "../deliv/figure"),
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
   arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
   labsep = "\\n", fontsize = 7, textGrob.x = 0.01, textGrob.y = 0.25,
