@@ -245,7 +245,7 @@ mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
 ##' @rdname mrggsave
 ##' @export
 mrggsave_common <- function(x,
-                            script,
+                            script = getOption("mrg_script_name", NULL),
                             tag = NULL,
                             width = 5, height = 5,
                             stem="Rplot",
@@ -261,6 +261,13 @@ mrggsave_common <- function(x,
                             textGrob.x = 0.01,
                             textGrob.y = 0.25,
                             ...) {
+
+  if(is.null(script)) {
+    stop(
+      "Please specify the script name either as an argument (script) or an option (mrg_script_name)",
+      call. = FALSE
+    )
+  }
 
   if(!is.null(tag)) {
     stem <- make_stem(script,tag)

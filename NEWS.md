@@ -1,4 +1,9 @@
-# 0.1.0.9002
+# mrggsave 0.2.0.9001
+
+
+# mrggsave 0.2.0
+- Validate and release
+# mrggsave 0.1.0.9002
 - Added `ncol` as a formal argument; when `ncol` > 1, we set arrange to `TRUE`
 - Added `mrggpage` function as a wrapper around `gridExtra::arrangeGrob`
 - Added `mrggsave_list`, which takes in a list of objects that are ready 
@@ -20,9 +25,9 @@ placed between `script` and the (possibly collapsed) `tag` value
 across multiple pages; added methods for handling `arrangelist` objects
 coming out of `gridExtra::marrangeGrob`
 
-# 0.1.0
+# mrggsave 0.1.0
 - Initial validation
 
-# 0.0.1.9001
+# mrggsave 0.0.1.9001
 
 - Pre-release
