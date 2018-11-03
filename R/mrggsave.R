@@ -263,7 +263,10 @@ mrggsave_common <- function(x,
                             ...) {
 
   if(is.null(script)) {
-    stop("Please specify the script name either as an argument (script) or an option (mrg_script_name)", call. = FALSE)
+    stop(
+      "Please specify the script name either as an argument (script) or an option (mrg_script_name)",
+      call. = FALSE
+    )
   }
 
   if(!is.null(tag)) {
