@@ -20,5 +20,5 @@ Imports:
   assertthat, 
   rlang (>= 0.1.1)
 Suggests: GGally, gtable, testthat, lattice, patchwork
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Remotes: thomasp85/patchwork

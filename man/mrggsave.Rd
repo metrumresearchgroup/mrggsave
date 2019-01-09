@@ -16,8 +16,8 @@
 \usage{
 mrggsave(x, ...)
 
-\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE, ncol = 1,
-  onefile = TRUE)
+\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE,
+  ncol = 1, onefile = TRUE)
 
 \method{mrggsave}{ggmatrix}(x, ..., ypad = 4, arrange = FALSE,
   onefile = TRUE)
@@ -26,23 +26,25 @@ mrggsave(x, ...)
 
 \method{mrggsave}{gtable}(...)
 
-\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
-  onefile = TRUE)
+\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE,
+  ncol = 1, onefile = TRUE)
 
 \method{mrggsave}{ggassemble}(x, ...)
 
-\method{mrggsave}{list}(x, ..., arrange = FALSE)
+\method{mrggsave}{list}(x, ..., arrange = FALSE, use_names = FALSE)
 
 \method{mrggsave}{gg}(x, ...)
 
 mrgglabel(..., draw = FALSE, .save = FALSE)
 
-mrggsave_common(x, script = getOption("mrg_script_name", NULL), tag = NULL,
-  width = 5, height = 5, stem = "Rplot", dir = getOption("mrggsave_dir",
-  "../deliv/figure"), prefix = gsub("^\\\\.\\\\./", "./", dir),
-  onefile = TRUE, arrange = FALSE, draw = FALSE, .save = TRUE,
-  ypad = 3, labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
-  textGrob.y = 0.25, ...)
+mrggsave_common(x, script = getOption("mrg_script_name", NULL),
+  tag = NULL, width = 5, height = 5, stem = "Rplot",
+  dir = getOption("mrggsave_dir", "../deliv/figure"),
+  prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
+  arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
+  labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
+  textGrob.y = 0.25, dev = c("pdf", "png"), res = 150,
+  units = "in", ...)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
@@ -59,6 +61,9 @@ single page with \code{arrangeGrob}}
 \item{ncol}{passed to \code{\link{arrangeGrob}}}
 
 \item{onefile}{passed to \code{\link{pdf}}}
+
+\item{use_names}{if \code{TRUE}, the names from a list of plots will be used
+as the stems for output file names}
 
 \item{draw}{if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}}
 
@@ -90,6 +95,12 @@ Source graphic labels}
 \item{textGrob.x}{passed to \code{textGrob} (as \code{x})}
 
 \item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
+
+\item{dev}{the device to use; currently, pdf or png}
+
+\item{res}{passed to \code{\link{png}}}
+
+\item{units}{passed to \code{\link{png}}}
 }
 \description{
 Save plot objects as .pdf file after labeling with Source graphic and
