@@ -19,6 +19,6 @@ Imports:
   grDevices, 
   assertthat, 
   rlang (>= 0.1.1)
-Suggests: GGally, gtable, testthat, lattice, patchwork
+Suggests: GGally, gtable, testthat, lattice, patchwork, survminer
 RoxygenNote: 6.1.1
 Remotes: thomasp85/patchwork

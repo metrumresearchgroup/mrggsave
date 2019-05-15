@@ -1,47 +1,46 @@
-##' Prepare any object for use with mrggsave
-##'
-##' @param x a plot object
-##' @param ... not currently used
-##'
-##' @export
+#' Prepare any object for use with mrggsave
+#'
+#' @param x a plot object
+#' @param ... not currently used
+#'
+#' @export
 mrggsave_prep_object <- function(x,...) {
   UseMethod("mrggsave_prep_object")
 }
-##' @export
+#' @export
 mrggsave_prep_object.gg <- function(x,...) {
   NextMethod()
 }
-##' @export
+#' @export
 mrggsave_prep_object.default <- function(x,...) {
   return(gridExtra::arrangeGrob(x))
 }
-##' @export
+#' @export
 mrggsave_prep_object.ggplot <- function(x,...) {
   return(ggplotGrob(x))
 }
-##' @export
+#' @export
 mrggsave_prep_object.ggmatrix <- function(x,...) {
   assert_that(requireNamespace("GGally"))
   assert_that(requireNamespace("gtable"))
   return(GGally::ggmatrix_gtable(x))
 }
-##' @export
+#' @export
 mrggsave_prep_object.ggassemble <- function(x,...) {
   assert_that(requireNamespace("patchwork"))
   return(patchwork::patchworkGrob(x))
 }
-##' @export
+#' @export
 mrggsave_prep_object.gtable <- function(x,...) {
   return(x)
 }
-##' @export
+#' @export
 mrggsave_prep_object.arrangelist <- function(x,...) {
   return(x)
 }
-
 #' @export
-mrggsave_prep_object.ggsurvplot <- function(x) {
-  stopifnot(requireNamespace("survminer"))
-  arrange_ggsurvplots(list(x), nrow = 1, ncol = 1, print = FALSE)
+mrggsave_prep_object.ggsurvplot <- function(x,...) {
+  assert_that(requireNamespace("survminer"))
+  survminer::arrange_ggsurvplots(list(x), nrow = 1, ncol = 1, print = FALSE)
 }
 
