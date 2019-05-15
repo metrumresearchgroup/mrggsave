@@ -205,6 +205,10 @@ mrggsave.ggassemble <- function(x, ...) {
   return(mrggsave.ggplot(x, ...))
 }
 
+#' @export
+mrggsave.ggsurvplot <- function(x,...) {
+  mrggsave_common(mrggsave_prep_object(x), ...)
+}
 
 ##' @rdname mrggsave
 ##' @export
@@ -267,6 +271,10 @@ mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
   mrggsave(..., draw = FALSE, .save = FALSE)
 }
 
+eps <- function(...) {
+  postscript(..., paper = "special", onefile = FALSE,horizontal = FALSE)
+}
+
 ##' @rdname mrggsave
 ##' @export
 mrggsave_common <- function(x,
@@ -285,24 +293,16 @@ mrggsave_common <- function(x,
                             fontsize = 7,
                             textGrob.x = 0.01,
                             textGrob.y = 0.25,
-                            dev = c("pdf", "png"),
+                            dev = "pdf",
                             res = 150,
                             units = "in",
                             ...) {
 
-  dev <- match.arg(dev)
-
   n  <- length(x)
 
   if(dev=="pdf") {
-    device <- grDevices::pdf
     onefile <- onefile | n==1
   } else {
-    device <- grDevices::png
-    if(missing(width)) width <- NULL
-    if(missing(height)) height <- NULL
-    if(missing(res)) res <- NULL
-    if(missing(units)) units <- NULL
     onefile <- length(x)==1
   }
 
@@ -310,7 +310,8 @@ mrggsave_common <- function(x,
 
   if(is.null(script)) {
     stop(
-      "Please specify the script name either as an argument (script) or an option (mrg_script_name)",
+      c("Please specify the script name either as an argument (script) ",
+        "or an option (mrg_script_name)"),
       call. = FALSE
     )
   }
@@ -365,19 +366,29 @@ mrggsave_common <- function(x,
     return(invisible(x))
   }
 
-  args <- list(...)
-  args$file <- pdffile
-  args$onefile <- onefile
-  args$width <- width
-  args$height <- height
-  if(dev=="png") {
-    args$res <- res
-    args$units <- units
-    args$filename <- pdffile
-  }
-  args <- args[names(args) %in% names(formals(device))]
+  args <- list(
+    onefile = onefile, width = width, height = height, res = res,
+    units = units
+  )
 
-  do.call(device, args)
+  if(dev=="eps") {
+    dev <- "postscript"
+    args$paper <- "special"
+    args$onefile <- FALSE
+    args$horizontal <- FALSE
+  }
+
+  if(dev=="ps") {
+    dev <- "postscript"
+  }
+
+  args$file <- pdffile
+  args$filename <- pdffile
+
+  args <- args[names(args) %in% names(formals(dev))]
+  args <- c(args, list(...))
+
+  do.call(dev, args)
   for(i in seq_along(x)) {
     grid.arrange(x[[i]])
   }

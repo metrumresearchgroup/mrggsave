@@ -43,8 +43,7 @@ mrggsave_common(x, script = getOption("mrg_script_name", NULL),
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
   arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
   labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
-  textGrob.y = 0.25, dev = c("pdf", "png"), res = 150,
-  units = "in", ...)
+  textGrob.y = 0.25, dev = "pdf", res = 150, units = "in", ...)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}

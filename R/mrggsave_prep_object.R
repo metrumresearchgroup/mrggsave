@@ -38,3 +38,10 @@ mrggsave_prep_object.gtable <- function(x,...) {
 mrggsave_prep_object.arrangelist <- function(x,...) {
   return(x)
 }
+
+#' @export
+mrggsave_prep_object.ggsurvplot <- function(x) {
+  stopifnot(requireNamespace("survminer"))
+  arrange_ggsurvplots(list(x), nrow = 1, ncol = 1, print = FALSE)
+}
+

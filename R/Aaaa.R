@@ -1,4 +1,4 @@
-##' @importFrom grDevices pdf dev.off graphics.off
+##' @importFrom grDevices pdf dev.off graphics.off postscript
 ##' @importFrom ggplot2 theme margin ggplotGrob
 ##' @importFrom gridExtra grid.arrange arrangeGrob marrangeGrob
 ##' @importFrom grid grid.draw gpar grid.newpage
