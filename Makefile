@@ -7,6 +7,10 @@ PKGDIR=.
 CHKDIR=.
 TESTDIR=../../software-qualification/mrggsave_qualification/testing/
 
+
+pkgdown:
+	Rscript -e "pkgdown::build_site()"
+	
 move-testing:
 	cp ${TARBALL} ${TESTDIR}
 

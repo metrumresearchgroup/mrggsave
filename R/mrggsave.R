@@ -24,6 +24,9 @@
 ##' for portrait figure
 ##' @param height passed to \code{\link{pdf}}; should be less than 7 in.
 ##' for portrait figure
+##' @param dev the device to use; currently, pdf or png
+##' @param res passed to \code{\link{png}}
+##' @param units passed to \code{\link{png}}
 ##' @param .save logical; if \code{FALSE}, return the labeled objects
 ##' @param arrange logical; if \code{TRUE}, arrange the ggplot objects on a
 ##' single page with \code{arrangeGrob}
@@ -31,6 +34,8 @@
 ##' @param labsep character separator (or newline) for Source code and
 ##' Source graphic labels
 ##' @param draw if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}
+##' @param use_names if \code{TRUE}, the names from a list of plots will be used
+##' as the stems for output file names
 ##' @param ... other arguments passed to \code{mrggsave_common} and then
 ##' on to \code{\link{pdf}} and \code{arrangeGrob}
 ##'
@@ -200,10 +205,34 @@ mrggsave.ggassemble <- function(x, ...) {
   return(mrggsave.ggplot(x, ...))
 }
 
+#' @export
+mrggsave.ggsurvplot <- function(x,...) {
+  mrggsave_common(mrggsave_prep_object(x), ...)
+}
 
 ##' @rdname mrggsave
 ##' @export
-mrggsave.list <- function(x, ..., arrange = FALSE) {
+mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
+
+  if(use_names) {
+    stem <- names(x)
+    if(is.null(stem)) {
+      stop("The plot list must be named when use_names is TRUE.", call.=FALSE)
+    }
+    if(!all(nchar(stem) > 0)) {
+      stop("All plot names must at least one character.", call.=FALSE)
+    }
+    args <- list(...)
+    args$arrange <- arrange
+    tag <- args$tag
+    args$tag <- NULL
+    ans <- lapply(seq_along(x), function(i) {
+      args$stem <- paste0(c(stem[i],tag), collapse="_")
+      args$x <- x[[i]]
+      do.call(mrggsave, args)
+    })
+    return(invisible(unlist(ans,use.names=FALSE)))
+  }
 
   x <- flatten_plots(x)
 
@@ -242,6 +271,10 @@ mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
   mrggsave(..., draw = FALSE, .save = FALSE)
 }
 
+eps <- function(...) {
+  postscript(..., paper = "special", onefile = FALSE,horizontal = FALSE)
+}
+
 ##' @rdname mrggsave
 ##' @export
 mrggsave_common <- function(x,
@@ -260,11 +293,25 @@ mrggsave_common <- function(x,
                             fontsize = 7,
                             textGrob.x = 0.01,
                             textGrob.y = 0.25,
+                            dev = "pdf",
+                            res = 150,
+                            units = "in",
                             ...) {
+
+  n  <- length(x)
+
+  if(dev=="pdf") {
+    onefile <- onefile | n==1
+  } else {
+    onefile <- length(x)==1
+  }
+
+  ext <- paste0(".", dev)
 
   if(is.null(script)) {
     stop(
-      "Please specify the script name either as an argument (script) or an option (mrg_script_name)",
+      c("Please specify the script name either as an argument (script) ",
+        "or an option (mrg_script_name)"),
       call. = FALSE
     )
   }
@@ -275,24 +322,24 @@ mrggsave_common <- function(x,
     stem <- paste0(stem,collapse = "_")
   }
 
-  n  <- length(x)
-
   if(!onefile) {
-    pdffile <- paste0(file.path(dir,stem), "%03d.pdf")
+    pdffile <- paste0(file.path(dir,stem), "%03d", ext)
     file <- paste0(file.path(prefix,stem),
-                   sprintf("%03d", seq(n)), ".pdf")
+                   sprintf("%03d", seq(n)), ext)
     outfile <- sprintf(pdffile, seq(n))
   } else {
-    pdffile <- paste0(file.path(dir,stem), ".pdf")
-    file <- paste0(file.path(prefix,stem), ".pdf")
+    pdffile <- paste0(file.path(dir,stem), ext)
+    file <- paste0(file.path(prefix,stem), ext)
     outfile <- pdffile
     if(n>1) file <-  paste(file, "page:", seq(n))
   }
 
-  label <- paste0(paste0(rep("\n",as.integer(ypad)), collapse = ""),
-                  "Source code: ", script,
-                  labsep,
-                  "Source graphic: ", file)
+  label <- paste0(
+    paste0(rep("\n",as.integer(ypad)), collapse = ""),
+    "Source code: ", script,
+    labsep,
+    "Source graphic: ", file
+  )
 
   for(i in seq_along(x)) {
     x[[i]] <- arrangeGrob(
@@ -319,14 +366,29 @@ mrggsave_common <- function(x,
     return(invisible(x))
   }
 
-  args <- list(...)
-  args$file <- pdffile
-  args$onefile <- onefile
-  args$width <- width
-  args$height <- height
-  args <- args[names(args) %in% names(formals(grDevices::pdf))]
+  args <- list(
+    onefile = onefile, width = width, height = height, res = res,
+    units = units
+  )
 
-  do.call(grDevices::pdf, args)
+  if(dev=="eps") {
+    dev <- "postscript"
+    args$paper <- "special"
+    args$onefile <- FALSE
+    args$horizontal <- FALSE
+  }
+
+  if(dev=="ps") {
+    dev <- "postscript"
+  }
+
+  args$file <- pdffile
+  args$filename <- pdffile
+
+  args <- args[names(args) %in% names(formals(dev))]
+  args <- c(args, list(...))
+
+  do.call(dev, args)
   for(i in seq_along(x)) {
     grid.arrange(x[[i]])
   }
