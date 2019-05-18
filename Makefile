@@ -8,6 +8,10 @@ CHKDIR=.
 TESTDIR=../../software-qualification/mrggsave_qualification/testing/
 
 
+covr:
+	Rscript inst/script/covr.R
+
+
 pkgdown:
 	Rscript -e "pkgdown::build_site()"
 	
@@ -56,7 +60,6 @@ check:
 	R CMD check ${TARBALL} -o ${CHKDIR}
 
 test:
-	make install
 	Rscript -e 'testthat::test_dir("tests")'
 
 

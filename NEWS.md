@@ -1,5 +1,9 @@
 # mrggsave 0.2.0.9001
-
+- Added support for the following devices: pdf, png, tiff, jpeg, eps, ps, 
+  bmp, svg
+- Added ability to save last plot when it was created with ggplot2 (see the 
+  `mrggsave_last` function
+- Added ability to save a named list of plots
 
 # mrggsave 0.2.0
 - Validate and release

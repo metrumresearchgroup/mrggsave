@@ -54,18 +54,6 @@ test_that("arranged lattice plots", {
   expect_equal(basename(out), "test-mrggsave_lat-arranged.pdf")
 })
 
-# if(requireNamespace("patchwork") ) {
-#   test_that("ggarrange", {
-#     p <- pg + pg + pg
-#     out <- mrggsave(p, Script, "ggarranged")
-#     expect_equal(basename(out), "test-mrggsave_ggarranged.pdf")
-#
-#     p <- list(p, p, p)
-#     out <- mrggsave(p, Script, "ggarranged_list")
-#     expect_equal(basename(out), "test-mrggsave_ggarranged_list.pdf")
-#   })
-# }
-
 test_that("gtable", {
   out <- mrggsave(gt, Script, stem = "gtable")
   expect_equal(basename(out), "gtable.pdf")
@@ -79,6 +67,16 @@ test_that("gList", {
   expect_equal(basename(ans), "gList.pdf")
 })
 
+test_that("named list", {
+  l <- list(a = pg, b = gt, c = pl)
+  x <- mrggsave(l, Script, stem = "named_list", use_names=TRUE)
+  x <- basename(x)
+  expect_identical(x[1],"a.pdf")
+  expect_identical(x[2],"b.pdf")
+  expect_identical(x[3],"c.pdf")
+})
+
+
 test_that("mixed list", {
   l1 <- list(pg,pg,pg)
   l2 <- list(pg,pl)
@@ -88,4 +86,7 @@ test_that("mixed list", {
   ans <- mrggsave(plots, Script, stem = "mixed")
   expect_equal(basename(ans), "mixed.pdf")
 })
+
+
+
 

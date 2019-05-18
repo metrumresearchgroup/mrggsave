@@ -43,7 +43,8 @@ mrggsave_common(x, script = getOption("mrg_script_name", NULL),
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
   arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
   labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
-  textGrob.y = 0.25, dev = "pdf", res = 150, units = "in", ...)
+  textGrob.y = 0.25, dev = "pdf", res = 150, units = "in",
+  envir = .GlobalEnv, ...)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
@@ -95,11 +96,14 @@ Source graphic labels}
 
 \item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
 
-\item{dev}{the device to use; currently, pdf or png}
+\item{dev}{the device to use}
 
 \item{res}{passed to \code{\link{png}}}
 
 \item{units}{passed to \code{\link{png}}}
+
+\item{envir}{environment to be used for string interpolation in
+stem and tag}
 }
 \description{
 Save plot objects as .pdf file after labeling with Source graphic and

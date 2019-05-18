@@ -24,7 +24,7 @@
 ##' for portrait figure
 ##' @param height passed to \code{\link{pdf}}; should be less than 7 in.
 ##' for portrait figure
-##' @param dev the device to use; currently, pdf or png
+##' @param dev the device to use
 ##' @param res passed to \code{\link{png}}
 ##' @param units passed to \code{\link{png}}
 ##' @param .save logical; if \code{FALSE}, return the labeled objects
@@ -36,6 +36,8 @@
 ##' @param draw if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}
 ##' @param use_names if \code{TRUE}, the names from a list of plots will be used
 ##' as the stems for output file names
+##' @param envir environment to be used for string interpolation in
+##' stem and tag
 ##' @param ... other arguments passed to \code{mrggsave_common} and then
 ##' on to \code{\link{pdf}} and \code{arrangeGrob}
 ##'
@@ -171,9 +173,7 @@ mrggsave.gtable <- function(...) {
 
 ##' @rdname mrggsave
 ##' @export
-mrggsave.trellis <- function(x, ..., ypad = 3,
-                             arrange = FALSE,
-                             ncol = 1,
+mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
                              onefile = TRUE) {
 
   if(ncol > 1) arrange <- TRUE
@@ -217,10 +217,10 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
   if(use_names) {
     stem <- names(x)
     if(is.null(stem)) {
-      stop("The plot list must be named when use_names is TRUE.", call.=FALSE)
+      stop("the plot list must be named when use_names is TRUE.", call.=FALSE)
     }
     if(!all(nchar(stem) > 0)) {
-      stop("All plot names must at least one character.", call.=FALSE)
+      stop("all plot names must at least one character.", call.=FALSE)
     }
     args <- list(...)
     args$arrange <- arrange
@@ -296,6 +296,7 @@ mrggsave_common <- function(x,
                             dev = "pdf",
                             res = 150,
                             units = "in",
+                            envir = .GlobalEnv,
                             ...) {
 
   n  <- length(x)
@@ -321,6 +322,8 @@ mrggsave_common <- function(x,
   } else {
     stem <- paste0(stem,collapse = "_")
   }
+
+  stem <- glue(stem, .envir = envir)
 
   if(!onefile) {
     pdffile <- paste0(file.path(dir,stem), "%03d", ext)
@@ -397,8 +400,6 @@ mrggsave_common <- function(x,
   return(invisible(outfile))
 }
 
-
-
 scan_list_cl <- function(x) {
   cl <- lapply(x, class)
   cl <- unlist(lapply(cl, paste, collapse = "-"), use.names=FALSE)
@@ -407,4 +408,11 @@ scan_list_cl <- function(x) {
        cl = cl)
 }
 
-
+#' Save the last plot using mrggsave
+#' @param stem passed to [mrggsave]
+#' @param script passed to [mrggsave]
+#' @param ... passed to [mrggsave]
+#' @export
+mrggsave_last <- function(stem, script = getOption("mrg_script_name", NULL), ...) {
+   mrggsave(last_plot(), stem=stem, script=script, ...)
+}

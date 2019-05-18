@@ -18,7 +18,8 @@ Imports:
   gridExtra, 
   grDevices, 
   assertthat, 
-  rlang (>= 0.1.1)
+  rlang (>= 0.1.1), 
+  glue
 Suggests: GGally, gtable, testthat, lattice, patchwork, survminer
 RoxygenNote: 6.1.1
 Remotes: thomasp85/patchwork
