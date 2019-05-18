@@ -87,6 +87,10 @@ test_that("mixed list", {
   expect_equal(basename(ans), "mixed.pdf")
 })
 
-
+test_that("last plot", {
+  print(pg)
+  x <- mrggsave_last(script = Script,stem = "testlast")
+  expect_identical(basename(x),"testlast.pdf")
+})
 
 
