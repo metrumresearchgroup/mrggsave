@@ -42,3 +42,12 @@ test_that("vector tag gets collapsed", {
   expect_equal(basename(ans), "test-filename_a_101_b.pdf")
 })
 
+p1 <- p2 <- p3 <- p
+l <- named_plots(p1,p2,p3,tag = "bbb")
+test_that("plots get named by object", {
+  expect_identical(names(l), c("p1_bbb", "p2_bbb", "p3_bbb"))
+  expect_length(l,3)
+  cl <- sapply(l, is.ggplot)
+  expect_true(all(cl))
+})
+

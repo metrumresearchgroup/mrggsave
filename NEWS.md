@@ -1,10 +1,14 @@
 # mrggsave 0.2.0.9001
-- Added support for the following devices: pdf, png, tiff, jpeg, eps, ps, 
-  bmp, svg
-- Added ability to save last plot when it was created with ggplot2 (see the 
-  `mrggsave_last` function
-- Added ability to save a named list of plots
-
+- Add support for the following devices: pdf, png, tiff, jpeg, eps, ps, 
+  bmp, svg (#13)
+- Add ability to save last plot when it was created with ggplot2 (see the 
+  `mrggsave_last` function) (#12)
+- Add ability to save a named list of plots; when the list is named and 
+  the `use_names` argument is invoked, plots will get written out to their
+  own file names (#14)
+- Add method for handing `ggsurvplot` objects (#11)
+- Pass the file name through `glue::glue` once it is formed from either 
+  `stem` or `tag` (e.g. `stem = "dv_pred_{runnumber}"`) (#15)
 # mrggsave 0.2.0
 - Validate and release
 # mrggsave 0.1.0.9002
