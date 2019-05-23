@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Arrange plots on a single page — mrggpage • mrggsave</title>
+<title>Save the last plot using mrggsave — mrggsave_last • mrggsave</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Arrange plots on a single page — mrggpage" />
+<meta property="og:title" content="Save the last plot using mrggsave — mrggsave_last" />
 
-<meta property="og:description" content="This function is just a convenience wrapper for
-gridExtra::arrangeGrob." />
+<meta property="og:description" content="Save the last plot using mrggsave" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -101,50 +100,33 @@ gridExtra::arrangeGrob." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Arrange plots on a single page</h1>
+    <h1>Save the last plot using mrggsave</h1>
     
-    <div class="hidden name"><code>mrggpage.Rd</code></div>
+    <div class="hidden name"><code>mrggsave_last.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function is just a convenience wrapper for
-<code><a href='https://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob'>gridExtra::arrangeGrob</a></code>.</p>
+    <p>Save the last plot using mrggsave</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>mrggpage</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>multiple</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>top</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/substitute'>quote</a></span>(<span class='kw'>NULL</span>))</pre>
+    <pre class="usage"><span class='fu'>mrggsave_last</span>(<span class='no'>stem</span>, <span class='kw'>script</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"mrg_script_name"</span>, <span class='kw'>NULL</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>a list of plots</p></td>
+      <th>stem</th>
+      <td><p>passed to [mrggsave]</p></td>
+    </tr>
+    <tr>
+      <th>script</th>
+      <td><p>passed to [mrggsave]</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>additional plot objects</p></td>
-    </tr>
-    <tr>
-      <th>ncol</th>
-      <td><p>passed to <code><a href='https://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob'>gridExtra::arrangeGrob</a></code> or
-<code><a href='https://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob'>gridExtra::marrangeGrob</a></code></p></td>
-    </tr>
-    <tr>
-      <th>nrow</th>
-      <td><p>passed to <code><a href='https://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob'>gridExtra::arrangeGrob</a></code> or
-<code><a href='https://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob'>gridExtra::marrangeGrob</a></code></p></td>
-    </tr>
-    <tr>
-      <th>multiple</th>
-      <td><p>if <code>TRUE</code>, multiple pages will (potentially)
-be produced with <code><a href='https://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob'>gridExtra::marrangeGrob</a></code></p></td>
-    </tr>
-    <tr>
-      <th>top</th>
-      <td><p>passed to <code><a href='https://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob'>gridExtra::marrangeGrob</a></code></p></td>
+      <td><p>passed to [mrggsave]</p></td>
     </tr>
     </table>
     
