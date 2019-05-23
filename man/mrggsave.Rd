@@ -7,7 +7,6 @@
 \alias{mrggsave.gList}
 \alias{mrggsave.gtable}
 \alias{mrggsave.trellis}
-\alias{mrggsave.ggassemble}
 \alias{mrggsave.list}
 \alias{mrggsave.gg}
 \alias{mrgglabel}
@@ -28,8 +27,6 @@ mrggsave(x, ...)
 
 \method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE,
   ncol = 1, onefile = TRUE)
-
-\method{mrggsave}{ggassemble}(x, ...)
 
 \method{mrggsave}{list}(x, ..., arrange = FALSE, use_names = FALSE)
 

@@ -1,10 +1,10 @@
 Package: mrggsave
 Type: Package
 Title: Save and Arrange Annotated Plots
-Version: 0.2.0.9000
+Version: 0.3.0
 Authors@R: c(
        person("Kyle T", "Baron", "", "kyleb@metrumrg.com", c("aut", "cre")),
-       person("Metrum Research Group LLC", role =  c("cph"))
+       person("Metrum Research Group", role =  c("cph"))
        )
 Maintainer: Kyle Baron <kyleb@metrumrg.com>
 Description: Plots are annotated with the name of the generating
@@ -22,4 +22,3 @@ Imports:
   glue
 Suggests: GGally, gtable, testthat, lattice, patchwork, survminer
 RoxygenNote: 6.1.1
-Remotes: thomasp85/patchwork

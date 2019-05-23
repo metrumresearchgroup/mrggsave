@@ -25,11 +25,10 @@ mrggsave_prep_object.ggmatrix <- function(x,...) {
   assert_that(requireNamespace("gtable"))
   return(GGally::ggmatrix_gtable(x))
 }
-#' @export
-mrggsave_prep_object.ggassemble <- function(x,...) {
-  assert_that(requireNamespace("patchwork"))
-  return(patchwork::patchworkGrob(x))
-}
+# mrggsave_prep_object.ggassemble <- function(x,...) {
+#   assert_that(requireNamespace("patchwork"))
+#   return(patchwork::patchworkGrob(x))
+# }
 #' @export
 mrggsave_prep_object.gtable <- function(x,...) {
   return(x)

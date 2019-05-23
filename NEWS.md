@@ -2,15 +2,23 @@
 - Add support for the following devices: pdf, png, tiff, jpeg, eps, ps, 
   bmp, svg (#13)
 - Add ability to save last plot when it was created with ggplot2 (see the 
-  `mrggsave_last` function) (#12)
+  `mrggsave_last` function); this gets the last plot via ggplot2::last_plot (#12)
 - Add ability to save a named list of plots; when the list is named and 
   the `use_names` argument is invoked, plots will get written out to their
   own file names (#14)
 - Add method for handing `ggsurvplot` objects (#11)
 - Pass the file name through `glue::glue` once it is formed from either 
   `stem` or `tag` (e.g. `stem = "dv_pred_{runnumber}"`) (#15)
+- Add `named_plots` function to generate plot names (and eventually file names)
+  from the code used to generate the plot (#14)
+- Add non-exported `context` function to set the output file name when 
+  using `tag` argument; `context` is set and is in effect via `option` until
+  the context is changed or reset; use `context_clear`
+- Removed support for objects created with patchwork
+
 # mrggsave 0.2.0
 - Validate and release
+
 # mrggsave 0.1.0.9002
 - Added `ncol` as a formal argument; when `ncol` > 1, we set arrange to `TRUE`
 - Added `mrggpage` function as a wrapper around `gridExtra::arrangeGrob`

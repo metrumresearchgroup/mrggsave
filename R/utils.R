@@ -17,7 +17,7 @@ context <- function(x) {
   options(mrggsave.use.context = x)
 }
 
-clear_context <- function(x) {
+context_clear <- function(x) {
   options(mrggsave.use.context = NULL)
 }
 

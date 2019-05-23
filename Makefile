@@ -5,8 +5,7 @@ VERSION=$(shell grep Version DESCRIPTION |awk '{print $$2}')
 TARBALL=${PACKAGE}_${VERSION}.tar.gz
 PKGDIR=.
 CHKDIR=.
-TESTDIR=../../software-qualification/mrggsave_qualification/testing/
-
+TESTDIR=../../qualification/mrggsave_qualification/testing/
 
 covr:
 	Rscript inst/script/covr.R
@@ -14,8 +13,8 @@ covr:
 
 pkgdown:
 	Rscript -e "pkgdown::build_site()"
-	
-move-testing:
+
+testing:
 	cp ${TARBALL} ${TESTDIR}
 
 release:

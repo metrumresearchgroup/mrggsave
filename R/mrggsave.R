@@ -192,18 +192,16 @@ mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
                          onefile = onefile, ...))
 }
 
-##' @rdname mrggsave
-##' @export
-mrggsave.ggassemble <- function(x, ...) {
-
-  if(!inherits(x, "list")) {
-    x <- list(x)
-  }
-
-  x <- lapply(x, mrggsave_prep_object.ggassemble)
-
-  return(mrggsave.ggplot(x, ...))
-}
+# mrggsave.ggassemble <- function(x, ...) {
+#
+#   if(!inherits(x, "list")) {
+#     x <- list(x)
+#   }
+#
+#   x <- lapply(x, mrggsave_prep_object.ggassemble)
+#
+#   return(mrggsave.ggplot(x, ...))
+# }
 
 #' @export
 mrggsave.ggsurvplot <- function(x,...) {
@@ -250,10 +248,10 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
   if(all(cl$ggmatrix)) {
     return(mrggsave.ggmatrix(x, arrange = arrange, ...))
   }
-
-  if(all(cl$ggassemble)) {
-    return(mrggsave.ggassemble(x, arrange = arrange, ...))
-  }
+#
+#   if(all(cl$ggassemble)) {
+#     return(mrggsave.ggassemble(x, arrange = arrange, ...))
+#   }
 
   x <- lapply(x, mrggsave_prep_object)
 
@@ -406,7 +404,7 @@ scan_list_cl <- function(x) {
   cl <- lapply(x, class)
   cl <- unlist(lapply(cl, paste, collapse = "-"), use.names=FALSE)
   list(ggmatrix = cl == "gg-ggmatrix",
-       ggassemble = cl=="ggassemble-gg-ggplot",
+       #ggassemble = cl=="ggassemble-gg-ggplot",
        cl = cl)
 }
 
