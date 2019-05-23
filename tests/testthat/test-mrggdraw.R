@@ -2,7 +2,7 @@ library(testthat)
 library(mrggsave)
 library(ggplot2)
 
-context("test-mrggsave-list")
+testthat::context("test-mrggsave-list")
 
 set.seed(1100022)
 data <- data.frame(x = rnorm(100), y = rnorm(100))

@@ -3,10 +3,10 @@ library(mrggsave)
 library(ggplot2)
 library(grid)
 
-context("test-mrggsave")
+testthat::context("test-mrggsave")
 
 set.seed(1100022)
-data <- data.frame(x = rnorm(100), y = rnorm(100))
+data <- data.frame(x = rnorm(10), y = rnorm(10))
 Script <- "test-mrggsave"
 options(mrggsave_dir = tempdir())
 

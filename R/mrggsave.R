@@ -226,8 +226,9 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
     args$arrange <- arrange
     tag <- args$tag
     args$tag <- NULL
+    context <- getOption("mrggsave.use.context", NULL)
     ans <- lapply(seq_along(x), function(i) {
-      args$stem <- paste0(c(stem[i],tag), collapse="_")
+      args$stem <- paste0(c(context,stem[i],tag), collapse="_")
       args$x <- x[[i]]
       do.call(mrggsave, args)
     })
@@ -318,7 +319,8 @@ mrggsave_common <- function(x,
   }
 
   if(!is.null(tag)) {
-    stem <- make_stem(script,tag)
+    context <- getOption("mrggsave.use.context", script)
+    stem <- make_stem(context,tag)
   } else {
     stem <- paste0(stem,collapse = "_")
   }

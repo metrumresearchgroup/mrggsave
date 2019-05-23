@@ -12,3 +12,13 @@ inherits_list <- function(x) {
 flatten_plots <- function(x) {
   rlang::flatten_if(x, inherits_list)
 }
+
+context <- function(x) {
+  options(mrggsave.use.context = x)
+}
+
+clear_context <- function(x) {
+  options(mrggsave.use.context = NULL)
+}
+
+

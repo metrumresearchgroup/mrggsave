@@ -2,7 +2,7 @@ library(testthat)
 library(mrggsave)
 library(ggplot2)
 
-context("test-mrggpage")
+testthat::context("test-mrggpage")
 
 set.seed(1100022)
 data <- data.frame(x = rnorm(10), y = rnorm(10))
