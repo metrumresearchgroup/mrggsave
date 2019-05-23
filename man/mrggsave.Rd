@@ -37,9 +37,9 @@ mrggsave(x, ...)
 
 mrgglabel(..., draw = FALSE, .save = FALSE)
 
-mrggsave_common(x, script = getOption("mrg_script_name", NULL),
-  tag = NULL, width = 5, height = 5, stem = "Rplot",
-  dir = getOption("mrggsave_dir", "../deliv/figure"),
+mrggsave_common(x, script = getOption("mrg.script", NULL), tag = NULL,
+  width = 5, height = 5, stem = "Rplot",
+  dir = getOption("mrggsave.dir", "../deliv/figure"),
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
   arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
   labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
@@ -153,7 +153,7 @@ Script <- "example.R"
 # for project work
 
 # Changing it here only for the example
-options(mrggsave_dir = tempdir())
+options(mrggsave.dir = tempdir())
 
 
 p1 <- ggplot(data=Theoph) +

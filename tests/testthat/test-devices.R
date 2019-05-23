@@ -8,7 +8,7 @@ testthat::context("test-devices")
 set.seed(1100022)
 data <- data.frame(x = rnorm(100), y = rnorm(100))
 Script <- "test-mrggsave"
-options(mrggsave_dir = tempdir(), mrg_script_name = "test.R")
+options(mrggsave.dir = tempdir(), mrg.script = "test.R")
 
 pg <- ggplot(data, aes(x = x, y = y)) + geom_point()
 

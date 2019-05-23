@@ -8,7 +8,7 @@ testthat::context("test-mrggsave")
 set.seed(1100022)
 data <- data.frame(x = rnorm(10), y = rnorm(10))
 Script <- "test-mrggsave"
-options(mrggsave_dir = tempdir())
+options(mrggsave.dir = tempdir())
 
 pl <- lattice::xyplot(y~x, data = data)
 pg <- ggplot(data, aes(x = x, y = y)) + geom_point()

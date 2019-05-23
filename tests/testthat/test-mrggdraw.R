@@ -7,7 +7,7 @@ testthat::context("test-mrggsave-list")
 set.seed(1100022)
 data <- data.frame(x = rnorm(100), y = rnorm(100))
 Script <- "test-mrggsave"
-options(mrggsave_dir = tempdir())
+options(mrggsave.dir = tempdir())
 
 p <- ggplot(data, aes(x = x, y = y)) + geom_point()
 

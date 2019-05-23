@@ -4,7 +4,7 @@
 \alias{mrggsave_last}
 \title{Save the last plot using mrggsave}
 \usage{
-mrggsave_last(stem, script = getOption("mrg_script_name", NULL), ...)
+mrggsave_last(stem, script = getOption("mrg.script", NULL), ...)
 }
 \arguments{
 \item{stem}{passed to [mrggsave]}

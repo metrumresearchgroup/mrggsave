@@ -87,7 +87,7 @@
 ##' # for project work
 ##'
 ##' # Changing it here only for the example
-##' options(mrggsave_dir = tempdir())
+##' options(mrggsave.dir = tempdir())
 ##'
 ##'
 ##' p1 <- ggplot(data=Theoph) +
@@ -279,11 +279,11 @@ eps <- function(...) {
 ##' @rdname mrggsave
 ##' @export
 mrggsave_common <- function(x,
-                            script = getOption("mrg_script_name", NULL),
+                            script = getOption("mrg.script", NULL),
                             tag = NULL,
                             width = 5, height = 5,
                             stem="Rplot",
-                            dir = getOption("mrggsave_dir","../deliv/figure"),
+                            dir = getOption("mrggsave.dir","../deliv/figure"),
                             prefix = gsub("^\\.\\./","./",dir),
                             onefile=TRUE,
                             arrange=FALSE,
@@ -313,7 +313,7 @@ mrggsave_common <- function(x,
   if(is.null(script)) {
     stop(
       c("Please specify the script name either as an argument (script) ",
-        "or an option (mrg_script_name)"),
+        "or an option (mrg.script)"),
       call. = FALSE
     )
   }
@@ -415,6 +415,6 @@ scan_list_cl <- function(x) {
 #' @param script passed to [mrggsave]
 #' @param ... passed to [mrggsave]
 #' @export
-mrggsave_last <- function(stem, script = getOption("mrg_script_name", NULL), ...) {
+mrggsave_last <- function(stem, script = getOption("mrg.script", NULL), ...) {
    mrggsave(last_plot(), stem=stem, script=script, ...)
 }

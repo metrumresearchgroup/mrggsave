@@ -8,7 +8,7 @@ set.seed(1100022)
 data <- data.frame(x = rnorm(10), y = rnorm(10))
 p <- ggplot(data = data, aes(x,y)) + geom_point()
 Script <- "test-mrggsave"
-options(mrggsave_dir = tempdir())
+options(mrggsave.dir = tempdir())
 
 test_that("plots are arranged on a single page", {
   x <- list(p,p,p,p)

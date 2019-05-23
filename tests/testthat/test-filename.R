@@ -10,7 +10,7 @@ data <- tibble(x = c(1,2,3), y = c(4,5,6))
 
 p <- ggplot(data) + geom_point(aes(x,y))
 
-options(mrggsave_dir = tempdir())
+options(mrggsave.dir = tempdir())
 
 assign("runn", 1234, .GlobalEnv)
 
