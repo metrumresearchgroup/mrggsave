@@ -39,9 +39,9 @@ mrggsave_common(x, script = getOption("mrg.script", NULL), tag = NULL,
   dir = getOption("mrggsave.dir", "../deliv/figure"),
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
   arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
-  labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
-  textGrob.y = 0.25, dev = "pdf", res = 150, units = "in",
-  envir = .GlobalEnv, ...)
+  labsep = "\\n", pre_label = NULL, post_label = NULL,
+  fontsize = 7, textGrob.x = 0.01, textGrob.y = 0.25, dev = "pdf",
+  res = 150, units = "in", envir = .GlobalEnv, ...)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
@@ -86,6 +86,12 @@ graphic, label}
 
 \item{labsep}{character separator (or newline) for Source code and
 Source graphic labels}
+
+\item{pre_label}{text to include before annotation; separate lines prior
+to Source code label}
+
+\item{post_label}{text to include after annotation; separate lines after
+Source graphic}
 
 \item{fontsize}{for Source graphic and Source code labels}
 
