@@ -24,7 +24,7 @@
 ##' for portrait figure
 ##' @param height passed to \code{\link{pdf}}; should be less than 7 in.
 ##' for portrait figure
-##' @param dev the device to use; currently, pdf or png
+##' @param dev the device to use
 ##' @param res passed to \code{\link{png}}
 ##' @param units passed to \code{\link{png}}
 ##' @param .save logical; if \code{FALSE}, return the labeled objects
@@ -36,6 +36,8 @@
 ##' @param draw if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}
 ##' @param use_names if \code{TRUE}, the names from a list of plots will be used
 ##' as the stems for output file names
+##' @param envir environment to be used for string interpolation in
+##' stem and tag
 ##' @param ... other arguments passed to \code{mrggsave_common} and then
 ##' on to \code{\link{pdf}} and \code{arrangeGrob}
 ##'
@@ -85,7 +87,7 @@
 ##' # for project work
 ##'
 ##' # Changing it here only for the example
-##' options(mrggsave_dir = tempdir())
+##' options(mrggsave.dir = tempdir())
 ##'
 ##'
 ##' p1 <- ggplot(data=Theoph) +
@@ -171,9 +173,7 @@ mrggsave.gtable <- function(...) {
 
 ##' @rdname mrggsave
 ##' @export
-mrggsave.trellis <- function(x, ..., ypad = 3,
-                             arrange = FALSE,
-                             ncol = 1,
+mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
                              onefile = TRUE) {
 
   if(ncol > 1) arrange <- TRUE
@@ -192,19 +192,21 @@ mrggsave.trellis <- function(x, ..., ypad = 3,
                          onefile = onefile, ...))
 }
 
-##' @rdname mrggsave
-##' @export
-mrggsave.ggassemble <- function(x, ...) {
+# mrggsave.ggassemble <- function(x, ...) {
+#
+#   if(!inherits(x, "list")) {
+#     x <- list(x)
+#   }
+#
+#   x <- lapply(x, mrggsave_prep_object.ggassemble)
+#
+#   return(mrggsave.ggplot(x, ...))
+# }
 
-  if(!inherits(x, "list")) {
-    x <- list(x)
-  }
-
-  x <- lapply(x, mrggsave_prep_object.ggassemble)
-
-  return(mrggsave.ggplot(x, ...))
+#' @export
+mrggsave.ggsurvplot <- function(x,...) {
+  mrggsave_common(mrggsave_prep_object(x), ...)
 }
-
 
 ##' @rdname mrggsave
 ##' @export
@@ -213,17 +215,18 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
   if(use_names) {
     stem <- names(x)
     if(is.null(stem)) {
-      stop("The plot list must be named when use_names is TRUE.", call.=FALSE)
+      stop("the plot list must be named when use_names is TRUE.", call.=FALSE)
     }
     if(!all(nchar(stem) > 0)) {
-      stop("All plot names must at least one character.", call.=FALSE)
+      stop("all plot names must at least one character.", call.=FALSE)
     }
     args <- list(...)
     args$arrange <- arrange
     tag <- args$tag
     args$tag <- NULL
+    context <- getOption("mrggsave.use.context", NULL)
     ans <- lapply(seq_along(x), function(i) {
-      args$stem <- paste0(c(stem[i],tag), collapse="_")
+      args$stem <- paste0(c(context,stem[i],tag), collapse="_")
       args$x <- x[[i]]
       do.call(mrggsave, args)
     })
@@ -245,10 +248,10 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
   if(all(cl$ggmatrix)) {
     return(mrggsave.ggmatrix(x, arrange = arrange, ...))
   }
-
-  if(all(cl$ggassemble)) {
-    return(mrggsave.ggassemble(x, arrange = arrange, ...))
-  }
+#
+#   if(all(cl$ggassemble)) {
+#     return(mrggsave.ggassemble(x, arrange = arrange, ...))
+#   }
 
   x <- lapply(x, mrggsave_prep_object)
 
@@ -267,14 +270,18 @@ mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
   mrggsave(..., draw = FALSE, .save = FALSE)
 }
 
+eps <- function(...) {
+  postscript(..., paper = "special", onefile = FALSE,horizontal = FALSE)
+}
+
 ##' @rdname mrggsave
 ##' @export
 mrggsave_common <- function(x,
-                            script = getOption("mrg_script_name", NULL),
+                            script = getOption("mrg.script", NULL),
                             tag = NULL,
                             width = 5, height = 5,
                             stem="Rplot",
-                            dir = getOption("mrggsave_dir","../deliv/figure"),
+                            dir = getOption("mrggsave.dir","../deliv/figure"),
                             prefix = gsub("^\\.\\./","./",dir),
                             onefile=TRUE,
                             arrange=FALSE,
@@ -285,24 +292,17 @@ mrggsave_common <- function(x,
                             fontsize = 7,
                             textGrob.x = 0.01,
                             textGrob.y = 0.25,
-                            dev = c("pdf", "png"),
+                            dev = "pdf",
                             res = 150,
                             units = "in",
+                            envir = .GlobalEnv,
                             ...) {
-
-  dev <- match.arg(dev)
 
   n  <- length(x)
 
   if(dev=="pdf") {
-    device <- grDevices::pdf
     onefile <- onefile | n==1
   } else {
-    device <- grDevices::png
-    if(missing(width)) width <- NULL
-    if(missing(height)) height <- NULL
-    if(missing(res)) res <- NULL
-    if(missing(units)) units <- NULL
     onefile <- length(x)==1
   }
 
@@ -310,16 +310,20 @@ mrggsave_common <- function(x,
 
   if(is.null(script)) {
     stop(
-      "Please specify the script name either as an argument (script) or an option (mrg_script_name)",
+      c("Please specify the script name either as an argument (script) ",
+        "or an option (mrg.script)"),
       call. = FALSE
     )
   }
 
   if(!is.null(tag)) {
-    stem <- make_stem(script,tag)
+    context <- getOption("mrggsave.use.context", script)
+    stem <- make_stem(context,tag)
   } else {
     stem <- paste0(stem,collapse = "_")
   }
+
+  stem <- glue(stem, .envir = envir)
 
   if(!onefile) {
     pdffile <- paste0(file.path(dir,stem), "%03d", ext)
@@ -365,19 +369,29 @@ mrggsave_common <- function(x,
     return(invisible(x))
   }
 
-  args <- list(...)
-  args$file <- pdffile
-  args$onefile <- onefile
-  args$width <- width
-  args$height <- height
-  if(dev=="png") {
-    args$res <- res
-    args$units <- units
-    args$filename <- pdffile
-  }
-  args <- args[names(args) %in% names(formals(device))]
+  args <- list(
+    onefile = onefile, width = width, height = height, res = res,
+    units = units
+  )
 
-  do.call(device, args)
+  if(dev=="eps") {
+    dev <- "postscript"
+    args$paper <- "special"
+    args$onefile <- FALSE
+    args$horizontal <- FALSE
+  }
+
+  if(dev=="ps") {
+    dev <- "postscript"
+  }
+
+  args$file <- pdffile
+  args$filename <- pdffile
+
+  args <- args[names(args) %in% names(formals(dev))]
+  args <- c(args, list(...))
+
+  do.call(dev, args)
   for(i in seq_along(x)) {
     grid.arrange(x[[i]])
   }
@@ -386,14 +400,19 @@ mrggsave_common <- function(x,
   return(invisible(outfile))
 }
 
-
-
 scan_list_cl <- function(x) {
   cl <- lapply(x, class)
   cl <- unlist(lapply(cl, paste, collapse = "-"), use.names=FALSE)
   list(ggmatrix = cl == "gg-ggmatrix",
-       ggassemble = cl=="ggassemble-gg-ggplot",
+       #ggassemble = cl=="ggassemble-gg-ggplot",
        cl = cl)
 }
 
-
+#' Save the last plot using mrggsave
+#' @param stem passed to [mrggsave]
+#' @param script passed to [mrggsave]
+#' @param ... passed to [mrggsave]
+#' @export
+mrggsave_last <- function(stem, script = getOption("mrg.script", NULL), ...) {
+   mrggsave(last_plot(), stem=stem, script=script, ...)
+}

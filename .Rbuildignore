@@ -1,3 +1,5 @@
+docs
+vignettes
 ^README\.Rmd$
 inst/img
 ^NEXT_RELEASE.*$
