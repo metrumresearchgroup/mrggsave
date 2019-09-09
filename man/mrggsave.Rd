@@ -40,7 +40,7 @@ mrggsave_common(x, script = getOption("mrg.script", NULL), tag = NULL,
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
   arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
   labsep = "\\n", pre_label = NULL, post_label = NULL,
-  fontsize = 7, textGrob.x = 0.01, textGrob.y = 0.25, dev = "pdf",
+  fontsize = 7, textGrob.x = 0.01, textGrob.y = 0.1, dev = "pdf",
   res = 150, units = "in", envir = .GlobalEnv, ...)
 }
 \arguments{
