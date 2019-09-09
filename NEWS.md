@@ -1,3 +1,11 @@
+# mrggsave 0.3.0.9000
+- Add arguments `pre_label` and `post_label` to insert text above and below
+  the standard annotation
+- Force unit of `textGrob.y` to be `inch` to ensure consistent bottom margin
+
+# mrggsave 0.3.0
+- Validate as CR 102
+
 # mrggsave 0.2.0.9001
 - Add support for the following devices: pdf, png, tiff, jpeg, eps, ps, 
   bmp, svg (#13)
