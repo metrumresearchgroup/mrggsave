@@ -34,9 +34,9 @@
 ##' @param labsep character separator (or newline) for Source code and
 ##' Source graphic labels
 ##' @param pre_label text to include before annotation; separate lines prior
-##' to Source code label
+##' to Source code label; see details
 ##' @param post_label text to include after annotation; separate lines after
-##' Source graphic
+##' Source graphic; see details
 ##' @param draw if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}
 ##' @param use_names if \code{TRUE}, the names from a list of plots will be used
 ##' as the stems for output file names
@@ -74,6 +74,10 @@
 ##' \code{mrgglabel} calls \code{mrggsave} and
 ##' neither draws nor saves the plot, but
 ##' returns the annotated plots as table grob.
+##'
+##' \code{pre_label} and \code{post_label} are collapsed with newline if
+##' supplied by the user, allowing multiple lines to be added before or
+##' after the standard annotation.
 ##'
 ##' @seealso \code{\link{mrggdraw}}, \code{\link{mrggsave_list}}
 ##'

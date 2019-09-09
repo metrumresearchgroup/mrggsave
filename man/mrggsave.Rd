@@ -88,10 +88,10 @@ graphic, label}
 Source graphic labels}
 
 \item{pre_label}{text to include before annotation; separate lines prior
-to Source code label}
+to Source code label; see details}
 
 \item{post_label}{text to include after annotation; separate lines after
-Source graphic}
+Source graphic; see details}
 
 \item{fontsize}{for Source graphic and Source code labels}
 
@@ -141,6 +141,10 @@ is a list of length 1.
 \code{mrgglabel} calls \code{mrggsave} and
 neither draws nor saves the plot, but
 returns the annotated plots as table grob.
+
+\code{pre_label} and \code{post_label} are collapsed with newline if
+supplied by the user, allowing multiple lines to be added before or
+after the standard annotation.
 }
 \examples{
 data(Theoph)
