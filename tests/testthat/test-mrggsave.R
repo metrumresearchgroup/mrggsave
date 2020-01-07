@@ -59,6 +59,7 @@ test_that("gtable", {
   expect_equal(basename(out), "gtable.pdf")
 })
 
+
 test_that("gList", {
   l <- list(pg,pg,pg)
   l <- lapply(l, ggplotGrob)
@@ -104,3 +105,14 @@ test_that("extra labels - issue::20", {
   expect_identical(basename(zz),"vector_label.pdf")
 })
 
+
+context("patchwork objects")
+test_that("patchwork issue-26", {
+  skip_if_not_installed("patchwork")
+  pat <- pg+pg/(pg+pg)
+  expect_is(pat,"patchwork")
+  out <- mrggsave(pat, Script, stem = "patchwork")
+  expect_equal(basename(out), "patchwork.pdf")
+  x <- mrggsave_prep_object(pat)
+  expect_is(x,"gtable")
+})

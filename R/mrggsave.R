@@ -200,16 +200,12 @@ mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
                          onefile = onefile, ...))
 }
 
-# mrggsave.ggassemble <- function(x, ...) {
-#
-#   if(!inherits(x, "list")) {
-#     x <- list(x)
-#   }
-#
-#   x <- lapply(x, mrggsave_prep_object.ggassemble)
-#
-#   return(mrggsave.ggplot(x, ...))
-# }
+#' @rdname mrggsave
+#' @export
+mrggsave.patchwork <- function(x,...) {
+  assert_that(requireNamespace("patchwork"))
+  mrggsave(patchwork::patchworkGrob(x),...)
+}
 
 #' @export
 mrggsave.ggsurvplot <- function(x,...) {
@@ -256,10 +252,6 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
   if(all(cl$ggmatrix)) {
     return(mrggsave.ggmatrix(x, arrange = arrange, ...))
   }
-  #
-  #   if(all(cl$ggassemble)) {
-  #     return(mrggsave.ggassemble(x, arrange = arrange, ...))
-  #   }
 
   x <- lapply(x, mrggsave_prep_object)
 
