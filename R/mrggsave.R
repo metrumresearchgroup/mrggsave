@@ -33,6 +33,10 @@
 ##' @param ncol passed to \code{\link{arrangeGrob}}
 ##' @param labsep character separator (or newline) for Source code and
 ##' Source graphic labels
+##' @param pre_label text to include before annotation; separate lines prior
+##' to Source code label; see details
+##' @param post_label text to include after annotation; separate lines after
+##' Source graphic; see details
 ##' @param draw if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}
 ##' @param use_names if \code{TRUE}, the names from a list of plots will be used
 ##' as the stems for output file names
@@ -70,6 +74,10 @@
 ##' \code{mrgglabel} calls \code{mrggsave} and
 ##' neither draws nor saves the plot, but
 ##' returns the annotated plots as table grob.
+##'
+##' \code{pre_label} and \code{post_label} are collapsed with newline if
+##' supplied by the user, allowing multiple lines to be added before or
+##' after the standard annotation.
 ##'
 ##' @seealso \code{\link{mrggdraw}}, \code{\link{mrggsave_list}}
 ##'
@@ -248,10 +256,10 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
   if(all(cl$ggmatrix)) {
     return(mrggsave.ggmatrix(x, arrange = arrange, ...))
   }
-#
-#   if(all(cl$ggassemble)) {
-#     return(mrggsave.ggassemble(x, arrange = arrange, ...))
-#   }
+  #
+  #   if(all(cl$ggassemble)) {
+  #     return(mrggsave.ggassemble(x, arrange = arrange, ...))
+  #   }
 
   x <- lapply(x, mrggsave_prep_object)
 
@@ -289,9 +297,11 @@ mrggsave_common <- function(x,
                             .save = TRUE,
                             ypad = 3,
                             labsep = "\n",
+                            pre_label = NULL,
+                            post_label = NULL,
                             fontsize = 7,
                             textGrob.x = 0.01,
-                            textGrob.y = 0.25,
+                            textGrob.y = 0.1,
                             dev = "pdf",
                             res = 150,
                             units = "in",
@@ -337,11 +347,15 @@ mrggsave_common <- function(x,
     if(n>1) file <-  paste(file, "page:", seq(n))
   }
 
+  pad <- paste0(rep("\n",as.integer(ypad)), collapse = "")
+
   label <- paste0(
-    paste0(rep("\n",as.integer(ypad)), collapse = ""),
+    pad,
+    if(!is.null(pre_label)) paste0(paste0(pre_label,collapse="\n"),"\n"),
     "Source code: ", script,
     labsep,
-    "Source graphic: ", file
+    "Source graphic: ", file,
+    if(!is.null(post_label)) paste0("\n",paste0(post_label,collapse="\n"))
   )
 
   for(i in seq_along(x)) {
@@ -350,7 +364,7 @@ mrggsave_common <- function(x,
       bottom=textGrob(
         gp=gpar(fontsize=fontsize),
         just=c('left','bottom'),
-        y=textGrob.y,
+        y=unit(textGrob.y,"in"),
         x=textGrob.x,
         label=label[[i]]
       )
@@ -414,5 +428,5 @@ scan_list_cl <- function(x) {
 #' @param ... passed to [mrggsave]
 #' @export
 mrggsave_last <- function(stem, script = getOption("mrg.script", NULL), ...) {
-   mrggsave(last_plot(), stem=stem, script=script, ...)
+  mrggsave(last_plot(), stem=stem, script=script, ...)
 }

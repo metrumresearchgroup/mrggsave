@@ -39,9 +39,9 @@ mrggsave_common(x, script = getOption("mrg.script", NULL), tag = NULL,
   dir = getOption("mrggsave.dir", "../deliv/figure"),
   prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
   arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
-  labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
-  textGrob.y = 0.25, dev = "pdf", res = 150, units = "in",
-  envir = .GlobalEnv, ...)
+  labsep = "\\n", pre_label = NULL, post_label = NULL,
+  fontsize = 7, textGrob.x = 0.01, textGrob.y = 0.1, dev = "pdf",
+  res = 150, units = "in", envir = .GlobalEnv, ...)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
@@ -86,6 +86,12 @@ graphic, label}
 
 \item{labsep}{character separator (or newline) for Source code and
 Source graphic labels}
+
+\item{pre_label}{text to include before annotation; separate lines prior
+to Source code label; see details}
+
+\item{post_label}{text to include after annotation; separate lines after
+Source graphic; see details}
 
 \item{fontsize}{for Source graphic and Source code labels}
 
@@ -135,6 +141,10 @@ is a list of length 1.
 \code{mrgglabel} calls \code{mrggsave} and
 neither draws nor saves the plot, but
 returns the annotated plots as table grob.
+
+\code{pre_label} and \code{post_label} are collapsed with newline if
+supplied by the user, allowing multiple lines to be added before or
+after the standard annotation.
 }
 \examples{
 data(Theoph)

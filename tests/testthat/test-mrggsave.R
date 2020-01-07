@@ -93,4 +93,14 @@ test_that("last plot", {
   expect_identical(basename(x),"testlast.pdf")
 })
 
+test_that("extra labels - issue::20", {
+  x <- mrggsave(pg, script=Script,stem="pre_label")
+  y <- mrggsave(pg, script = Script, stem="post_label")
+  z <- mrggsave(pg, script = Script, stem="pre_post_label")
+  zz <- mrggsave(pg,script = Script, stem = "vector_label")
+  expect_identical(basename(x),"pre_label.pdf")
+  expect_identical(basename(y),"post_label.pdf")
+  expect_identical(basename(z),"pre_post_label.pdf")
+  expect_identical(basename(zz),"vector_label.pdf")
+})
 
