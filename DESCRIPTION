@@ -21,4 +21,4 @@ Imports:
   rlang (>= 0.3.4), 
   glue
 Suggests: GGally, gtable, testthat, lattice, survminer
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

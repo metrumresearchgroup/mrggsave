@@ -15,18 +15,15 @@
 \usage{
 mrggsave(x, ...)
 
-\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE,
-  ncol = 1, onefile = TRUE)
+\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE, ncol = 1, onefile = TRUE)
 
-\method{mrggsave}{ggmatrix}(x, ..., ypad = 4, arrange = FALSE,
-  onefile = TRUE)
+\method{mrggsave}{ggmatrix}(x, ..., ypad = 4, arrange = FALSE, onefile = TRUE)
 
 \method{mrggsave}{gList}(...)
 
 \method{mrggsave}{gtable}(...)
 
-\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE,
-  ncol = 1, onefile = TRUE)
+\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE, ncol = 1, onefile = TRUE)
 
 \method{mrggsave}{list}(x, ..., arrange = FALSE, use_names = FALSE)
 
@@ -34,14 +31,32 @@ mrggsave(x, ...)
 
 mrgglabel(..., draw = FALSE, .save = FALSE)
 
-mrggsave_common(x, script = getOption("mrg.script", NULL), tag = NULL,
-  width = 5, height = 5, stem = "Rplot",
+mrggsave_common(
+  x,
+  script = getOption("mrg.script", NULL),
+  tag = NULL,
+  width = 5,
+  height = 5,
+  stem = "Rplot",
   dir = getOption("mrggsave.dir", "../deliv/figure"),
-  prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
-  arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
-  labsep = "\\n", pre_label = NULL, post_label = NULL,
-  fontsize = 7, textGrob.x = 0.01, textGrob.y = 0.1, dev = "pdf",
-  res = 150, units = "in", envir = .GlobalEnv, ...)
+  prefix = gsub("^\\\\.\\\\./", "./", dir),
+  onefile = TRUE,
+  arrange = FALSE,
+  draw = FALSE,
+  .save = TRUE,
+  ypad = 3,
+  labsep = "\\n",
+  pre_label = NULL,
+  post_label = NULL,
+  fontsize = 7,
+  textGrob.x = 0.01,
+  textGrob.y = 0.1,
+  dev = "pdf",
+  res = 150,
+  units = "in",
+  envir = .GlobalEnv,
+  ...
+)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
