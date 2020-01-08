@@ -1,7 +1,8 @@
-# mrggsave 0.3.0.9000
+# mrggsave 0.3.0.9xxx
 - Add arguments `pre_label` and `post_label` to insert text above and below
   the standard annotation
 - Force unit of `textGrob.y` to be `inch` to ensure consistent bottom margin
+- Add support for patchwork objects (#26)
 
 # mrggsave 0.3.0
 - Validate as CR 102
