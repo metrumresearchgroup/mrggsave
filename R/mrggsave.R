@@ -361,7 +361,7 @@ mrggsave_common <- function(x,
       post_label = post_label,
       source_code = script,
       labsep = labsep,
-      source_file = file,
+      source_graphic = file,
       n = n,
       file = pdffile,
       position = position,
@@ -449,7 +449,7 @@ mrggsave_common <- function(x,
     x <- list(
       outfile = outfile,
       label = label,
-      source_file = d$source_file,
+      source_graphic = d$source_graphic,
       source_code = d$source_code
     )
     return(invisible(x))

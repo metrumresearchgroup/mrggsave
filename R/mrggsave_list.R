@@ -41,6 +41,8 @@ named_plots <- function(..., tag = NULL) {
   if(is.null(na)) na <- rep("", length(args))
   calls <- sapply(args,as.character, simplify=FALSE)
   funs <- sapply(calls, "[[",1)
+  na <- usub(na)
+  funs[na != ""] <- na[na != ""]
   if(any(duplicated(funs))) {
     funs[duplicated(funs)] <- paste0(funs[duplicated(funs)],"_",na[duplicated(funs)])
   }

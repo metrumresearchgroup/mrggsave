@@ -28,8 +28,9 @@ label.fun <- function(x) {
     if(!is.null(x$pre_label)) paste0(paste0(x$pre_label,collapse="\n"),"\n"),
     "Source code: ", x$source_code,
     x$labsep,
-    "Source graphic: ", x$source_file,
+    "Source graphic: ", x$source_graphic,
     if(!is.null(x$post_label)) paste0("\n",paste0(x$post_label,collapse="\n"))
   )
 }
 
+usub <- function(x) gsub(" +", "_", x)
