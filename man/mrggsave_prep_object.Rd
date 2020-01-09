@@ -2,9 +2,33 @@
 % Please edit documentation in R/mrggsave_prep_object.R
 \name{mrggsave_prep_object}
 \alias{mrggsave_prep_object}
+\alias{mrggsave_prep_object.gg}
+\alias{mrggsave_prep_object.default}
+\alias{mrggsave_prep_object.ggplot}
+\alias{mrggsave_prep_object.ggmatrix}
+\alias{mrggsave_prep_object.patchwork}
+\alias{mrggsave_prep_object.gtable}
+\alias{mrggsave_prep_object.arrangelist}
+\alias{mrggsave_prep_object.ggsurvplot}
 \title{Prepare any object for use with mrggsave}
 \usage{
 mrggsave_prep_object(x, ...)
+
+\method{mrggsave_prep_object}{gg}(x, ...)
+
+\method{mrggsave_prep_object}{default}(x, ...)
+
+\method{mrggsave_prep_object}{ggplot}(x, ...)
+
+\method{mrggsave_prep_object}{ggmatrix}(x, ...)
+
+\method{mrggsave_prep_object}{patchwork}(x, ...)
+
+\method{mrggsave_prep_object}{gtable}(x, ...)
+
+\method{mrggsave_prep_object}{arrangelist}(x, ...)
+
+\method{mrggsave_prep_object}{ggsurvplot}(x, ...)
 }
 \arguments{
 \item{x}{a plot object}

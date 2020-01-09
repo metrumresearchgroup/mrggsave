@@ -21,3 +21,14 @@ context_clear <- function(x) {
   options(mrggsave.use.context = NULL)
 }
 
+label.fun <- function(x) {
+  paste0(
+    x$pad,
+    if(!is.null(x$pre_label)) paste0(paste0(x$pre_label,collapse="\n"),"\n"),
+    "Source code: ", x$source_code,
+    x$labsep,
+    "Source graphic: ", x$source_file,
+    if(!is.null(x$post_label)) paste0("\n",paste0(x$post_label,collapse="\n"))
+  )
+}
+

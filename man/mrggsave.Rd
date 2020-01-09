@@ -53,10 +53,12 @@ mrggsave_common(
   post_label = NULL,
   fontsize = 7,
   textGrob.x = 0.01,
-  textGrob.y = 0.1,
-  dev = "pdf",
+  textGrob.y = unit(0.1, "in"),
+  just = c("left", "bottom"),
+  dev = getOption("mrggsave.dev", "pdf"),
   res = 150,
   units = "in",
+  position = getOption("mrggsave.position", "default"),
   envir = .GlobalEnv,
   ...
 )
@@ -117,11 +119,15 @@ Source graphic; see details}
 
 \item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
 
+\item{just}{passed to \code{textGrob} (as \code{just})}
+
 \item{dev}{the device to use}
 
 \item{res}{passed to \code{\link{png}}}
 
 \item{units}{passed to \code{\link{png}}}
+
+\item{position}{force the graphic annotation to locate to the left or right}
 
 \item{envir}{environment to be used for string interpolation in
 stem and tag}
