@@ -240,6 +240,10 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
       args$x <- x[[i]]
       do.call(mrggsave, args)
     })
+    if(getOption("mrggsave.return.more",FALSE)) {
+      names(ans) <- stem
+      return(invisible(ans))
+    }
     return(invisible(unlist(ans,use.names=FALSE)))
   }
 
@@ -441,6 +445,15 @@ mrggsave_common <- function(x,
   }
   grDevices::dev.off()
 
+  if(getOption("mrggsave.return.more", FALSE)) {
+    x <- list(
+      outfile = outfile,
+      label = label,
+      source_file = d$source_file,
+      source_code = d$source_code
+    )
+    return(invisible(x))
+  }
   return(invisible(outfile))
 }
 

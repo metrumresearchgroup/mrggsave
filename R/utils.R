@@ -14,6 +14,7 @@ flatten_plots <- function(x) {
 }
 
 context <- function(x) {
+  x <- gsub(" +", "_",x)
   options(mrggsave.use.context = x)
 }
 
