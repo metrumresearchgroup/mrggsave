@@ -105,6 +105,10 @@ test_that("extra labels - issue::20", {
   expect_identical(basename(zz),"vector_label.pdf")
 })
 
+test_that("use_names not passed issue-29", {
+  ans <- mrggsave(pg, script = Script, stem = "issue_29", use_names=FALSE)
+  expect_identical(basename(ans),"issue_29.pdf")
+})
 
 context("patchwork objects")
 test_that("patchwork issue-26", {
@@ -116,3 +120,5 @@ test_that("patchwork issue-26", {
   x <- mrggsave_prep_object(pat)
   expect_is(x,"gtable")
 })
+
+
