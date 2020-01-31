@@ -436,8 +436,9 @@ mrggsave_common <- function(x,
   args$file <- pdffile
   args$filename <- pdffile
 
-  args <- args[names(args) %in% names(formals(dev))]
   args <- c(args, list(...))
+  args <- args[names(args) %in% names(formals(dev))]
+
 
   do.call(dev, args)
   for(i in seq_along(x)) {
