@@ -11,3 +11,4 @@ Makefile
 test.R
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.drone.yml
