@@ -16,7 +16,8 @@ Imports:
   ggplot2 (>= 2.2.1), 
   grid, 
   gridExtra, 
-  grDevices, 
+  grDevices,
+  gridGraphics,
   assertthat, 
   rlang (>= 0.3.4), 
   glue

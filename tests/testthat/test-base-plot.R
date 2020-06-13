@@ -1,7 +1,7 @@
 library(testthat)
 library(mrggsave)
 
-context("capture_base_plot")
+testthat::context("capture_base_plot")
 
 test_that("capture base plot", {
   x <- rnorm(100)

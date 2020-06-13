@@ -1,7 +1,7 @@
 library(testthat)
 library(mrggsave)
 
-context("patchwork objects")
+testthat::context("patchwork objects")
 
 test_that("patchwork issue-26", {
   skip_if_not_installed("patchwork")
