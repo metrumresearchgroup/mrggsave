@@ -21,5 +21,5 @@ Imports:
   assertthat, 
   rlang (>= 0.3.4), 
   glue
-Suggests: GGally, gtable, testthat, lattice, survminer, patchwork
+Suggests: GGally, gtable, testthat, lattice, survminer, patchwork, survival
 RoxygenNote: 7.1.0
