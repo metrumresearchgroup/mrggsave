@@ -4,7 +4,7 @@ library(mrggsave)
 testthat::context("test-ggsurv")
 
 test_that("ggsurvplot", {
-  skip_if_not(require("survminer"))
+  skip_if_not(requireNamespace("survminer",quietly=TRUE))
 
   data(lung, package = "survival")
 
