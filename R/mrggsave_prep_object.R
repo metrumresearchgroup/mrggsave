@@ -51,3 +51,9 @@ mrggsave_prep_object.ggsurvplot <- function(x,...) {
   assert_that(requireNamespace("survminer"))
   survminer::arrange_ggsurvplots(list(x), nrow = 1, ncol = 1, print = FALSE)
 }
+
+#' @rdname mrggsave_prep_object
+#' @export
+mrggsave_prep_object.gTree <- function(x,...) {
+  grid::gList(x)
+}
