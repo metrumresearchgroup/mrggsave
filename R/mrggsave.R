@@ -320,7 +320,8 @@ mrggsave_common <- function(x,
     onefile <- length(x)==1
   }
 
-  ext <- paste0(".", dev)
+  ext <- gsub("cairo_pdf", "pdf", dev, fixed = TRUE)
+  ext <- paste0(".", ext)
 
   if(is.null(script)) {
     stop(
