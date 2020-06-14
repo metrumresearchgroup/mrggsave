@@ -17,6 +17,7 @@ steps:
   pull: never
   environment:
     R_LIBS_USER: "/opt/rpkgs/3.6"
+    _R_CHECK_FORCE_SUGGESTS_: false
   commands:
   - /opt/R/3.6.3/bin/R -e "devtools::test()"
   - /opt/R/3.6.3/bin/R -e "devtools::check()"
@@ -33,6 +34,7 @@ steps:
   pull: never
   environment:
     R_LIBS_USER: "/opt/rpkgs/3.6"
+    _R_CHECK_FORCE_SUGGESTS_: false
   commands:
   - git config --global user.email "drone@metrumrg.com"
   - git config --global user.name "Drony"

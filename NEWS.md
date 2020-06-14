@@ -1,8 +1,9 @@
-# mrggsave 0.3.0.9xxx
-- Add arguments `pre_label` and `post_label` to insert text above and below
-  the standard annotation
+# mrggsave 0.3.1
+- Add support for ggsurvplot objects #11
 - Force unit of `textGrob.y` to be `inch` to ensure consistent bottom margin
-- Add support for patchwork objects (#26)
+- Add support for patchwork objects #26
+- Add support for gTree objects #34
+- Fix file extension to pdf when cairo_pdf device is used #36
 
 # mrggsave 0.3.0
 - Validate as CR 102
