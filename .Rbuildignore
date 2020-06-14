@@ -12,3 +12,4 @@ test.R
 ^.*\.Rproj$
 ^\.Rproj\.user$
 .drone.yml
+WORDLIST
