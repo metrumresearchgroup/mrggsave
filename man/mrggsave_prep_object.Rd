@@ -10,6 +10,7 @@
 \alias{mrggsave_prep_object.gtable}
 \alias{mrggsave_prep_object.arrangelist}
 \alias{mrggsave_prep_object.ggsurvplot}
+\alias{mrggsave_prep_object.gTree}
 \title{Prepare any object for use with mrggsave}
 \usage{
 mrggsave_prep_object(x, ...)
@@ -29,6 +30,8 @@ mrggsave_prep_object(x, ...)
 \method{mrggsave_prep_object}{arrangelist}(x, ...)
 
 \method{mrggsave_prep_object}{ggsurvplot}(x, ...)
+
+\method{mrggsave_prep_object}{gTree}(x, ...)
 }
 \arguments{
 \item{x}{a plot object}

@@ -10,6 +10,7 @@
 \alias{mrggsave.patchwork}
 \alias{mrggsave.list}
 \alias{mrggsave.gg}
+\alias{mrggsave.gTree}
 \alias{mrgglabel}
 \alias{mrggsave_common}
 \title{Label, arrange, and save graphics}
@@ -31,6 +32,8 @@ mrggsave(x, ...)
 \method{mrggsave}{list}(x, ..., arrange = FALSE, use_names = FALSE)
 
 \method{mrggsave}{gg}(x, ...)
+
+\method{mrggsave}{gTree}(x, ...)
 
 mrgglabel(..., draw = FALSE, .save = FALSE)
 

@@ -274,6 +274,12 @@ mrggsave.gg <- function(x,...) {
   NextMethod()
 }
 
+#' @rdname mrggsave
+#' @export
+mrggsave.gTree <- function(x,...) {
+  mrggsave_common(mrggsave_prep_object(x), ...)
+}
+
 #' @export
 #' @rdname mrggsave
 mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
