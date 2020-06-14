@@ -52,3 +52,9 @@ test_that("svg", {
   foo <- mrggsave(pg, stem = "foo", dev="svg")
   expect_equal(basename(foo), "foo.svg")
 })
+
+test_that("cairo_pdf", {
+  foo <- mrggsave(pg, stem = "foo", dev="cairo_pdf")
+  expect_equal(basename(foo), "foo.pdf")
+})
+
