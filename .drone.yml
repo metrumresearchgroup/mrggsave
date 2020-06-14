@@ -19,8 +19,8 @@ steps:
     R_LIBS_USER: "/opt/rpkgs/3.6"
     _R_CHECK_FORCE_SUGGESTS_: false
   commands:
-  - /opt/R/3.6/bin/R -e "devtools::test()"
-  - /opt/R/3.6/bin/R -e "devtools::check()"
+  - /opt/R/3.6.3/bin/R -e "devtools::test()"
+  - /opt/R/3.6.3/bin/R -e "devtools::check()"
   depends_on:
   - container-pull
 
