@@ -10,6 +10,8 @@ TESTDIR=../../qualification/mrggsave_qualification/testing/
 covr:
 	Rscript inst/script/covr.R
 
+spelling:
+	Rscript -e 'spelling::spell_check_package(".")'
 
 pkgdown:
 	Rscript -e "pkgdown::build_site()"
