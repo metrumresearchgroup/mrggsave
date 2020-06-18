@@ -7,41 +7,64 @@
 \alias{mrggsave.gList}
 \alias{mrggsave.gtable}
 \alias{mrggsave.trellis}
+\alias{mrggsave.patchwork}
 \alias{mrggsave.list}
 \alias{mrggsave.gg}
+\alias{mrggsave.gTree}
 \alias{mrgglabel}
 \alias{mrggsave_common}
 \title{Label, arrange, and save graphics}
 \usage{
 mrggsave(x, ...)
 
-\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE,
-  ncol = 1, onefile = TRUE)
+\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE, ncol = 1, onefile = TRUE)
 
-\method{mrggsave}{ggmatrix}(x, ..., ypad = 4, arrange = FALSE,
-  onefile = TRUE)
+\method{mrggsave}{ggmatrix}(x, ..., ypad = 4, arrange = FALSE, onefile = TRUE)
 
 \method{mrggsave}{gList}(...)
 
 \method{mrggsave}{gtable}(...)
 
-\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE,
-  ncol = 1, onefile = TRUE)
+\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE, ncol = 1, onefile = TRUE)
+
+\method{mrggsave}{patchwork}(x, ...)
 
 \method{mrggsave}{list}(x, ..., arrange = FALSE, use_names = FALSE)
 
 \method{mrggsave}{gg}(x, ...)
 
+\method{mrggsave}{gTree}(x, ...)
+
 mrgglabel(..., draw = FALSE, .save = FALSE)
 
-mrggsave_common(x, script = getOption("mrg.script", NULL), tag = NULL,
-  width = 5, height = 5, stem = "Rplot",
+mrggsave_common(
+  x,
+  script = getOption("mrg.script", NULL),
+  tag = NULL,
+  width = 5,
+  height = 5,
+  stem = "Rplot",
   dir = getOption("mrggsave.dir", "../deliv/figure"),
-  prefix = gsub("^\\\\.\\\\./", "./", dir), onefile = TRUE,
-  arrange = FALSE, draw = FALSE, .save = TRUE, ypad = 3,
-  labsep = "\\n", fontsize = 7, textGrob.x = 0.01,
-  textGrob.y = 0.25, dev = "pdf", res = 150, units = "in",
-  envir = .GlobalEnv, ...)
+  prefix = gsub("^\\\\.\\\\./", "./", dir),
+  onefile = TRUE,
+  arrange = FALSE,
+  draw = FALSE,
+  .save = TRUE,
+  ypad = 3,
+  labsep = "\\n",
+  pre_label = NULL,
+  post_label = NULL,
+  fontsize = 7,
+  textGrob.x = 0.01,
+  textGrob.y = unit(0.1, "in"),
+  just = c("left", "bottom"),
+  dev = getOption("mrggsave.dev", "pdf"),
+  res = 150,
+  units = "in",
+  position = getOption("mrggsave.position", "default"),
+  envir = .GlobalEnv,
+  ...
+)
 }
 \arguments{
 \item{x}{an object or list of objects of class \code{gg}}
@@ -87,17 +110,27 @@ graphic, label}
 \item{labsep}{character separator (or newline) for Source code and
 Source graphic labels}
 
+\item{pre_label}{text to include before annotation; separate lines prior
+to Source code label; see details}
+
+\item{post_label}{text to include after annotation; separate lines after
+Source graphic; see details}
+
 \item{fontsize}{for Source graphic and Source code labels}
 
 \item{textGrob.x}{passed to \code{textGrob} (as \code{x})}
 
 \item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
 
+\item{just}{passed to \code{textGrob} (as \code{just})}
+
 \item{dev}{the device to use}
 
 \item{res}{passed to \code{\link{png}}}
 
 \item{units}{passed to \code{\link{png}}}
+
+\item{position}{force the graphic annotation to locate to the left or right}
 
 \item{envir}{environment to be used for string interpolation in
 stem and tag}
@@ -135,6 +168,10 @@ is a list of length 1.
 \code{mrgglabel} calls \code{mrggsave} and
 neither draws nor saves the plot, but
 returns the annotated plots as table grob.
+
+\code{pre_label} and \code{post_label} are collapsed with newline if
+supplied by the user, allowing multiple lines to be added before or
+after the standard annotation.
 }
 \examples{
 data(Theoph)
@@ -161,13 +198,20 @@ p2 <- ggplot(data=Theoph) +
   facet_wrap(~Subject)
 
 mrggsave(p1, Script, "_plot1")
+
+\dontrun{
 mrggsave(p2, Script, "_plot2")
+}
 
 mrggsave(list(p1,p2), Script, "both_plots")
+
+\dontrun{
 mrggsave(list(p1,p2), Script, "separate_files", onefile=FALSE)
+}
 
 mrggsave(p1, Script, "different_shape", width=10, height=4)
 
+\dontrun{
 mrggsave(list(p1,p2), Script, "onepage", arrange=TRUE, ncol=2)
 
 stopifnot(require(GGally))
@@ -175,7 +219,7 @@ stopifnot(require(GGally))
 p3 <- ggpairs(data)
 
 mrggsave(p3, Script, "ggally_plot")
-
+}
 }
 \seealso{
 \code{\link{mrggdraw}}, \code{\link{mrggsave_list}}

@@ -18,8 +18,7 @@ should be \code{TRUE} unless you really don't want to flatten here}
 Label and save a list of objects
 }
 \details{
-No arrangement is done; the objects are just
-labeldd and save.
+No arrangement is done; the objects are just labeled and save.
 
 The objects could be ggplot objects or ggplot
 objects that have been arranged on a page

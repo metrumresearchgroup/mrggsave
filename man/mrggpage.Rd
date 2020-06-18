@@ -4,8 +4,7 @@
 \alias{mrggpage}
 \title{Arrange plots on a single page}
 \usage{
-mrggpage(x, ..., ncol = 2, nrow = NULL, multiple = FALSE,
-  top = quote(NULL))
+mrggpage(x, ..., ncol = 2, nrow = NULL, multiple = FALSE, top = quote(NULL))
 }
 \arguments{
 \item{x}{a list of plots}

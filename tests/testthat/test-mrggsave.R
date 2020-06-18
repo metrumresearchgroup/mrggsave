@@ -59,6 +59,7 @@ test_that("gtable", {
   expect_equal(basename(out), "gtable.pdf")
 })
 
+
 test_that("gList", {
   l <- list(pg,pg,pg)
   l <- lapply(l, ggplotGrob)
@@ -91,6 +92,22 @@ test_that("last plot", {
   print(pg)
   x <- mrggsave_last(script = Script,stem = "testlast")
   expect_identical(basename(x),"testlast.pdf")
+})
+
+test_that("extra labels - issue::20", {
+  x <- mrggsave(pg, script=Script,stem="pre_label")
+  y <- mrggsave(pg, script = Script, stem="post_label")
+  z <- mrggsave(pg, script = Script, stem="pre_post_label")
+  zz <- mrggsave(pg,script = Script, stem = "vector_label")
+  expect_identical(basename(x),"pre_label.pdf")
+  expect_identical(basename(y),"post_label.pdf")
+  expect_identical(basename(z),"pre_post_label.pdf")
+  expect_identical(basename(zz),"vector_label.pdf")
+})
+
+test_that("use_names not passed issue-29", {
+  ans <- mrggsave(pg, script = Script, stem = "issue_29", use_names=FALSE)
+  expect_identical(basename(ans),"issue_29.pdf")
 })
 
 

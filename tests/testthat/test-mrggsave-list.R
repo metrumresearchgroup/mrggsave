@@ -14,7 +14,5 @@ p <- ggplot(data, aes(x = x, y = y)) + geom_point()
 test_that("save a list", {
   x <- mrggsave_list(list(p,p,p), script = Script, stem = "testlist")
   expect_identical(basename(x),"testlist.pdf")
-
-
 })
 

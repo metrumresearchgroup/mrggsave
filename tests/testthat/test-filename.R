@@ -1,12 +1,11 @@
 library(testthat)
 library(mrggsave)
 library(ggplot2)
-library(tibble)
 library(glue)
 
 testthat::context("test-filename")
 
-data <- tibble(x = c(1,2,3), y = c(4,5,6))
+data <- data.frame(x = c(1,2,3), y = c(4,5,6))
 
 p <- ggplot(data) + geom_point(aes(x,y))
 

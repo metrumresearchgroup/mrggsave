@@ -6,8 +6,7 @@
 #' @param ... passed to \code{\link{mrggsave_common}}
 #'
 #' @details
-#' No arrangement is done; the objects are just
-#' labeldd and save.
+#' No arrangement is done; the objects are just labeled and save.
 #'
 #' The objects could be ggplot objects or ggplot
 #' objects that have been arranged on a page
@@ -41,6 +40,8 @@ named_plots <- function(..., tag = NULL) {
   if(is.null(na)) na <- rep("", length(args))
   calls <- sapply(args,as.character, simplify=FALSE)
   funs <- sapply(calls, "[[",1)
+  na <- usub(na)
+  funs[na != ""] <- na[na != ""]
   if(any(duplicated(funs))) {
     funs[duplicated(funs)] <- paste0(funs[duplicated(funs)],"_",na[duplicated(funs)])
   }

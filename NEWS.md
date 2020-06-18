@@ -1,3 +1,13 @@
+# mrggsave 0.3.2
+- Add support for ggsurvplot objects #11
+- Force unit of `textGrob.y` to be `inch` to ensure consistent bottom margin
+- Add support for patchwork objects #26
+- Add support for gTree objects #34
+- Fix file extension to pdf when cairo_pdf device is used #36
+
+# mrggsave 0.3.0
+- Validate as CR 102
+
 # mrggsave 0.2.0.9001
 - Add support for the following devices: pdf, png, tiff, jpeg, eps, ps, 
   bmp, svg (#13)
