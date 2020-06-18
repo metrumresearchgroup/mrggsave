@@ -1,4 +1,4 @@
-# mrggsave 0.3.1
+# mrggsave 0.3.2
 - Add support for ggsurvplot objects #11
 - Force unit of `textGrob.y` to be `inch` to ensure consistent bottom margin
 - Add support for patchwork objects #26
