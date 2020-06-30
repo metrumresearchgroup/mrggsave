@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • mrggsave</title>
+<title>Capture a base plot — capture_base_plot • mrggsave</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Capture a base plot — capture_base_plot" />
+<meta property="og:description" content="Capture a base plot" />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -106,90 +107,34 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Capture a base plot</h1>
+    
+    <div class="hidden name"><code>capture_base_plot.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Capture a base plot</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>capture_base_plot</span>()</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="capture_base_plot.html">capture_base_plot()</a></code> </p>
-        </td>
-        <td><p>Capture a base plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="draw_newpage.html">draw_newpage()</a></code> </p>
-        </td>
-        <td><p>Draw an annotated plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mrggdraw.html">mrggdraw()</a></code> </p>
-        </td>
-        <td><p>Draw a plot or list of plots</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mrggpage.html">mrggpage()</a></code> </p>
-        </td>
-        <td><p>Arrange plots on a single page</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mrggsave.html">mrggsave()</a></code> <code><a href="mrggsave.html">mrgglabel()</a></code> <code><a href="mrggsave.html">mrggsave_common()</a></code> </p>
-        </td>
-        <td><p>Label, arrange, and save graphics</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mrggsave_last.html">mrggsave_last()</a></code> </p>
-        </td>
-        <td><p>Save the last plot using mrggsave</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mrggsave_list.html">mrggsave_list()</a></code> </p>
-        </td>
-        <td><p>Label and save a list of objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mrggsave_prep_object.html">mrggsave_prep_object()</a></code> </p>
-        </td>
-        <td><p>Prepare any object for use with mrggsave</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="named_plots.html">named_plots()</a></code> </p>
-        </td>
-        <td><p>Generate a list of auto named plots</p></td>
-      </tr>
-    </tbody>
-    </table>
+
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>)
+<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>)
+
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>,<span class='no'>y</span>)
+
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>capture_base_plot</span>()
+
+<span class='fu'><a href='mrggsave.html'>mrggsave</a></span>(<span class='no'>p</span>, <span class='kw'>script</span> <span class='kw'>=</span> <span class='st'>"foo.R"</span>, <span class='kw'>stem</span> <span class='kw'>=</span> <span class='st'>"base_plot"</span>,<span class='kw'>dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>())
+}</div></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
