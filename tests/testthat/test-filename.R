@@ -22,23 +22,23 @@ test_that("variable gets glued into stem", {
 
 test_that("variable gets glued into tag", {
   ans <- mrggsave(p, script = "file.R", tag = "save_{runn}")
-  expect_equal(basename(ans), "file_save_1234.pdf")
+  expect_equal(basename(ans), "file-save_1234.pdf")
 })
 
 test_that("an environment gets passed to glue", {
   env <- list(runn=4321)
   ans <- mrggsave(p, script = "file.R", tag = "save_{runn}",envir = env)
-  expect_equal(basename(ans), "file_save_4321.pdf")
+  expect_equal(basename(ans), "file-save_4321.pdf")
 })
 
 test_that("vector stem gets collapsed", {
   ans <- mrggsave(p, script = "test-filename.R", stem = c("a", 101, "b"))
-  expect_equal(basename(ans), "a_101_b.pdf")
+  expect_equal(basename(ans), "a-101-b.pdf")
 })
 
 test_that("vector tag gets collapsed", {
   ans <- mrggsave(p, script = "test-filename.R", tag = c("a", 101, "b"))
-  expect_equal(basename(ans), "test-filename_a_101_b.pdf")
+  expect_equal(basename(ans), "test-filename-a-101-b.pdf")
 })
 
 assign("p1", p, globalenv())
@@ -46,7 +46,7 @@ assign("p2", p, globalenv())
 assign("p3", p, globalenv())
 l <- named_plots(p1,p2,p3,tag = "bbb")
 test_that("plots get named by object", {
-  expect_identical(names(l), c("p1_bbb", "p2_bbb", "p3_bbb"))
+  expect_identical(names(l), c("p1-bbb", "p2-bbb", "p3-bbb"))
   expect_length(l,3)
   cl <- sapply(l, is.ggplot)
   expect_true(all(cl))
