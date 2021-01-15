@@ -36,7 +36,7 @@ mrggsave_list <- function(x, flatten = TRUE, ...) {
 #' @param tag used to create a name for the plot
 #'
 #' @export
-named_plots <- function(..., tag = NULL) {
+named_plots <- function(..., tag = NULL, add_context = FALSE) {
   args <- enexprs(...)
   na <- names(args)
   if(is.null(na)) na <- rep("", length(args))
@@ -55,6 +55,8 @@ named_plots <- function(..., tag = NULL) {
     funs <- paste0(funs, "-", glue(tag))
   }
   names(plots) <- sanitize_filename(funs)
-  plots <- structure(plots, class = c("named-plots", class(plots)))
+  cl <- "named-plots"
+  if(add_context) cl <- c("named-plots")
+  plots <- structure(plots, class = c(cl, class(plots)))
   return(invisible(plots))
 }

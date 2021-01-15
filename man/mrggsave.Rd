@@ -45,7 +45,7 @@ mrggsave_common(
   height = 5,
   stem = "Rplot",
   dir = getOption("mrggsave.dir", "../deliv/figure"),
-  prefix = gsub("^\\\\.\\\\./", "./", dir),
+  prefix = NULL,
   onefile = TRUE,
   arrange = FALSE,
   draw = FALSE,

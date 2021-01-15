@@ -307,9 +307,9 @@ mrggsave_common <- function(x,
                             width = 5, height = 5,
                             stem="Rplot",
                             dir = getOption("mrggsave.dir","../deliv/figure"),
-                            prefix = gsub("^\\.\\./","./",dir),
-                            onefile=TRUE,
-                            arrange=FALSE,
+                            prefix = NULL,#gsub("^\\.\\./","./",dir),
+                            onefile = TRUE,
+                            arrange = FALSE,
                             draw = FALSE,
                             .save = TRUE,
                             ypad = 3,
@@ -348,28 +348,31 @@ mrggsave_common <- function(x,
 
   if(!is.null(tag)) {
     context <- getOption("mrggsave.use.context", script)
-    stem <- make_stem(context,tag)
+    stem <- make_stem(context, tag)
   } else {
-    stem <- paste0(stem,collapse = "-")
+    stem <- paste0(stem, collapse = "-")
   }
 
   stem <- glue(stem, .envir = envir)
 
+  if(getOption("mrggsave.tolower.file", FALSE)) {
+    stem <- tolower(stem)
+  }
+
   if(!onefile) {
     pdffile <- paste0(file.path(dir,stem),"%03d", ext)
-    file <- paste0(file.path(prefix,stem),sprintf("%03d", seq(n)), ext)
+    file <- paste0(stem,sprintf("%03d", seq(n)), ext)
+    if(is.character(prefix)) file <- file.path(prefix, file)
     outfile <- sprintf(pdffile, seq(n))
   } else {
     pdffile <- paste0(file.path(dir,stem), ext)
-    file <- paste0(file.path(prefix,stem), ext)
+    file <- paste0(stem, ext)
+    if(is.character(prefix)) file <- file.path(prefix, file)
     outfile <- pdffile
-    if(getOption("mrggsave.tolower.file", FALSE)) {
-      outfile <- tolower(outfile)
-    }
     if(n>1) file <-  paste(file, "page:", seq(n))
   }
 
-  pad <- paste0(rep("\n",as.integer(ypad)), collapse = "")
+  pad <- paste0(rep("\n", as.integer(ypad)), collapse = "")
 
   labeller <- getOption("mrggsave.label.fun", label.fun)
 
