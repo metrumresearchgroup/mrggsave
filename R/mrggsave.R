@@ -251,7 +251,8 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names = FALSE) {
     if(inherits(x, "needs-context")) {
       context <- args$script
       if(is.null(context)) {
-        context <- getOption("mrggsave.use.context", getOption("mrg.script", context))
+        mrg.script <- getOption("mrg.script", context)
+        context <- getOption("mrggsave.use.context", mrg.script)
       }
       context <- no_r_ext(context)
     }
