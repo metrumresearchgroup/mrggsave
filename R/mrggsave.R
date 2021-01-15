@@ -249,9 +249,11 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names = FALSE) {
     args$tag <- NULL
     context <- NULL
     if(inherits(x, "needs-context")) {
-      context <- getOption("mrg.script", args$script)
-      context <- getOption("mrggsave.use.context", context)
-      if(is.character(context)) context <- no_r_ext(context)
+      context <- args$script
+      if(is.null(context)) {
+        context <- getOption("mrggsave.use.context", getOption("mrg.script", context))
+      }
+      context <- no_r_ext(context)
     }
     ans <- lapply(seq_along(x), function(i) {
       args$stem <- paste0(c(context, stem[i], tag), collapse = "-")

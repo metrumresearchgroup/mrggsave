@@ -1,6 +1,7 @@
 is_glist <- function(x) "gList" %in% class(x) # nocov
 
 no_r_ext <- function(x) {
+  if(!is.character(x)) return(x)
   gsub("\\.(r|R|Rmd|rmd)$", "", x)
 }
 

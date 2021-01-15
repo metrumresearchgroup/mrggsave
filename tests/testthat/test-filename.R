@@ -7,13 +7,14 @@ testthat::context("test-filename")
 
 data <- data.frame(x = c(1,2,3), y = c(4,5,6))
 
-p <- ggplot(data) + geom_point(aes(x,y))
+p  <- ggplot(data) + geom_point(aes(x,y))
+p1 <- ggplot(data) + geom_point(aes(x,y))
+p2 <- ggplot(data) + geom_point(aes(x,y))
+p3 <- ggplot(data) + geom_point(aes(x,y))
 
 options(mrggsave.dir = normalizePath(tempdir()))
 
 assign("runn", 1234, .GlobalEnv)
-
-p <- ggplot(data) + geom_point(aes(x,y))
 
 test_that("variable gets glued into stem", {
   ans <- mrggsave(p, script = "test-filename.R", stem = "save_{runn}", dir = tempdir())
@@ -41,7 +42,11 @@ test_that("vector tag gets collapsed", {
   expect_equal(basename(ans), "test-filename-a-101-b.pdf")
 })
 
-p1 <- p2 <- p3 <- p
+assign("p1", p, globalenv())
+assign("p2", p, globalenv())
+assign("p3", p, globalenv())
+assign("dv_pred", p, globalenv())
+
 test_that("plots get named by object", {
   l <- named_plots(p1,p2,p3, tag = "bbb")
   expect_identical(names(l), c("p1-bbb", "p2-bbb", "p3-bbb"))
@@ -49,6 +54,7 @@ test_that("plots get named by object", {
   cl <- sapply(l, is.ggplot)
   expect_true(all(cl))
 })
+
 
 test_that("named_plots returns an object with class", {
   ans <- named_plots(p1,p2,p3)
@@ -64,13 +70,12 @@ test_that("named_plots input auto uses names", {
   ans <- mrggsave(inpt, script = "test-filename.R")
   ans <- basename(ans)
   expect_equal(ans, c("a.pdf", "p2.pdf", "ggplot.pdf"))
-  inpt <- named_plots(p1, add_context=TRUE)
-  ans <- mrggsave(inpt, script = "scrname")
+  inpt <- named_plots(p1, add_context = TRUE)
+  ans <- mrggsave(inpt, script = "scrname.R")
   ans <- basename(ans)
   expect_equal(ans, "scrname-p1.pdf")
 })
 
-dv_pred <- p1
 test_that("named_plots names are sanitized", {
   inpt <- named_plots(dv_pred, "a b.-c" = p2)
   expect_equal(names(inpt), c("dv-pred", "a-b-c"))
