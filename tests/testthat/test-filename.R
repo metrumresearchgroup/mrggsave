@@ -86,6 +86,8 @@ test_that("option to make lower", {
   inpt <- named_plots(EV.PREd = p1)
   ans <- mrggsave(inpt, script = "test-filename.R")
   expect_equal(basename(ans), "ev-pred.pdf")
+  ans <- mrggsave(p1, script = "test-filename", stem = "ABCDE")
+  expect_equal(basename(ans), "abcde.pdf")
 })
 options(mrggsave.file.tolower = NULL)
 

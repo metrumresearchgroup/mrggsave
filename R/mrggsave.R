@@ -371,7 +371,7 @@ mrggsave_common <- function(x,
 
   stem <- glue(stem, .envir = envir)
 
-  if(getOption("mrggsave.file.tolower", FALSE)) {
+  if(isTRUE(getOption("mrggsave.file.tolower", FALSE))) {
     stem <- tolower(stem)
   }
 
@@ -512,5 +512,5 @@ scan_list_cl <- function(x) {
 #' @param ... passed to [mrggsave]
 #' @export
 mrggsave_last <- function(stem, script = getOption("mrg.script", NULL), ...) {
-  mrggsave(last_plot(), stem=stem, script=script, ...)
+  mrggsave(last_plot(), stem = stem, script = script, ...)
 }
