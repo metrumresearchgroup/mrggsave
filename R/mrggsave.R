@@ -231,14 +231,14 @@ mrggsave.ggsurvplot <- function(x,...) {
 
 #' @rdname mrggsave
 #' @export
-mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
+mrggsave.list <- function(x, ..., arrange = FALSE, use_names = FALSE) {
 
   if(inherits(x, "named-plots")) use_names <-  TRUE
 
   if(use_names) {
     stem <- names(x)
     if(is.null(stem)) {
-      stop("the plot list must be named when use_names is TRUE.", call.=FALSE)
+      stop("the plot list must be named when `use_names` is TRUE.", call.=FALSE)
     }
     if(!all(nchar(stem) > 0)) {
       stop("all plot names must at least one character.", call.=FALSE)
@@ -247,19 +247,24 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
     args$arrange <- arrange
     tag <- args$tag
     args$tag <- NULL
-    context <- getOption("mrggsave.use.context", NULL)
+    context <- NULL
+    if(inherits(x, "needs-context")) {
+      context <- getOption("mrg.script", args$script)
+      context <- getOption("mrggsave.use.context", context)
+      if(is.character(context)) context <- no_r_ext(context)
+    }
     ans <- lapply(seq_along(x), function(i) {
-      args$stem <- paste0(c(context,stem[i],tag), collapse="-")
+      args$stem <- paste0(c(context, stem[i], tag), collapse = "-")
       args$x <- x[[i]]
       do.call(mrggsave, args)
     })
 
-    if(getOption("mrggsave.return.more",FALSE)) {
+    if(getOption("mrggsave.return.more", FALSE)) {
       names(ans) <- stem
       return(invisible(ans))
     }
 
-    return(invisible(unlist(ans,use.names=FALSE)))
+    return(invisible(unlist(ans, use.names = FALSE)))
   }
 
   x <- flatten_plots(x)
@@ -331,7 +336,7 @@ mrggsave_common <- function(x,
                             units = "in",
                             position = getOption("mrggsave.position", "default"),
                             labeller = getOption("mrggsave.label.fun", label.fun),
-                            envir = .GlobalEnv,
+                            envir = sys.frame(-1),
                             ...) {
 
   n  <- length(x)
@@ -362,7 +367,7 @@ mrggsave_common <- function(x,
 
   stem <- glue(stem, .envir = envir)
 
-  if(getOption("mrggsave.tolower.file", FALSE)) {
+  if(getOption("mrggsave.file.tolower", FALSE)) {
     stem <- tolower(stem)
   }
 

@@ -1,8 +1,12 @@
 is_glist <- function(x) "gList" %in% class(x) # nocov
 
+no_r_ext <- function(x) {
+  gsub("\\.(r|R|Rmd|rmd)$", "", x)
+}
+
 make_stem <- function(script,tag) {
-  base <- gsub("\\.(r|R|Rmd|rmd)$", "", script)
-  paste0(base,"-",paste0(tag,collapse = "-"))
+  base <- no_r_ext(script)
+  paste0(base,"-",paste0(tag,collapse="-"))
 }
 
 inherits_list <- function(x) { # nocov

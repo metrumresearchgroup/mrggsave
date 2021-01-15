@@ -37,7 +37,7 @@ mrggsave_list <- function(x, flatten = TRUE, ...) {
 #' @param add_context not used for now
 #'
 #' @export
-named_plots <- function(..., tag = NULL, add_context = FALSE, envir = .GlobalEnv) {
+named_plots <- function(..., tag = NULL, add_context = FALSE, envir = sys.frame(-1)) {
   args <- enexprs(...)
   na <- names(args)
   if(is.null(na)) na <- rep("", length(args))
@@ -55,7 +55,7 @@ named_plots <- function(..., tag = NULL, add_context = FALSE, envir = .GlobalEnv
   if(any(duplicated(funs))) {
     warning("duplicated names in output")
   }
-  plots <- lapply(args, eval,parent.frame(3))
+  plots <- lapply(args, eval, parent.frame(3))
   if(!is.null(tag)) {
     funs <- paste0(funs, "-", glue(tag, envir = envir))
   }

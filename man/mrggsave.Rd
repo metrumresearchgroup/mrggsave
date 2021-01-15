@@ -63,7 +63,7 @@ mrggsave_common(
   units = "in",
   position = getOption("mrggsave.position", "default"),
   labeller = getOption("mrggsave.label.fun", label.fun),
-  envir = .GlobalEnv,
+  envir = sys.frame(-1),
   ...
 )
 }
