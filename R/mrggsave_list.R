@@ -50,7 +50,7 @@ named_plots <- function(..., tag = NULL) {
   }
   plots <- lapply(args,eval,parent.frame(3))
   if(is.character(tag)) {
-    funs <- paste0(funs, "_", glue(tag))
+    funs <- paste0(funs, "-", glue(tag))
   }
   names(plots) <- funs
   plots <- structure(plots, class = c("named-plots", class(plots)))
