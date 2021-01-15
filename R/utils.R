@@ -42,3 +42,7 @@ usub <- function(x) gsub(" +", "-", x)
 sanitize_filename <- function(x) {
   gsub("[._-]+", "-", x)
 }
+
+frame_test <- function(arg = parent.frame()) {
+  list(sys.frame(), parent.frame(), sys.frame(-1), arg = arg)
+}
