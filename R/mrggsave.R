@@ -229,6 +229,8 @@ mrggsave.ggsurvplot <- function(x,...) {
 #' @export
 mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
 
+  if(inherits(x, "named-plots")) use_names <-  TRUE
+
   if(use_names) {
     stem <- names(x)
     if(is.null(stem)) {

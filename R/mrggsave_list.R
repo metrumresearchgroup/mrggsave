@@ -53,7 +53,6 @@ named_plots <- function(..., tag = NULL) {
     funs <- paste0(funs, "_", glue(tag))
   }
   names(plots) <- funs
+  plots <- structure(plots, class = c("named-plots", class(plots)))
   return(invisible(plots))
 }
-
-
