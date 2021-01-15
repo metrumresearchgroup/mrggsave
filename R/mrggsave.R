@@ -243,7 +243,7 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
     args$tag <- NULL
     context <- getOption("mrggsave.use.context", NULL)
     ans <- lapply(seq_along(x), function(i) {
-      args$stem <- paste0(c(context,stem[i],tag), collapse="_")
+      args$stem <- paste0(c(context,stem[i],tag), collapse="-")
       args$x <- x[[i]]
       do.call(mrggsave, args)
     })
@@ -348,7 +348,7 @@ mrggsave_common <- function(x,
     context <- getOption("mrggsave.use.context", script)
     stem <- make_stem(context,tag)
   } else {
-    stem <- paste0(stem,collapse = "_")
+    stem <- paste0(stem,collapse = "-")
   }
 
   stem <- glue(stem, .envir = envir)
@@ -394,7 +394,7 @@ mrggsave_common <- function(x,
     stop("'label' must be length ",n," (not ",nn,")", call.=FALSE)
   }
 
-  position <- match.arg(d$position, c("default","left", "right"))
+  position <- match.arg(d$position, c("default", "left", "right"))
   if(position != "default") {
     if(position=="left") {
       d$just <- c("left", "bottom")

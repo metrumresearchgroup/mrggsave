@@ -2,7 +2,7 @@ is_glist <- function(x) "gList" %in% class(x) # nocov
 
 make_stem <- function(script,tag) {
   base <- gsub("\\.(r|R|Rmd|rmd)$", "", script)
-  paste0(base,"_",paste0(tag,collapse = "_"))
+  paste0(base,"-",paste0(tag,collapse = "-"))
 }
 
 inherits_list <- function(x) { # nocov
@@ -14,7 +14,7 @@ flatten_plots <- function(x) {
 }
 
 context <- function(x) {
-  x <- gsub(" +", "_",x)
+  x <- gsub(" +", "-",x)
   options(mrggsave.use.context = x)
 }
 
@@ -33,4 +33,4 @@ label.fun <- function(x) {
   )
 }
 
-usub <- function(x) gsub(" +", "_", x)
+usub <- function(x) gsub(" +", "-", x)
