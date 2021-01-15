@@ -1,5 +1,11 @@
 # mrggsave (development version)
 
+## Breaking changes
+- The default separator when auto-constructing file names is changed from 
+  underscore to hyphen; this is a breaking change that will result in different
+  output filenames if users were using `tag` #2
+- 
+
 # mrggsave 0.3.2
 - Add support for ggsurvplot objects #11
 - Force unit of `textGrob.y` to be `inch` to ensure consistent bottom margin

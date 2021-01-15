@@ -88,3 +88,8 @@ test_that("option to make lower", {
   expect_equal(basename(ans), "ev-pred.pdf")
 })
 options(mrggsave.file.tolower = NULL)
+
+test_that("passing a named list sets use_names to TRUE", {
+  ans <- mrggsave(list(a = p1, b = p1), script = "blah.R")
+  expect_equal(basename(ans), c("a.pdf","b.pdf"))
+})
