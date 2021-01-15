@@ -29,6 +29,10 @@
 #' @param res passed to \code{\link{png}}
 #' @param units passed to \code{\link{png}}
 #' @param position force the graphic annotation to locate to the left or right
+#' @param labeller a function that creates the plot annotation; the function
+#' should receive a single argument (\code{x}) which is an environment
+#' containing various items that might go into the label; pass `NULL` to
+#' omit the label on the plot
 #' @param .save logical; if \code{FALSE}, return the labeled objects
 #' @param arrange logical; if \code{TRUE}, arrange the ggplot objects on a
 #' single page with \code{arrangeGrob}
@@ -249,10 +253,12 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
       args$x <- x[[i]]
       do.call(mrggsave, args)
     })
+
     if(getOption("mrggsave.return.more",FALSE)) {
       names(ans) <- stem
       return(invisible(ans))
     }
+
     return(invisible(unlist(ans,use.names=FALSE)))
   }
 
@@ -261,11 +267,11 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
   cl <- scan_list_cl(x)
 
   if(all(cl$cl == "gg-ggplot")) {
-    return(mrggsave.ggplot(x, arrange = arrange,...))
+    return(mrggsave.ggplot(x, arrange = arrange, ...))
   }
 
   if(all(cl$cl == "trellis")) {
-    return(mrggsave.trellis(x, arrange = arrange,...))
+    return(mrggsave.trellis(x, arrange = arrange, ...))
   }
 
   if(all(cl$ggmatrix)) {
@@ -279,13 +285,13 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
 
 #' @rdname mrggsave
 #' @export
-mrggsave.gg <- function(x,...) {
+mrggsave.gg <- function(x, ...) {
   NextMethod()
 }
 
 #' @rdname mrggsave
 #' @export
-mrggsave.gTree <- function(x,...) {
+mrggsave.gTree <- function(x, ...) {
   mrggsave_common(mrggsave_prep_object(x), ...)
 }
 
@@ -296,7 +302,7 @@ mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
 }
 
 eps <- function(...) {
-  postscript(..., paper = "special", onefile = FALSE,horizontal = FALSE)
+  postscript(..., paper = "special", onefile = FALSE, horizontal = FALSE)
 }
 
 #' @rdname mrggsave
@@ -305,7 +311,7 @@ mrggsave_common <- function(x,
                             script = getOption("mrg.script", NULL),
                             tag = NULL,
                             width = 5, height = 5,
-                            stem="Rplot",
+                            stem = "Rplot",
                             dir = getOption("mrggsave.dir","../deliv/figure"),
                             prefix = NULL,#gsub("^\\.\\./","./",dir),
                             onefile = TRUE,
@@ -323,7 +329,8 @@ mrggsave_common <- function(x,
                             dev = getOption("mrggsave.dev", "pdf"),
                             res = 150,
                             units = "in",
-                            position = getOption("mrggsave.position","default"),
+                            position = getOption("mrggsave.position", "default"),
+                            labeller = getOption("mrggsave.label.fun", label.fun),
                             envir = .GlobalEnv,
                             ...) {
 
@@ -340,8 +347,8 @@ mrggsave_common <- function(x,
 
   if(is.null(script)) {
     stop(
-      c("Please specify the script name either as an argument (script) ",
-        "or an option (mrg.script)"),
+      c("please specify the script name either as an argument (`script`) ",
+        "or an option (`mrg.script`)"),
       call. = FALSE
     )
   }
@@ -369,12 +376,10 @@ mrggsave_common <- function(x,
     file <- paste0(stem, ext)
     if(is.character(prefix)) file <- file.path(prefix, file)
     outfile <- pdffile
-    if(n>1) file <-  paste(file, "page:", seq(n))
+    if(n > 1) file <-  paste(file, "page:", seq(n))
   }
 
   pad <- paste0(rep("\n", as.integer(ypad)), collapse = "")
-
-  labeller <- getOption("mrggsave.label.fun", label.fun)
 
   d <- list2env(
     list(
@@ -395,13 +400,6 @@ mrggsave_common <- function(x,
     parent = .GlobalEnv
   )
 
-  label <- labeller(d)
-
-  if(length(label) != n) {
-    nn <- length(label)
-    stop("'label' must be length ",n," (not ",nn,")", call.=FALSE)
-  }
-
   position <- match.arg(d$position, c("default", "left", "right"))
   if(position != "default") {
     if(position=="left") {
@@ -414,18 +412,7 @@ mrggsave_common <- function(x,
     }
   }
 
-  for(i in seq_along(x)) {
-    x[[i]] <- arrangeGrob(
-      x[[i]],
-      bottom=textGrob(
-        gp=gpar(fontsize=d$fontsize),
-        just=d$just,
-        y=d$textGrob.y,
-        x=d$textGrob.x,
-        label=label[[i]]
-      )
-    )
-  }
+  x <- annotate_graphic(x, d, labeller)
 
   if(draw) {
     if(is_glist(x)) {
@@ -441,7 +428,7 @@ mrggsave_common <- function(x,
 
   args <- list(
     onefile = onefile, width = width, height = height, res = res,
-    units = units
+    units = units, file = pdffile, filename = pdffile
   )
 
   if(dev=="eps") {
@@ -455,12 +442,8 @@ mrggsave_common <- function(x,
     dev <- "postscript"
   }
 
-  args$file <- pdffile
-  args$filename <- pdffile
-
   args <- c(args, list(...))
   args <- args[names(args) %in% names(formals(dev))]
-
 
   do.call(dev, args)
   for(i in seq_along(x)) {
@@ -471,7 +454,7 @@ mrggsave_common <- function(x,
   if(getOption("mrggsave.return.more", FALSE)) {
     x <- list(
       outfile = outfile,
-      label = label,
+      label = d$label,
       source_graphic = d$source_graphic,
       source_code = d$source_code
     )
@@ -479,6 +462,32 @@ mrggsave_common <- function(x,
   }
   return(invisible(outfile))
 }
+
+annotate_graphic <- function(x, d, labeller) {
+  if(!is.function(labeller)) {
+    d$label <-  rep("", d$n)
+    return(lapply(x, arrangeGrob))
+  }
+  d$label <- labeller(d)
+  if(length(d$label) != d$n) {
+    nn <- length(d$label)
+    stop("`label` must be length ", d$n," (not ", nn, ")", call. = FALSE)
+  }
+  for(i in seq_along(x)) {
+    x[[i]] <- arrangeGrob(
+      x[[i]],
+      bottom = textGrob(
+        gp = gpar(fontsize = d$fontsize),
+        just = d$just,
+        y = d$textGrob.y,
+        x = d$textGrob.x,
+        label = d$label[[i]]
+      )
+    )
+  }
+  x
+}
+
 
 scan_list_cl <- function(x) {
   cl <- lapply(x, class)

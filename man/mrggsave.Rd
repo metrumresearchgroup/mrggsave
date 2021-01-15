@@ -62,6 +62,7 @@ mrggsave_common(
   res = 150,
   units = "in",
   position = getOption("mrggsave.position", "default"),
+  labeller = getOption("mrggsave.label.fun", label.fun),
   envir = .GlobalEnv,
   ...
 )
@@ -131,6 +132,11 @@ Source graphic; see details}
 \item{units}{passed to \code{\link{png}}}
 
 \item{position}{force the graphic annotation to locate to the left or right}
+
+\item{labeller}{a function that creates the plot annotation; the function
+should receive a single argument (\code{x}) which is an environment
+containing various items that might go into the label; pass `NULL` to
+omit the label on the plot}
 
 \item{envir}{environment to be used for string interpolation in
 stem and tag}

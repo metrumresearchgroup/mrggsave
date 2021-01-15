@@ -4,12 +4,18 @@
 \alias{named_plots}
 \title{Generate a list of auto named plots}
 \usage{
-named_plots(..., tag = NULL, add_context = FALSE)
+named_plots(..., tag = NULL, add_context = FALSE, envir = .GlobalEnv)
 }
 \arguments{
 \item{...}{function calls to generate plots or plot objects}
 
-\item{tag}{used to create a name for the plot}
+\item{tag}{if specified, stem is overwritten by pasting \code{script}
+and \code{tag} together}
+
+\item{add_context}{not used for now}
+
+\item{envir}{environment to be used for string interpolation in
+stem and tag}
 }
 \description{
 Generate a list of auto named plots
