@@ -28,6 +28,8 @@ mrggsave_list <- function(x, flatten = TRUE, ...) {
   mrggsave_common(x,...)
 }
 
+
+
 #' Generate a list of auto named plots
 #'
 #' @param ... function calls to generate plots or plot objects
@@ -43,16 +45,16 @@ named_plots <- function(..., tag = NULL) {
   na <- usub(na)
   funs[na != ""] <- na[na != ""]
   if(any(duplicated(funs))) {
-    funs[duplicated(funs)] <- paste0(funs[duplicated(funs)],"_",na[duplicated(funs)])
+    funs[duplicated(funs)] <- paste0(funs[duplicated(funs)],"-",na[duplicated(funs)])
   }
   if(any(duplicated(funs))) {
-    warning("duplicated names in output.")
+    warning("duplicated names in output")
   }
   plots <- lapply(args,eval,parent.frame(3))
-  if(is.character(tag)) {
+  if(!is.null(tag)) {
     funs <- paste0(funs, "-", glue(tag))
   }
-  names(plots) <- funs
+  names(plots) <- sanitize_filename(funs)
   plots <- structure(plots, class = c("named-plots", class(plots)))
   return(invisible(plots))
 }

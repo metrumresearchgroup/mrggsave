@@ -363,6 +363,9 @@ mrggsave_common <- function(x,
     pdffile <- paste0(file.path(dir,stem), ext)
     file <- paste0(file.path(prefix,stem), ext)
     outfile <- pdffile
+    if(getOption("mrggsave.tolower.file", FALSE)) {
+      outfile <- tolower(outfile)
+    }
     if(n>1) file <-  paste(file, "page:", seq(n))
   }
 
