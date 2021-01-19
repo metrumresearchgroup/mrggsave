@@ -45,6 +45,7 @@ mrggsave_common(
   height = 5,
   stem = "Rplot",
   dir = getOption("mrggsave.dir", "../deliv/figure"),
+  md5dir = getOption("mrggsave.md5dir", NULL),
   prefix = NULL,
   onefile = TRUE,
   arrange = FALSE,
@@ -103,7 +104,11 @@ for portrait figure}
 
 \item{stem}{to form the name of the output \code{.pdf} file}
 
-\item{dir}{output directory for \code{.pdf} file}
+\item{dir}{output directory for graphic file}
+
+\item{md5dir}{output directory below \code{dir} for md5 hash of the plot(s)
+being saved; the md5 has is computed and saved when a character value for the
+directory name is passed}
 
 \item{prefix}{gets prepended to the output file path in the Source
 graphic, label}

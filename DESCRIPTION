@@ -21,6 +21,7 @@ Imports:
   gridGraphics,
   assertthat, 
   rlang (>= 0.3.4), 
-  glue
+  glue, 
+  digest
 Suggests: GGally, gtable, testthat, lattice, survminer, patchwork, survival
 RoxygenNote: 7.1.1

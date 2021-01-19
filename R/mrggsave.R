@@ -11,7 +11,10 @@
 #' @param stem to form the name of the output \code{.pdf} file
 #' @param tag if specified, stem is overwritten by pasting \code{script}
 #' and \code{tag} together
-#' @param dir output directory for \code{.pdf} file
+#' @param dir output directory for graphic file
+#' @param md5dir output directory below \code{dir} for md5 hash of the plot(s)
+#' being saved; the md5 has is computed and saved when a character value for the
+#' directory name is passed
 #' @param prefix gets prepended to the output file path in the Source
 #' graphic, label
 #' @param onefile passed to \code{\link{pdf}}
@@ -322,6 +325,7 @@ mrggsave_common <- function(x,
                             width = 5, height = 5,
                             stem = "Rplot",
                             dir = getOption("mrggsave.dir","../deliv/figure"),
+                            md5dir = getOption("mrggsave.md5dir", NULL),
                             prefix = NULL,#gsub("^\\.\\./","./",dir),
                             onefile = TRUE,
                             arrange = FALSE,
@@ -346,7 +350,7 @@ mrggsave_common <- function(x,
   n  <- length(x)
 
   if(dev=="pdf") {
-    onefile <- onefile | n==1
+    onefile <- isTRUE(onefile) | n==1
   } else {
     onefile <- length(x)==1
   }
@@ -379,13 +383,19 @@ mrggsave_common <- function(x,
     pdffile <- paste0(file.path(dir,stem),"%03d", ext)
     file <- paste0(stem,sprintf("%03d", seq(n)), ext)
     if(is.character(prefix)) file <- file.path(prefix, file)
+    md5file <- file
     outfile <- sprintf(pdffile, seq(n))
   } else {
     pdffile <- paste0(file.path(dir,stem), ext)
     file <- paste0(stem, ext)
     if(is.character(prefix)) file <- file.path(prefix, file)
     outfile <- pdffile
+    md5file <- file
     if(n > 1) file <-  paste(file, "page:", seq(n))
+  }
+
+  if(is.character(md5dir)) {
+    dump_md5(x, dir = dir, md5dir = md5dir, md5file = md5file, onefile = onefile)
   }
 
   pad <- paste0(rep("\n", as.integer(ypad)), collapse = "")
@@ -469,6 +479,7 @@ mrggsave_common <- function(x,
     )
     return(invisible(x))
   }
+
   return(invisible(outfile))
 }
 
@@ -497,6 +508,24 @@ annotate_graphic <- function(x, d, labeller) {
   x
 }
 
+dump_md5 <- function(x, dir, md5dir, md5file, onefile) {
+  n <- length(x)
+  path <- file.path(dir, md5dir)
+  onefile <- isTRUE(onefile)
+  if(!dir.exists(path)) dir.create(path)
+  dig <- sapply(x, digest)
+  pagen <- ifelse(onefile, seq(n), rep(1, n))
+  dig <- paste0("page ", formatC(pagen, width = 3, flag = "0"), ": ", dig)
+  md5file <- paste0(basename(md5file), ".txt")
+  if(onefile) {
+    writeLines(con = file.path(path, md5file), text = dig)
+  } else {
+    for(i in seq_along(md5file)) {
+      writeLines(con = file.path(path, md5file[[i]]), text = dig[[i]])
+    }
+  }
+  return(invisible(NULL))
+}
 
 scan_list_cl <- function(x) {
   cl <- lapply(x, class)

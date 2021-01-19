@@ -9,5 +9,6 @@
 #' @importFrom glue glue
 #' @importFrom stats rnorm
 #' @importFrom graphics plot
+#' @importFrom digest digest
 NULL
 
