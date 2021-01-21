@@ -238,6 +238,7 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names = FALSE) {
 
   if(inherits(x, "named-plots")) use_names <-  TRUE
   if(missing(use_names) && is_named(x)) use_names <- TRUE
+  # dig <- sapply(x, digest)
 
   if(use_names) {
     stem <- names(x)
@@ -349,6 +350,14 @@ mrggsave_common <- function(x,
 
   n  <- length(x)
 
+  stopifnot(is.character(dev))
+  dev <- cvec_cs(dev)
+  more_dev <- NULL
+  if(length(dev) > 1) {
+    more_dev <- dev[-1]
+    dev <- dev[1]
+  }
+
   if(dev=="pdf") {
     onefile <- isTRUE(onefile) | n==1
   } else {
@@ -379,23 +388,27 @@ mrggsave_common <- function(x,
     stem <- tolower(stem)
   }
 
+  file <- list(
+    device = NULL,  # gets passed to the device call
+    out   =  NULL,  # the actual output file name
+    label =  NULL   # gets printed in the annotation label
+  )
   if(!onefile) {
-    pdffile <- paste0(file.path(dir,stem),"%03d", ext)
-    file <- paste0(stem,sprintf("%03d", seq(n)), ext)
-    if(is.character(prefix)) file <- file.path(prefix, file)
-    md5file <- file
-    outfile <- sprintf(pdffile, seq(n))
+    file$device <- file.path(dir, paste0(stem,"%03d", ext)) #paste0(file.path(dir,stem),"%03d", ext)
+    file$out <- sprintf(file$device, seq(n))
+    file$label <- basename(file$out) #paste0(stem, sprintf("%03d", seq(n)), ext)
+    if(is.character(prefix)) file$label <- file.path(prefix, file$label)
   } else {
-    pdffile <- paste0(file.path(dir,stem), ext)
-    file <- paste0(stem, ext)
-    if(is.character(prefix)) file <- file.path(prefix, file)
-    outfile <- pdffile
-    md5file <- file
-    if(n > 1) file <-  paste(file, "page:", seq(n))
+    file$label <- paste0(stem,ext)
+    file$device <- file.path(dir, file$label) #paste0(file.path(dir,stem), ext)
+    file$out <- file$device
+    file$label <- paste0(stem, ext)
+    if(is.character(prefix)) file <- file.path(prefix, file$label)
+    if(n > 1) file$label <-  paste(file$label, "page:", seq(n))
   }
 
   if(is.character(md5dir)) {
-    dump_md5(x, dir = dir, md5dir = md5dir, md5file = md5file, onefile = onefile)
+    dump_md5(x, dir = dir, md5dir = md5dir, file, onefile = onefile)
   }
 
   pad <- paste0(rep("\n", as.integer(ypad)), collapse = "")
@@ -407,9 +420,9 @@ mrggsave_common <- function(x,
       post_label = post_label,
       source_code = script,
       labsep = labsep,
-      source_graphic = file,
+      source_graphic = file$label,
       n = n,
-      file = pdffile,
+      file = file$device,
       position = position,
       textGrob.x = textGrob.x,
       textGrob.y = textGrob.y,
@@ -447,7 +460,7 @@ mrggsave_common <- function(x,
 
   args <- list(
     onefile = onefile, width = width, height = height, res = res,
-    units = units, file = pdffile, filename = pdffile
+    units = units, file = file$device, filename = file$device
   )
 
   if(dev=="eps") {
@@ -470,9 +483,17 @@ mrggsave_common <- function(x,
   }
   grDevices::dev.off()
 
+  if(!is.null(more_dev)) {
+    mrggcall <- match.call()
+    for(d in more_dev) {
+      mrggcall$dev <- d
+      foo <- eval(mrggcall, sys.frame(-1))
+    }
+  }
+
   if(getOption("mrggsave.return.more", FALSE)) {
     x <- list(
-      outfile = outfile,
+      outfile = file$out,
       label = d$label,
       source_graphic = d$source_graphic,
       source_code = d$source_code
@@ -480,7 +501,7 @@ mrggsave_common <- function(x,
     return(invisible(x))
   }
 
-  return(invisible(outfile))
+  return(invisible(file$out))
 }
 
 annotate_graphic <- function(x, d, labeller) {
@@ -508,15 +529,16 @@ annotate_graphic <- function(x, d, labeller) {
   x
 }
 
-dump_md5 <- function(x, dir, md5dir, md5file, onefile) {
+dump_md5 <- function(x, dir, md5dir, file, onefile) {
   n <- length(x)
   path <- file.path(dir, md5dir)
   onefile <- isTRUE(onefile)
   if(!dir.exists(path)) dir.create(path)
   dig <- sapply(x, digest)
-  pagen <- ifelse(onefile, seq(n), rep(1, n))
+  pagen <- seq(n)
+  if(!onefile) pagen <- rep(1,n)
   dig <- paste0("page ", formatC(pagen, width = 3, flag = "0"), ": ", dig)
-  md5file <- paste0(basename(md5file), ".txt")
+  md5file <- paste0(basename(file$out), ".hash")
   if(onefile) {
     writeLines(con = file.path(path, md5file), text = dig)
   } else {

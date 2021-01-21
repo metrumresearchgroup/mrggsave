@@ -1,3 +1,14 @@
+cvec_cs <- function (x) {
+  if (is.null(x) | length(x) == 0)
+    return(character(0))
+  x <- unlist(strsplit(as.character(x), ",", fixed = TRUE),
+              use.names = FALSE)
+  x <- unlist(strsplit(x, " ", fixed = TRUE), use.names = FALSE)
+  x <- x[x != ""]
+  if (length(x) == 0) return(character(0))
+  return(x)
+}
+
 is_glist <- function(x) "gList" %in% class(x) # nocov
 
 no_r_ext <- function(x) {
