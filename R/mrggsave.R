@@ -460,7 +460,7 @@ mrggsave_common <- function(x,
 
   args <- list(
     onefile = onefile, width = width, height = height, res = res,
-    units = units, file = file$device, filename = file$device
+    units = units
   )
 
   if(dev=="eps") {
@@ -475,19 +475,43 @@ mrggsave_common <- function(x,
   }
 
   args <- c(args, list(...))
-  args <- args[names(args) %in% names(formals(dev))]
 
-  do.call(dev, args)
-  for(i in seq_along(x)) {
-    grid.arrange(x[[i]])
+  formals_dev <- formals(dev)
+
+  # This is `file` file pdf and `filename` for the others
+  file_arg_name <- names(formals_dev)[1]
+  args[[file_arg_name]] <- file$device
+  args <- args[names(args) %in% names(formals_dev)]
+
+  call_dev_one <- function(dev, args, x, file) {
+    do.call(dev, args)
+    for(i in seq_along(x)) {
+      grid.arrange(x[[i]])
+    }
+    grDevices::dev.off()
+    return(invisible(NULL))
   }
-  grDevices::dev.off()
+
+  call_dev_multi <- function(dev, args, x, file, file_arg_name) {
+    this_file <- sprintf(file$device, seq_along(x))
+    for(i in seq_along(x)) {
+      args[[file_arg_name]] <- this_file[i]
+      call_dev_one(dev, args, x[i], file)
+    }
+    return(invisible(NULL))
+  }
+
+  if(isTRUE(onefile)) {
+    call_dev_one(dev, args, x, file)
+  } else {
+    call_dev_multi(dev, args, x, file, file_arg_name)
+  }
 
   if(!is.null(more_dev)) {
-    mrggcall <- match.call()
+    this_call <- match.call()
     for(d in more_dev) {
-      mrggcall$dev <- d
-      foo <- eval(mrggcall, sys.frame(-1))
+      this_call$dev <- d
+      foo <- eval(this_call, sys.frame(-1))
     }
   }
 
