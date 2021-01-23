@@ -238,7 +238,6 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names = FALSE) {
 
   if(inherits(x, "named-plots")) use_names <-  TRUE
   if(missing(use_names) && is_named(x)) use_names <- TRUE
-  # dig <- sapply(x, digest)
 
   if(use_names) {
     stem <- names(x)
@@ -382,33 +381,36 @@ mrggsave_common <- function(x,
     stem <- paste0(stem, collapse = "-")
   }
 
-  stem <- glue(stem, .envir = envir)
+  stem <- as.character(glue(stem, .envir = envir))
 
   if(isTRUE(getOption("mrggsave.file.tolower", FALSE))) {
     stem <- tolower(stem)
   }
 
   file <- list(
-    device = NULL,  # gets passed to the device call
-    out   =  NULL,  # the actual output file name
-    label =  NULL   # gets printed in the annotation label
+    stem   = NULL,  # updated stem with 00n if multiple output files
+    device = NULL,  # gets passed to the device call; includes path
+    label  = NULL,   # gets printed in the annotation label
+    dir    = dir,
+    md5dir = file.path(dir, md5dir)
   )
   if(!onefile) {
-    file$device <- file.path(dir, paste0(stem,"%03d", ext)) #paste0(file.path(dir,stem),"%03d", ext)
-    file$out <- sprintf(file$device, seq(n))
-    file$label <- basename(file$out) #paste0(stem, sprintf("%03d", seq(n)), ext)
+    file$stem <- sprintf(paste0(stem, "%03d"), seq(n))
+    file$base <- paste0(file$stem, ext)
+    file$label <- file$base
+    file$device <- file.path(file$dir, file$base)
     if(is.character(prefix)) file$label <- file.path(prefix, file$label)
   } else {
-    file$label <- paste0(stem,ext)
-    file$device <- file.path(dir, file$label) #paste0(file.path(dir,stem), ext)
-    file$out <- file$device
-    file$label <- paste0(stem, ext)
-    if(is.character(prefix)) file <- file.path(prefix, file$label)
+    file$stem <- stem
+    file$base <- paste0(file$stem, ext)
+    file$label <- file$base
+    file$device <- file.path(file$dir, file$label)
+    if(is.character(prefix)) file$label <- file.path(prefix, file$label)
     if(n > 1) file$label <-  paste(file$label, "page:", seq(n))
   }
 
   if(is.character(md5dir)) {
-    dump_md5(x, dir = dir, md5dir = md5dir, file, onefile = onefile)
+    dump_md5(x, file, onefile = onefile)
   }
 
   pad <- paste0(rep("\n", as.integer(ypad)), collapse = "")
@@ -486,7 +488,8 @@ mrggsave_common <- function(x,
   call_dev_one <- function(dev, args, x, file) {
     do.call(dev, args)
     for(i in seq_along(x)) {
-      grid.arrange(x[[i]])
+      y <- x[[i]]
+      grid.draw(y)
     }
     grDevices::dev.off()
     return(invisible(NULL))
@@ -517,15 +520,14 @@ mrggsave_common <- function(x,
 
   if(getOption("mrggsave.return.more", FALSE)) {
     x <- list(
-      outfile = file$out,
+      outfile = file$device,
       label = d$label,
       source_graphic = d$source_graphic,
       source_code = d$source_code
     )
     return(invisible(x))
   }
-
-  return(invisible(file$out))
+  return(invisible(file$device))
 }
 
 annotate_graphic <- function(x, d, labeller) {
@@ -553,21 +555,24 @@ annotate_graphic <- function(x, d, labeller) {
   x
 }
 
-dump_md5 <- function(x, dir, md5dir, file, onefile) {
+hashfile <- function(base) {
+  paste0(base, ".hash")
+}
+
+dump_md5 <- function(x, file, onefile) {
   n <- length(x)
-  path <- file.path(dir, md5dir)
+  md5file <- file.path(file$md5dir, hashfile(file$base))
   onefile <- isTRUE(onefile)
-  if(!dir.exists(path)) dir.create(path)
+  if(!dir.exists(file$md5dir)) dir.create(file$md5dir)
   dig <- sapply(x, digest)
   pagen <- seq(n)
   if(!onefile) pagen <- rep(1,n)
   dig <- paste0("page ", formatC(pagen, width = 3, flag = "0"), ": ", dig)
-  md5file <- paste0(basename(file$out), ".hash")
   if(onefile) {
-    writeLines(con = file.path(path, md5file), text = dig)
+    writeLines(con = md5file, text = dig)
   } else {
     for(i in seq_along(md5file)) {
-      writeLines(con = file.path(path, md5file[[i]]), text = dig[[i]])
+      writeLines(con = md5file[[i]], text = dig[[i]])
     }
   }
   return(invisible(NULL))
