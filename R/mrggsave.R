@@ -25,7 +25,8 @@
 #' for portrait figure
 #' @param height passed to \code{\link{pdf}}; should be less than 7 in.
 #' for portrait figure
-#' @param dev the device to use
+#' @param dev one or more devices to use; can pass a character vector or a
+#' comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"})
 #' @param res passed to \code{\link{png}}
 #' @param units passed to \code{\link{png}}
 #' @param position force the graphic annotation to locate to the left or right
@@ -325,6 +326,14 @@ mrggsave_common <- function(x,
                             envir = .GlobalEnv,
                             ...) {
 
+  stopifnot(is.character(dev))
+  dev <- cvec_cs(dev)
+  more_dev <- NULL
+  if(length(dev) > 1) {
+    more_dev <- dev[-1]
+    dev <- dev[1]
+  }
+
   n  <- length(x)
 
   if(dev=="pdf") {
@@ -459,6 +468,15 @@ mrggsave_common <- function(x,
     grid.arrange(x[[i]])
   }
   grDevices::dev.off()
+
+  if(!is.null(more_dev)) {
+    this_call <- match.call()
+    for(d in more_dev) {
+      this_call$dev <- d
+      this_outfile <- eval(this_call, sys.frame(-1))
+      outfile <- c(outfile, this_outfile)
+    }
+  }
 
   if(getOption("mrggsave.return.more", FALSE)) {
     x <- list(
