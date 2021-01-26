@@ -125,7 +125,8 @@ Source graphic; see details}
 
 \item{just}{passed to \code{textGrob} (as \code{just})}
 
-\item{dev}{the device to use}
+\item{dev}{one or more devices to use; can pass a character vector or a
+comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"})}
 
 \item{res}{passed to \code{\link{png}}}
 
