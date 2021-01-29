@@ -13,7 +13,8 @@
 ##'
 NULL
 
-.sep. <- "-"
+.global <- new.env()
+.global$SEP <- "-"
 
 #' Change the output file name separagor
 #'
@@ -33,5 +34,7 @@ output_file_sep <- function(sep = c("hyphen", "underscore", "dot")) {
   if(sep=="underscore") sep_char <- "_"
   if(sep=="dot") sep_char <- "."
   message(glue("[mrggsave] output file name sep is now {sep} ({sep_char})"))
-  assignInMyNamespace(".sep.", sep_char)
+  .global$SEP <- sep_char
+  return(invisible(NULL))
 }
+.sep <- function() .global$SEP

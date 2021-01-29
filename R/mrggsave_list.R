@@ -51,7 +51,7 @@ named_plots <- function(..., tag = NULL) {
   }
   plots <- lapply(args,eval,parent.frame(3))
   if(is.character(tag)) {
-    funs <- paste0(funs, .sep., glue(tag))
+    funs <- paste0(funs, .sep(), glue(tag))
   }
   names(plots) <- funs
   return(invisible(plots))
