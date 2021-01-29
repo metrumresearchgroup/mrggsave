@@ -19,6 +19,13 @@ NULL
 #'
 #' @param sep a descriptor of the file separator character
 #'
+#' @examples
+#' \dontrun{
+#' mrggsave:::output_file_sep("underscore")
+#' mrggsave:::output_file_sep("hyphen")
+#' mrggsave:::output_file_sep()
+#' }
+#'
 #' @md
 output_file_sep <- function(sep = c("hyphen", "underscore", "dot")) {
   sep <- match.arg(sep)

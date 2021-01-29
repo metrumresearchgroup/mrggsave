@@ -12,3 +12,11 @@ output_file_sep(sep = c("hyphen", "underscore", "dot"))
 \description{
 Change the output file name separagor
 }
+\examples{
+\dontrun{
+mrggsave:::output_file_sep("underscore")
+mrggsave:::output_file_sep("hyphen")
+mrggsave:::output_file_sep()
+}
+
+}
