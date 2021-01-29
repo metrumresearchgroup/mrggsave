@@ -9,7 +9,6 @@
 ##' @importFrom glue glue
 ##' @importFrom stats rnorm
 ##' @importFrom graphics plot
-##' @importFrom utils assignInMyNamespace
 ##'
 NULL
 
