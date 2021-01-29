@@ -52,3 +52,11 @@ test_that("plots get named by object", {
   expect_true(all(cl))
 })
 
+test_that("change file name separator", {
+  out1 <- basename(mrggsave(p1, tag = "1", script = "foo.R", dev = "bmp"))
+  expect_equal(out1, "foo-1.bmp")
+  mrggsave:::output_file_sep("underscore")
+  out2 <- basename(mrggsave(p1, tag = "1", script = "foo.R", dev = "bmp"))
+  expect_equal(out2, "foo_1.bmp")
+  mrggsave:::output_file_sep()
+})

@@ -4,8 +4,6 @@
 #' Save plot objects as .pdf file after labeling with Source graphic and
 #' Source code labels.
 #'
-#'
-#'
 #' @param x an object or list of objects of class \code{gg}
 #' @param script the name of the script generating the \code{gg} objects
 #' @param stem to form the name of the output \code{.pdf} file
@@ -206,7 +204,7 @@ mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
   if(arrange) {
     onefile <- TRUE
     x <- lapply(x, arrangeGrob)
-    x <- gList(arrangeGrob(grobs=x,ncol = ncol, ...))
+    x <- gList(arrangeGrob(grobs = x, ncol = ncol, ...))
   }
 
   mrggsave_common(
@@ -244,11 +242,11 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names=FALSE) {
     args$tag <- NULL
     context <- getOption("mrggsave.use.context", NULL)
     ans <- lapply(seq_along(x), function(i) {
-      args$stem <- paste0(c(context,stem[i],tag), collapse="-")
+      args$stem <- paste0(c(context,stem[i],tag), collapse = .sep.)
       args$x <- x[[i]]
       do.call(mrggsave, args)
     })
-    if(getOption("mrggsave.return.more",FALSE)) {
+    if(getOption("mrggsave.return.more", FALSE)) {
       names(ans) <- stem
       return(invisible(ans))
     }
@@ -347,7 +345,7 @@ mrggsave_common <- function(x,
 
   if(is.null(script)) {
     stop(
-      c("Please specify the script name either as an argument (script) ",
+      c("please specify the script name either as an argument (script) ",
         "or an option (mrg.script)"),
       call. = FALSE
     )
@@ -357,7 +355,7 @@ mrggsave_common <- function(x,
     context <- getOption("mrggsave.use.context", script)
     stem <- make_stem(context,tag)
   } else {
-    stem <- paste0(stem,collapse = "-")
+    stem <- paste0(stem, collapse = .sep.)
   }
 
   stem <- glue(stem, .envir = envir)
@@ -400,7 +398,7 @@ mrggsave_common <- function(x,
 
   if(length(label) != n) {
     nn <- length(label)
-    stop("'label' must be length ",n," (not ",nn,")", call.=FALSE)
+    stop("'label' must be length ",n ," (not ",nn,")", call.=FALSE)
   }
 
   position <- match.arg(d$position, c("default", "left", "right"))
@@ -499,10 +497,11 @@ scan_list_cl <- function(x) {
 }
 
 #' Save the last plot using mrggsave
-#' @param stem passed to [mrggsave]
-#' @param script passed to [mrggsave]
-#' @param ... passed to [mrggsave]
+#' @param stem passed to [mrggsave()]
+#' @param script passed to [mrggsave()]
+#' @param ... passed to [mrggsave()]
+#' @md
 #' @export
 mrggsave_last <- function(stem, script = getOption("mrg.script", NULL), ...) {
-  mrggsave(last_plot(), stem=stem, script=script, ...)
+  mrggsave(last_plot(), stem = stem, script = script, ...)
 }

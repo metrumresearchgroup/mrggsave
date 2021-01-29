@@ -7,11 +7,11 @@
 mrggsave_last(stem, script = getOption("mrg.script", NULL), ...)
 }
 \arguments{
-\item{stem}{passed to [mrggsave]}
+\item{stem}{passed to \code{\link[=mrggsave]{mrggsave()}}}
 
-\item{script}{passed to [mrggsave]}
+\item{script}{passed to \code{\link[=mrggsave]{mrggsave()}}}
 
-\item{...}{passed to [mrggsave]}
+\item{...}{passed to \code{\link[=mrggsave]{mrggsave()}}}
 }
 \description{
 Save the last plot using mrggsave

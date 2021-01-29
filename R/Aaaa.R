@@ -9,6 +9,22 @@
 ##' @importFrom glue glue
 ##' @importFrom stats rnorm
 ##' @importFrom graphics plot
+##' @importFrom utils assignInMyNamespace
 ##'
 NULL
 
+.sep. <- "-"
+
+#' Change the output file name separagor
+#'
+#' @param sep a descriptor of the file separator character
+#'
+#' @md
+output_file_sep <- function(sep = c("hyphen", "underscore", "dot")) {
+  sep <- match.arg(sep)
+  sep_char <- '-'
+  if(sep=="underscore") sep_char <- "_"
+  if(sep=="dot") sep_char <- "."
+  message(glue("[mrggsave] output file name sep is now {sep} ({sep_char})"))
+  assignInMyNamespace(".sep.", sep_char)
+}
