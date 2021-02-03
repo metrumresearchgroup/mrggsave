@@ -7,15 +7,17 @@
 output_file_sep(sep = c("-", "_", "."))
 }
 \arguments{
-\item{sep}{a descriptor of the file separator character}
+\item{sep}{a file separator character; this is limited to hyphen
+(\code{-}), underscore (\verb{_}) and dot (\code{.})}
 }
 \description{
 Change the output file name separagor
 }
 \examples{
 \dontrun{
-mrggsave:::output_file_sep("underscore")
-mrggsave:::output_file_sep("hyphen")
+mrggsave:::output_file_sep("_")
+mrggsave:::output_file_sep("-")
+mrggsave:::output_file_sep(".")
 mrggsave:::output_file_sep()
 }
 

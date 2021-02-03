@@ -17,12 +17,14 @@ NULL
 
 #' Change the output file name separagor
 #'
-#' @param sep a descriptor of the file separator character
+#' @param sep a file separator character; this is limited to hyphen
+#' (`-`), underscore (`_`) and dot (`.`)
 #'
 #' @examples
 #' \dontrun{
-#' mrggsave:::output_file_sep("underscore")
-#' mrggsave:::output_file_sep("hyphen")
+#' mrggsave:::output_file_sep("_")
+#' mrggsave:::output_file_sep("-")
+#' mrggsave:::output_file_sep(".")
 #' mrggsave:::output_file_sep()
 #' }
 #'
