@@ -27,13 +27,13 @@ NULL
 #' }
 #'
 #' @md
-output_file_sep <- function(sep = c("hyphen", "underscore", "dot")) {
+output_file_sep <- function(sep = c("-", "_", ".")) {
   sep <- match.arg(sep)
-  sep_char <- '-'
-  if(sep=="underscore") sep_char <- "_"
-  if(sep=="dot") sep_char <- "."
-  message(glue("[mrggsave] output file name sep is now {sep} ({sep_char})"))
-  .global$SEP <- sep_char
+  sep_name <- 'hyphen'
+  if(sep=="_") sep_name <- "underscore"
+  if(sep==".") sep_name <- "dot"
+  message(glue("[mrggsave] output file name sep is now {sep_name} ({sep})"))
+  .global$SEP <- sep
   return(invisible(NULL))
 }
 .sep <- function() .global$SEP

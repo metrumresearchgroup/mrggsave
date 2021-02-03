@@ -4,7 +4,7 @@
 \alias{output_file_sep}
 \title{Change the output file name separagor}
 \usage{
-output_file_sep(sep = c("hyphen", "underscore", "dot"))
+output_file_sep(sep = c("-", "_", "."))
 }
 \arguments{
 \item{sep}{a descriptor of the file separator character}
