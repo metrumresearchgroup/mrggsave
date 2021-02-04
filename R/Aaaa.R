@@ -11,3 +11,30 @@
 #' @importFrom graphics plot
 NULL
 
+.global <- new.env()
+.global$SEP <- "-"
+
+#' Change the output file name separagor
+#'
+#' @param sep a file separator character; this is limited to hyphen
+#' (`-`), underscore (`_`) and dot (`.`)
+#'
+#' @examples
+#' \dontrun{
+#' mrggsave:::output_file_sep("_")
+#' mrggsave:::output_file_sep("-")
+#' mrggsave:::output_file_sep(".")
+#' mrggsave:::output_file_sep()
+#' }
+#'
+#' @md
+output_file_sep <- function(sep = c("-", "_", ".")) {
+  sep <- match.arg(sep)
+  sep_name <- 'hyphen'
+  if(sep=="_") sep_name <- "underscore"
+  if(sep==".") sep_name <- "dot"
+  message(glue("[mrggsave] output file name sep is now {sep_name} ({sep})"))
+  .global$SEP <- sep
+  return(invisible(NULL))
+}
+.sep <- function() .global$SEP

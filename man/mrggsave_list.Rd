@@ -7,12 +7,12 @@
 mrggsave_list(x, flatten = TRUE, ...)
 }
 \arguments{
-\item{x}{passed to \code{\link{mrggsave_common}}}
+\item{x}{passed to \code{\link[=mrggsave_common]{mrggsave_common()}}}
 
 \item{flatten}{if \code{TRUE}, flatten if an object is a list; this
 should be \code{TRUE} unless you really don't want to flatten here}
 
-\item{...}{passed to \code{\link{mrggsave_common}}}
+\item{...}{passed to \code{\link[=mrggsave_common]{mrggsave_common()}}}
 }
 \description{
 Label and save a list of objects
@@ -22,5 +22,5 @@ No arrangement is done; the objects are just labeled and save.
 
 The objects could be ggplot objects or ggplot
 objects that have been arranged on a page
-with \code{\link{mrggpage}}.
+with \code{\link[=mrggpage]{mrggpage()}}.
 }

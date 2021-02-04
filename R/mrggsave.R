@@ -4,89 +4,94 @@
 #' Save plot objects as .pdf file after labeling with Source graphic and
 #' Source code labels.
 #'
-#'
-#'
-#' @param x an object or list of objects of class \code{gg}
-#' @param script the name of the script generating the \code{gg} objects
-#' @param stem to form the name of the output \code{.pdf} file
-#' @param tag if specified, stem is overwritten by pasting \code{script}
-#' and \code{tag} together
-#' @param dir output directory for \code{.pdf} file
+#' @param x an object or list of objects of class `gg`
+#' @param script the name of the script generating the `gg` objects
+#' @param stem to form the name of the output `.pdf` file
+#' @param tag if specified, stem is overwritten by pasting `script`
+#' and `tag` together
+#' @param dir output directory for `.pdf` file
 #' @param prefix gets prepended to the output file path in the Source
 #' graphic, label
-#' @param onefile passed to \code{\link{pdf}}
+#' @param onefile passed to [pdf()]
 #' @param fontsize for Source graphic and Source code labels
-#' @param textGrob.x passed to \code{textGrob} (as \code{x})
-#' @param textGrob.y passed to \code{textGrob} (as \code{y})
-#' @param just passed to \code{textGrob} (as \code{just})
+#' @param textGrob.x passed to [grid::textGrob()] (as `x`)
+#' @param textGrob.y passed to `textGrob` (as `y`)
+#' @param just passed to [grid::textGrob()] (as `just`)
 #' @param ypad integer number of newlines to separate annotation
 #' from x-axis title
-#' @param width passed to \code{\link{pdf}}; should be less than 5 in.
+#' @param width passed to [pdf()]; should be less than 5 in.
 #' for portrait figure
-#' @param height passed to \code{\link{pdf}}; should be less than 7 in.
+#' @param height passed to [pdf()]; should be less than 7 in.
 #' for portrait figure
 #' @param dev one or more devices to use; can pass a character vector or a
-#' comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"})
-#' @param res passed to \code{\link{png}}
-#' @param units passed to \code{\link{png}}
+#' comma-separated string (e.g. `c("pdf", "png")` or `"pdf,png"`)
+#' @param res passed to [png()]
+#' @param units passed to [png()]
 #' @param position force the graphic annotation to locate to the left or right
 #' @param labeller a function that creates the plot annotation; the function
 #' should receive a single argument (\code{x}) which is an environment
 #' containing various items that might go into the label; pass `NULL` to
 #' omit the label on the plot
-#' @param .save logical; if \code{FALSE}, return the labeled objects
-#' @param arrange logical; if \code{TRUE}, arrange the ggplot objects on a
-#' single page with \code{arrangeGrob}
-#' @param ncol passed to \code{\link{arrangeGrob}}
+#' @param .save logical; if `FALSE`, return the labeled objects
+#' @param arrange logical; if `TRUE`, arrange the ggplot objects on a
+#' single page with [gridExtra::arrangeGrob()]
+#' @param ncol passed to [gridExtra::arrangeGrob()]
 #' @param labsep character separator (or newline) for Source code and
 #' Source graphic labels
 #' @param pre_label text to include before annotation; separate lines prior
 #' to Source code label; see details
 #' @param post_label text to include after annotation; separate lines after
 #' Source graphic; see details
-#' @param draw if \code{TRUE}, the plot is drawn using \code{\link{draw_newpage}}
-#' @param use_names if \code{TRUE}, the names from a list of plots will be used
+#' @param draw if `TRUE`, the plot is drawn using [draw_newpage()]
+#' @param use_names if `TRUE`, the names from a list of plots will be used
 #' as the stems for output file names
 #' @param envir environment to be used for string interpolation in
 #' stem and tag
-#' @param ... other arguments passed to \code{mrggsave_common} and then
-#' on to \code{\link{pdf}} and \code{arrangeGrob}
+#' @param ... other arguments passed to `mrggsave_common` and then
+#' on to [pdf()] and [gridExtra::arrangeGrob()]
 #'
 #' @details
-#' Methods are provided for \code{ggplot} output, \code{lattice}
-#' output, and \code{ggmatrix} objects (produced by
-#' \code{GGally::ggpairs}).  Either a single plot object
+#' Methods are provided for `ggplot` output, `lattice`
+#' output, and `ggmatrix` objects (produced by
+#' [GGally::ggpairs()]).  Either a single plot object
 #' or a list of objects can be passed in.  If a list of objects
 #' are passed in, the plots may be written to a single file (default)
-#' or multiple files (if \code{onefile} is \code{FALSE}).
-#' Alternatively, \code{ggplots} and \code{lattice plots}
+#' or multiple files (if `onefile` is `FALSE`).
+#' Alternatively, `ggplots` and `lattice plots`
 #' can be arranged on a single page when
-#' \code{arrange} is \code{TRUE}.  \code{ggmatrix} objects
+#' `arrange` is `TRUE`.  `ggmatrix` objects
 #' cannot be arranged.  An error is generated if different
 #' object types are passed in a single list.
 #'
 #' By default, the output file name is generated from
-#' the script name and the value in \code{tag}.  For example,
-#' when the script is named \code{vpc_figures} and the tag
-#' is passed as \code{_by_dose_group}, the output file name
-#' will be \code{vpc_figures_by_dose_group.pdf}.  Alternatively,
+#' the script name and the value in `tag`.  For example,
+#' when the script is named `vpc-figures` and the tag
+#' is passed as `by-dose-group`, the output file name
+#' will be `vpc-figures-by-dose-group.pdf`.  Alternatively,
 #' the user can specify the complete stem of the file
-#' name with the \code{stem} argument.
+#' name with the `stem` argument.
 #'
-#' When \code{.save} is \code{FALSE}, \code{mrggsave}
+#' Output file names are generated by default with a hyphen (`-`) separator.
+#' This can be changed using the function [output_file_sep()].  To
+#' revert to previous behavior where the underscore was the separator, call
+#' `mrggsave:::output_file_sep("underscore")`.
+#'
+#' When `.save` is `FALSE`, `mrggsave`
 #' always returns a list of table grobs.  If a single
 #' plot was passed, the return value in this case
 #' is a list of length 1.
 #'
-#' \code{mrgglabel} calls \code{mrggsave} and
+#' [mrgglabel()] calls [mrggsave()] and
 #' neither draws nor saves the plot, but
 #' returns the annotated plots as table grob.
 #'
-#' \code{pre_label} and \code{post_label} are collapsed with newline if
+#' `pre_label` and `post_label` are collapsed with newline if
 #' supplied by the user, allowing multiple lines to be added before or
 #' after the standard annotation.
 #'
-#' @seealso \code{\link{mrggdraw}}, \code{\link{mrggsave_list}}
+#' @seealso [mrggdraw()], [mrggsave_list()]
+#'
+#' @md
 #'
 #' @examples
 #' data(Theoph)
@@ -210,7 +215,7 @@ mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
   if(arrange) {
     onefile <- TRUE
     x <- lapply(x, arrangeGrob)
-    x <- gList(arrangeGrob(grobs=x,ncol = ncol, ...))
+    x <- gList(arrangeGrob(grobs = x, ncol = ncol, ...))
   }
 
   mrggsave_common(
@@ -259,7 +264,7 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names = FALSE) {
       context <- no_r_ext(context)
     }
     ans <- lapply(seq_along(x), function(i) {
-      args$stem <- paste0(c(context, stem[i], tag), collapse = "-")
+      args$stem <- paste0(c(context,stem[i],tag), collapse = .sep())
       args$x <- x[[i]]
       do.call(mrggsave, args)
     })
@@ -375,7 +380,7 @@ mrggsave_common <- function(x,
     context <- getOption("mrggsave.use.context", script)
     stem <- make_stem(context, tag)
   } else {
-    stem <- paste0(stem, collapse = "-")
+    stem <- paste0(stem, collapse = .sep())
   }
 
   stem <- glue(stem, .envir = envir)
@@ -418,6 +423,13 @@ mrggsave_common <- function(x,
     parent = .GlobalEnv
   )
 
+  label <- labeller(d)
+
+  if(length(label) != n) {
+    nn <- length(label)
+    stop("'label' must be length ",n ," (not ",nn,")", call.=FALSE)
+  }
+  
   position <- match.arg(d$position, c("default", "left", "right"))
   if(position != "default") {
     if(position=="left") {
@@ -525,9 +537,10 @@ scan_list_cl <- function(x) {
 }
 
 #' Save the last plot using mrggsave
-#' @param stem passed to [mrggsave]
-#' @param script passed to [mrggsave]
-#' @param ... passed to [mrggsave]
+#' @param stem passed to [mrggsave()]
+#' @param script passed to [mrggsave()]
+#' @param ... passed to [mrggsave()]
+#' @md
 #' @export
 mrggsave_last <- function(stem, script = getOption("mrg.script", NULL), ...) {
   mrggsave(last_plot(), stem = stem, script = script, ...)

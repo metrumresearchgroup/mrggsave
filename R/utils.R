@@ -18,8 +18,8 @@ no_r_ext <- function(x) {
 }
 
 make_stem <- function(script,tag) {
-  base <- no_r_ext(script)
-  paste0(base,"-",paste0(tag,collapse="-"))
+  base <- gsub("\\.(r|R|Rmd|rmd)$", "", script)
+  paste0(base, .sep(), paste0(tag, collapse = .sep()))
 }
 
 inherits_list <- function(x) { # nocov
@@ -31,7 +31,7 @@ flatten_plots <- function(x) {
 }
 
 context <- function(x) {
-  x <- gsub(" +", "-",x)
+  x <- gsub(" +", .sep(), x)
   options(mrggsave.use.context = x)
 }
 
@@ -50,12 +50,4 @@ label.fun <- function(x) {
   )
 }
 
-usub <- function(x) gsub(" +", "-", x)
-
-sanitize_filename <- function(x) {
-  gsub("[._-]+", "-", x)
-}
-
-frame_test <- function(arg = parent.frame()) {
-  list(sys.frame(), parent.frame(), sys.frame(-1), arg = arg)
-}
+usub <- function(x) gsub(" +", .sep(), x)
