@@ -27,6 +27,8 @@
 - Add option called `mrggsave.file.tolower` which, if set to `TRUE` will pass
   the file stem through `base::tolower()`, making it all lower case, regardless
   of how the stem was generated #8
+- Add ability to save to multiple devices on one function call; pass a character
+  vector of devices or a comma-separated string as `dev`
   
 # mrggsave 0.3.2
 - Add support for ggsurvplot objects #11
