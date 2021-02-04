@@ -12,9 +12,14 @@ cvec_cs <- function (x) {
 
 is_glist <- function(x) "gList" %in% class(x) # nocov
 
+no_r_ext <- function(x) {
+  if(!is.character(x)) return(x)
+  gsub("\\.(r|R|Rmd|rmd)$", "", x)
+}
+
 make_stem <- function(script,tag) {
-  base <- gsub("\\.(r|R|Rmd|rmd)$", "", script)
-  paste0(base,"-",paste0(tag,collapse = "-"))
+  base <- no_r_ext(script)
+  paste0(base,"-",paste0(tag,collapse="-"))
 }
 
 inherits_list <- function(x) { # nocov
@@ -46,3 +51,11 @@ label.fun <- function(x) {
 }
 
 usub <- function(x) gsub(" +", "-", x)
+
+sanitize_filename <- function(x) {
+  gsub("[._-]+", "-", x)
+}
+
+frame_test <- function(arg = parent.frame()) {
+  list(sys.frame(), parent.frame(), sys.frame(-1), arg = arg)
+}

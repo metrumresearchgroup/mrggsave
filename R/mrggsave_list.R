@@ -28,32 +28,40 @@ mrggsave_list <- function(x, flatten = TRUE, ...) {
   mrggsave_common(x,...)
 }
 
+
+
 #' Generate a list of auto named plots
 #'
+#' @inheritParams mrggsave_common
 #' @param ... function calls to generate plots or plot objects
-#' @param tag used to create a name for the plot
+#' @param add_context not used for now
 #'
 #' @export
-named_plots <- function(..., tag = NULL) {
+named_plots <- function(..., tag = NULL, add_context = FALSE, envir = sys.frame(-1)) {
   args <- enexprs(...)
   na <- names(args)
   if(is.null(na)) na <- rep("", length(args))
-  calls <- sapply(args,as.character, simplify=FALSE)
-  funs <- sapply(calls, "[[",1)
+  calls <- sapply(args, as.character, simplify = FALSE)
+  funs <- sapply(calls, "[[", 1)
   na <- usub(na)
   funs[na != ""] <- na[na != ""]
   if(any(duplicated(funs))) {
-    funs[duplicated(funs)] <- paste0(funs[duplicated(funs)],"_",na[duplicated(funs)])
+    funs[duplicated(funs)] <- paste0(
+      funs[duplicated(funs)],
+      "-",
+      na[duplicated(funs)]
+    )
   }
   if(any(duplicated(funs))) {
-    warning("duplicated names in output.")
+    warning("duplicated names in output")
   }
-  plots <- lapply(args,eval,parent.frame(3))
-  if(is.character(tag)) {
-    funs <- paste0(funs, "-", glue(tag))
+  plots <- lapply(args, eval, parent.frame(3))
+  if(!is.null(tag)) {
+    funs <- paste0(funs, "-", glue(tag, envir = envir))
   }
-  names(plots) <- funs
+  names(plots) <- sanitize_filename(funs)
+  cl <- "named-plots"
+  if(add_context) cl <- c("named-plots", "needs-context")
+  plots <- structure(plots, class = c(cl, class(plots)))
   return(invisible(plots))
 }
-
-
