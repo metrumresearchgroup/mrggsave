@@ -45,7 +45,7 @@ mrggsave_common(
   height = 5,
   stem = "Rplot",
   dir = getOption("mrggsave.dir", "../deliv/figure"),
-  prefix = gsub("^\\\\.\\\\./", "./", dir),
+  prefix = NULL,
   onefile = TRUE,
   arrange = FALSE,
   draw = FALSE,
@@ -62,7 +62,8 @@ mrggsave_common(
   res = 150,
   units = "in",
   position = getOption("mrggsave.position", "default"),
-  envir = .GlobalEnv,
+  labeller = getOption("mrggsave.label.fun", label.fun),
+  envir = sys.frame(-1),
   ...
 )
 }
@@ -132,6 +133,11 @@ comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"})}
 \item{units}{passed to \code{\link[=png]{png()}}}
 
 \item{position}{force the graphic annotation to locate to the left or right}
+
+\item{labeller}{a function that creates the plot annotation; the function
+should receive a single argument (\code{x}) which is an environment
+containing various items that might go into the label; pass `NULL` to
+omit the label on the plot}
 
 \item{envir}{environment to be used for string interpolation in
 stem and tag}

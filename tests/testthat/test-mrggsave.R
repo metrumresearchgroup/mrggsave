@@ -77,7 +77,6 @@ test_that("named list", {
   expect_identical(x[3],"c.pdf")
 })
 
-
 test_that("mixed list", {
   l1 <- list(pg,pg,pg)
   l2 <- list(pg,pl)
@@ -109,5 +108,3 @@ test_that("use_names not passed issue-29", {
   ans <- mrggsave(pg, script = Script, stem = "issue_29", use_names=FALSE)
   expect_identical(basename(ans),"issue_29.pdf")
 })
-
-

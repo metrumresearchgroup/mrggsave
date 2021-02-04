@@ -63,4 +63,10 @@ check:
 test:
 	Rscript -e 'testthat::test_dir("tests")'
 
+bump-dev:
+	Rscript -e 'usethis::use_version("dev")'
+
+tag-version:
+	git tag $(VERSION)
+	git push origin $(VERSION)
 
