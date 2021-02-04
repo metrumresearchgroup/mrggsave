@@ -51,3 +51,7 @@ label.fun <- function(x) {
 }
 
 usub <- function(x) gsub(" +", .sep(), x)
+
+sanitize_filename <- function(x) {
+  gsub("[._-]+", .sep(), x)
+}

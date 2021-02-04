@@ -136,7 +136,7 @@ comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"})}
 
 \item{labeller}{a function that creates the plot annotation; the function
 should receive a single argument (\code{x}) which is an environment
-containing various items that might go into the label; pass `NULL` to
+containing various items that might go into the label; pass \code{NULL} to
 omit the label on the plot}
 
 \item{envir}{environment to be used for string interpolation in
