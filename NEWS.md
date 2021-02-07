@@ -1,4 +1,4 @@
-# mrggsave (development version)
+# mrggsave 0.4.0 
 
 ## Breaking changes
 - The default separator when auto-constructing file names is changed from 
