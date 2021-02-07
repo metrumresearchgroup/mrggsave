@@ -58,3 +58,11 @@ test_that("cairo_pdf", {
   expect_equal(basename(foo), "foo.pdf")
 })
 
+test_that("save to multiple devices", {
+  foo <- mrggsave(list(pg,pg), stem = "multiple", dev = "pdf,png")
+  expect_true(file.exists(foo[[1]]))
+  expect_true(file.exists(foo[[2]]))
+  expect_true(file.exists(foo[[3]]))
+  foo <- basename(foo)
+  expect_equal(foo, c("multiple.pdf", "multiple001.png", "multiple002.png"))
+})

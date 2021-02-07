@@ -17,41 +17,41 @@ gt <- gridExtra::arrangeGrob(grobs = list(pg,pg,pg))
 
 test_that("lattice plot", {
   out <- mrggsave(pl, Script, "lattice_plot")
-  expect_equal(basename(out), "test-mrggsave_lattice_plot.pdf")
+  expect_equal(basename(out), "test-mrggsave-lattice_plot.pdf")
 })
 
 test_that("ggplot", {
   out <- mrggsave(pg, Script, "ggplot")
-  expect_equal(basename(out), "test-mrggsave_ggplot.pdf")
+  expect_equal(basename(out), "test-mrggsave-ggplot.pdf")
 })
 
 test_that("ggpairs", {
   out <- mrggsave(pG, Script, "ggpairs")
-  expect_equal(basename(out), "test-mrggsave_ggpairs.pdf")
+  expect_equal(basename(out), "test-mrggsave-ggpairs.pdf")
 })
 
 test_that("list of ggplots", {
   p <- list(pg,pg,pg)
   out <- mrggsave(p, Script, "list")
-  expect_equal(basename(out), "test-mrggsave_list.pdf")
+  expect_equal(basename(out), "test-mrggsave-list.pdf")
 })
 
 test_that("list of ggpairs", {
   p <- list(pG,pG,pG)
   out <- mrggsave(p, Script, "list_pairs")
-  expect_equal(basename(out), "test-mrggsave_list_pairs.pdf")
+  expect_equal(basename(out), "test-mrggsave-list_pairs.pdf")
 })
 
 test_that("arranged ggplots", {
   p <- list(pg,pg,pg)
   out <- mrggsave(p, Script, "arranged", arrange = TRUE)
-  expect_equal(basename(out), "test-mrggsave_arranged.pdf")
+  expect_equal(basename(out), "test-mrggsave-arranged.pdf")
 })
 
 test_that("arranged lattice plots", {
   p <- list(pl,pl,pl)
   out <- mrggsave(p, Script, "lat-arranged", arrange = TRUE)
-  expect_equal(basename(out), "test-mrggsave_lat-arranged.pdf")
+  expect_equal(basename(out), "test-mrggsave-lat-arranged.pdf")
 })
 
 test_that("gtable", {
@@ -76,7 +76,6 @@ test_that("named list", {
   expect_identical(x[2],"b.pdf")
   expect_identical(x[3],"c.pdf")
 })
-
 
 test_that("mixed list", {
   l1 <- list(pg,pg,pg)
@@ -109,5 +108,3 @@ test_that("use_names not passed issue-29", {
   ans <- mrggsave(pg, script = Script, stem = "issue_29", use_names=FALSE)
   expect_identical(basename(ans),"issue_29.pdf")
 })
-
-

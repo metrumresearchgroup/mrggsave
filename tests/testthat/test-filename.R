@@ -7,13 +7,14 @@ testthat::context("test-filename")
 
 data <- data.frame(x = c(1,2,3), y = c(4,5,6))
 
-p <- ggplot(data) + geom_point(aes(x,y))
+p  <- ggplot(data) + geom_point(aes(x,y))
+p1 <- ggplot(data) + geom_point(aes(x,y))
+p2 <- ggplot(data) + geom_point(aes(x,y))
+p3 <- ggplot(data) + geom_point(aes(x,y))
 
-options(mrggsave.dir = tempdir())
+options(mrggsave.dir = normalizePath(tempdir()))
 
 assign("runn", 1234, .GlobalEnv)
-
-p <- ggplot(data) + geom_point(aes(x,y))
 
 test_that("variable gets glued into stem", {
   ans <- mrggsave(p, script = "test-filename.R", stem = "save_{runn}", dir = tempdir())
@@ -22,33 +23,83 @@ test_that("variable gets glued into stem", {
 
 test_that("variable gets glued into tag", {
   ans <- mrggsave(p, script = "file.R", tag = "save_{runn}")
-  expect_equal(basename(ans), "file_save_1234.pdf")
+  expect_equal(basename(ans), "file-save_1234.pdf")
 })
 
 test_that("an environment gets passed to glue", {
   env <- list(runn=4321)
   ans <- mrggsave(p, script = "file.R", tag = "save_{runn}",envir = env)
-  expect_equal(basename(ans), "file_save_4321.pdf")
+  expect_equal(basename(ans), "file-save_4321.pdf")
 })
 
 test_that("vector stem gets collapsed", {
   ans <- mrggsave(p, script = "test-filename.R", stem = c("a", 101, "b"))
-  expect_equal(basename(ans), "a_101_b.pdf")
+  expect_equal(basename(ans), "a-101-b.pdf")
 })
 
 test_that("vector tag gets collapsed", {
   ans <- mrggsave(p, script = "test-filename.R", tag = c("a", 101, "b"))
-  expect_equal(basename(ans), "test-filename_a_101_b.pdf")
+  expect_equal(basename(ans), "test-filename-a-101-b.pdf")
 })
 
 assign("p1", p, globalenv())
 assign("p2", p, globalenv())
 assign("p3", p, globalenv())
-l <- named_plots(p1,p2,p3,tag = "bbb")
+assign("dv_pred", p, globalenv())
+
 test_that("plots get named by object", {
-  expect_identical(names(l), c("p1_bbb", "p2_bbb", "p3_bbb"))
+  l <- named_plots(p1,p2,p3, tag = "bbb")
+  expect_identical(names(l), c("p1-bbb", "p2-bbb", "p3-bbb"))
   expect_length(l,3)
   cl <- sapply(l, is.ggplot)
   expect_true(all(cl))
 })
 
+test_that("change file name separator", {
+  out1 <- basename(mrggsave(p1, tag = "1", script = "foo.R", dev = "bmp"))
+  expect_equal(out1, "foo-1.bmp")
+  mrggsave:::output_file_sep("_")
+  out2 <- basename(mrggsave(p1, tag = "1", script = "foo.R", dev = "bmp"))
+  expect_equal(out2, "foo_1.bmp")
+  mrggsave:::output_file_sep()
+})
+
+test_that("named_plots returns an object with class", {
+  ans <- named_plots(p1,p2,p3)
+  expect_is(ans, "named-plots")
+  ans <- named_plots(p1, add_context = TRUE)
+  expect_is(ans, "named-plots")
+  expect_is(ans, "needs-context")
+})
+
+test_that("named_plots input auto uses names", {
+  inpt <- named_plots(a = p1, p2, ggplot(mtcars))
+  expect_equal(names(inpt), c("a", "p2", "ggplot"))
+  ans <- mrggsave(inpt, script = "test-filename.R")
+  ans <- basename(ans)
+  expect_equal(ans, c("a.pdf", "p2.pdf", "ggplot.pdf"))
+  inpt <- named_plots(p1, add_context = TRUE)
+  ans <- mrggsave(inpt, script = "scrname.R")
+  ans <- basename(ans)
+  expect_equal(ans, "scrname-p1.pdf")
+})
+
+test_that("named_plots names are sanitized", {
+  inpt <- named_plots(dv_pred, "a b.-c" = p2)
+  expect_equal(names(inpt), c("dv-pred", "a-b-c"))
+})
+
+options(mrggsave.file.tolower = TRUE)
+test_that("option to make lower", {
+  inpt <- named_plots(EV.PREd = p1)
+  ans <- mrggsave(inpt, script = "test-filename.R")
+  expect_equal(basename(ans), "ev-pred.pdf")
+  ans <- mrggsave(p1, script = "test-filename", stem = "ABCDE")
+  expect_equal(basename(ans), "abcde.pdf")
+})
+options(mrggsave.file.tolower = NULL)
+
+test_that("passing a named list sets use_names to TRUE", {
+  ans <- mrggsave(list(a = p1, b = p1), script = "blah.R")
+  expect_equal(basename(ans), c("a.pdf","b.pdf"))
+})

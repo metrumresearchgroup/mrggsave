@@ -1,8 +1,25 @@
+
+cvec_cs <- function (x) {
+  if (is.null(x) | length(x) == 0)
+    return(character(0))
+  x <- unlist(strsplit(as.character(x), ",", fixed = TRUE),
+              use.names = FALSE)
+  x <- unlist(strsplit(x, " ", fixed = TRUE), use.names = FALSE)
+  x <- x[x != ""]
+  if (length(x) == 0) return(character(0))
+  return(x)
+}
+
 is_glist <- function(x) "gList" %in% class(x) # nocov
+
+no_r_ext <- function(x) {
+  if(!is.character(x)) return(x)
+  gsub("\\.(r|R|Rmd|rmd)$", "", x)
+}
 
 make_stem <- function(script,tag) {
   base <- gsub("\\.(r|R|Rmd|rmd)$", "", script)
-  paste0(base,"_",paste0(tag,collapse = "_"))
+  paste0(base, .sep(), paste0(tag, collapse = .sep()))
 }
 
 inherits_list <- function(x) { # nocov
@@ -14,7 +31,7 @@ flatten_plots <- function(x) {
 }
 
 context <- function(x) {
-  x <- gsub(" +", "_",x)
+  x <- gsub(" +", .sep(), x)
   options(mrggsave.use.context = x)
 }
 
@@ -33,4 +50,8 @@ label.fun <- function(x) {
   )
 }
 
-usub <- function(x) gsub(" +", "_", x)
+usub <- function(x) gsub(" +", .sep(), x)
+
+sanitize_filename <- function(x) {
+  gsub("[._-]+", .sep(), x)
+}
