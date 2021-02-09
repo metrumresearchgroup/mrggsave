@@ -1,3 +1,7 @@
+# mrggsave (development version)
+
+- Fix typo in `mrggsave:::output_file_sep()` title
+
 # mrggsave 0.4.0 
 
 ## Breaking changes
