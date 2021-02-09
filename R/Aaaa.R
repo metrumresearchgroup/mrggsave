@@ -14,7 +14,7 @@ NULL
 .global <- new.env()
 .global$SEP <- "-"
 
-#' Change the output file name separagor
+#' Change the output file name separator
 #'
 #' @param sep a file separator character; this is limited to hyphen
 #' (`-`), underscore (`_`) and dot (`.`)
