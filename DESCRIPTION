@@ -1,7 +1,7 @@
 Package: mrggsave
 Type: Package
 Title: Save and Arrange Annotated Plots
-Version: 0.4.0.9001
+Version: 0.4.0.9002
 Authors@R: c(
        person("Kyle T", "Baron", "", "kyleb@metrumrg.com", c("aut", "cre")),
        person("Metrum Research Group", role =  c("cph"))
@@ -24,4 +24,3 @@ Imports:
   glue
 Suggests: GGally, gtable, testthat, lattice, survminer, patchwork, survival
 RoxygenNote: 7.1.1
-
