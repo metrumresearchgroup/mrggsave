@@ -1,3 +1,8 @@
+# mrggsave (development version)
+
+- Revert behavior where named list automatically uses the names for output 
+  file names
+
 # mrggsave 0.4.0 
 
 ## Breaking changes
