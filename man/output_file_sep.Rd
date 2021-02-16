@@ -2,7 +2,7 @@
 % Please edit documentation in R/Aaaa.R
 \name{output_file_sep}
 \alias{output_file_sep}
-\title{Change the output file name separagor}
+\title{Change the output file name separator}
 \usage{
 output_file_sep(sep = c("-", "_", "."))
 }
@@ -11,7 +11,7 @@ output_file_sep(sep = c("-", "_", "."))
 (\code{-}), underscore (\verb{_}) and dot (\code{.})}
 }
 \description{
-Change the output file name separagor
+Change the output file name separator
 }
 \examples{
 \dontrun{
