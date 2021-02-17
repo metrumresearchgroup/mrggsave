@@ -1,5 +1,7 @@
 # mrggsave (development version)
 
+- Revert behavior where named list automatically uses the names for output 
+  file names
 - Fix typo in `mrggsave:::output_file_sep()` title
 
 # mrggsave 0.4.0 
