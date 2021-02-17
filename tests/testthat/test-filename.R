@@ -102,4 +102,8 @@ options(mrggsave.file.tolower = NULL)
 test_that("passing a named list with use_names set to TRUE", {
   ans <- mrggsave(list(a = p1, b = p1), script = "blah.R", use_names = TRUE)
   expect_equal(basename(ans), c("a.pdf","b.pdf"))
+  ans <- mrggsave(list(a = p1, b = p1), script = "blah.R", use_names = FALSE)
+  def_stem <- formals(mrggsave_common)$stem
+  check <- paste0(def_stem, ".pdf")
+  expect_equal(basename(ans), check)
 })
