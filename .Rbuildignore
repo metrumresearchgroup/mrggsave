@@ -14,3 +14,4 @@ test.R
 ^\.Rproj\.user$
 \.drone\.jsonnet
 WORDLIST
+\.drone\.yml
