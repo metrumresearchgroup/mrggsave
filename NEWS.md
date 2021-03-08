@@ -1,3 +1,8 @@
+# mrggsave 0.4.2
+
+- Calling the `cairo_pdf` device now allows multiple plots to be written to the 
+  same file (#21)
+
 # mrggsave 0.4.1
 
 - Revert behavior where named list automatically uses the names for output 
