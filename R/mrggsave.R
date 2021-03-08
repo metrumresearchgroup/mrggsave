@@ -358,7 +358,7 @@ mrggsave_common <- function(x,
 
   n  <- length(x)
 
-  if(dev=="pdf") {
+  if(dev %in% c("pdf", "cairo_pdf")) {
     onefile <- onefile | n==1
   } else {
     onefile <- length(x)==1
