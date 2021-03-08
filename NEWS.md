@@ -1,7 +1,7 @@
 # mrggsave 0.4.2
 
-- Calling the `cairo_pdf` now allows multiple plots to be written to the same
-  file (#21)
+- Calling the `cairo_pdf` device now allows multiple plots to be written to the 
+  same file (#21)
 
 # mrggsave 0.4.1
 
