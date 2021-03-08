@@ -58,6 +58,11 @@ test_that("cairo_pdf", {
   expect_equal(basename(foo), "foo.pdf")
 })
 
+test_that("save multiple plots to single file with cairo_pdf", {
+  foo <- mrggsave(list(pg,pg,pg), stem = "multi-cairo", dev = "cairo_pdf")
+  expect_identical(basename(foo), "multi-cairo.pdf")
+})
+
 test_that("save to multiple devices", {
   foo <- mrggsave(list(pg,pg), stem = "multiple", dev = "pdf,png")
   expect_true(file.exists(foo[[1]]))
