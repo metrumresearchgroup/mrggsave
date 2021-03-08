@@ -1,4 +1,4 @@
-# mrggsave (development version)
+# mrggsave 0.4.2
 
 - Calling the `cairo_pdf` now allows multiple plots to be written to the same
   file (#21)
