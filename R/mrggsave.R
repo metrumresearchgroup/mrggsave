@@ -345,7 +345,7 @@ mrggsave_common <- function(x,
                             units = "in",
                             position = getOption("mrggsave.position", "default"),
                             labeller = getOption("mrggsave.label.fun", label.fun),
-                            envir = sys.frame(-1),
+                            envir = parent.frame(2),
                             ...) {
 
   stopifnot(is.character(dev))
