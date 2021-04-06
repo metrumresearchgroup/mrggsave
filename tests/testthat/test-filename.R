@@ -116,3 +116,14 @@ test_that("glue file name within a function", {
   ans <- fun(p1, "112")
   expect_equal(basename(ans), "plot-112.pdf")
 })
+
+test_that("glue file name with mrggsave_last", {
+  p <- ggplot(data) + geom_point(aes(x,y))
+  runno <- 5678
+  ans <- mrggsave_last(
+    stem = "plot-{runno}",
+    dir = tempdir(),
+    script = "test.R"
+  )
+  expect_equal(basename(ans), "plot-5678.pdf")
+})

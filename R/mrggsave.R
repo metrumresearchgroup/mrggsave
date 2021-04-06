@@ -532,21 +532,24 @@ annotate_graphic <- function(x, d, labeller) {
   x
 }
 
-
 scan_list_cl <- function(x) {
   cl <- lapply(x, class)
   cl <- unlist(lapply(cl, paste, collapse = "-"), use.names=FALSE)
-  list(ggmatrix = cl == "gg-ggmatrix",
-       #ggassemble = cl=="ggassemble-gg-ggplot",
-       cl = cl)
+  list(ggmatrix = cl == "gg-ggmatrix", cl = cl)
 }
 
 #' Save the last plot using mrggsave
+#'
+#' @inheritParams mrggsave_common
 #' @param stem passed to [mrggsave()]
 #' @param script passed to [mrggsave()]
 #' @param ... passed to [mrggsave()]
+#' @param envir environment to be used for string interpolation in
+#' stem and tag; passed to [mrggsave()]
+#'
 #' @md
 #' @export
-mrggsave_last <- function(stem, script = getOption("mrg.script", NULL), ...) {
-  mrggsave(last_plot(), stem = stem, script = script, ...)
+mrggsave_last <- function(stem, script = getOption("mrg.script", NULL), ...,
+                          envir = parent.frame()) {
+  mrggsave(last_plot(), stem = stem, script = script, ..., envir = envir)
 }
