@@ -56,7 +56,7 @@ mrggsave(x, ...)
 
 \method{mrggsave}{gg}(x, ...)
 
-\method{mrggsave}{gTree}(x, ...)
+\method{mrggsave}{gTree}(x, ..., envir = parent.frame())
 
 mrgglabel(..., draw = FALSE, .save = FALSE)
 

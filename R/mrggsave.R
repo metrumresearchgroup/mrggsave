@@ -166,7 +166,8 @@ mrggsave.ggplot <- function(x, ..., ypad = 2,
   }
 
   mrggsave_common(
-    x = x, ypad = ypad, onefile = onefile, arrange = arrange, envir = envir,  ...
+    x = x, ypad = ypad, onefile = onefile, arrange = arrange,
+    envir = envir,  ...
   )
 }
 
@@ -221,7 +222,8 @@ mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
   }
 
   mrggsave_common(
-    x = x, ypad = ypad, arrange = arrange, onefile = onefile,  envir = envir, ...
+    x = x, ypad = ypad, arrange = arrange, onefile = onefile,
+    envir = envir, ...
   )
 }
 
@@ -304,15 +306,13 @@ mrggsave.list <- function(x, ..., arrange = FALSE,
 #' @rdname mrggsave
 #' @export
 mrggsave.gg <- function(x, ...) {
-  #NextMethod(generic = "mrggsave", object = x, envir = envir, ...)
-  #mrggsave.ggplot(x, ..., envir = envir)
   NextMethod()
 }
 
 #' @rdname mrggsave
 #' @export
-mrggsave.gTree <- function(x, ...) {
-  mrggsave_common(mrggsave_prep_object(x), ...)
+mrggsave.gTree <- function(x, ..., envir = parent.frame()) {
+  mrggsave_common(mrggsave_prep_object(x), ..., envir = envir)
 }
 
 #' @export
