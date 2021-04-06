@@ -540,7 +540,6 @@ scan_list_cl <- function(x) {
 
 #' Save the last plot using mrggsave
 #'
-#' @inheritParams mrggsave_common
 #' @param stem passed to [mrggsave()]
 #' @param script passed to [mrggsave()]
 #' @param ... passed to [mrggsave()]
