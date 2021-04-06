@@ -150,7 +150,9 @@ mrggsave <- function(x, ...) {
 mrggsave.ggplot <- function(x, ..., ypad = 2,
                             arrange = FALSE,
                             ncol = 1,
-                            onefile = TRUE) {
+                            onefile = TRUE,
+                            envir = parent.frame()
+                            ) {
 
   if(ncol > 1) arrange <- TRUE
 
@@ -164,14 +166,14 @@ mrggsave.ggplot <- function(x, ..., ypad = 2,
   }
 
   mrggsave_common(
-    x = x, ypad = ypad,onefile = onefile, arrange = arrange, ...
+    x = x, ypad = ypad, onefile = onefile, arrange = arrange, envir = envir,  ...
   )
 }
 
 #' @rdname mrggsave
 #' @export
 mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
-                              onefile = TRUE) {
+                              onefile = TRUE, envir = parent.frame()) {
 
   if(!inherits(x,"list")) {
     x <- list(x)
@@ -185,7 +187,7 @@ mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
   }
 
   mrggsave_common(
-    x = x, ypad = ypad, arrange = arrange, ...
+    x = x, ypad = ypad, arrange = arrange, envir = envir, ...
   )
 }
 
@@ -204,7 +206,7 @@ mrggsave.gtable <- function(...) {
 #' @rdname mrggsave
 #' @export
 mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
-                             onefile = TRUE) {
+                             onefile = TRUE, envir = parent.frame()) {
 
   if(ncol > 1) arrange <- TRUE
 
@@ -219,25 +221,26 @@ mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
   }
 
   mrggsave_common(
-    x = x, ypad = ypad, arrange = arrange, onefile = onefile, ...
+    x = x, ypad = ypad, arrange = arrange, onefile = onefile,  envir = envir, ...
   )
 }
 
 #' @rdname mrggsave
 #' @export
-mrggsave.patchwork <- function(x,...) {
+mrggsave.patchwork <- function(x,  ..., envir = parent.frame()) {
   assert_that(requireNamespace("patchwork"))
-  mrggsave(patchwork::patchworkGrob(x),...)
+  mrggsave(patchwork::patchworkGrob(x),..., envir = envir)
 }
 
 #' @export
-mrggsave.ggsurvplot <- function(x,...) {
-  mrggsave_common(mrggsave_prep_object(x), ...)
+mrggsave.ggsurvplot <- function(x, ..., envir = parent.frame()) {
+  mrggsave_common(mrggsave_prep_object(x), ..., envir = envir)
 }
 
 #' @rdname mrggsave
 #' @export
-mrggsave.list <- function(x, ..., arrange = FALSE, use_names = FALSE) {
+mrggsave.list <- function(x, ..., arrange = FALSE,
+                          use_names = FALSE, envir = parent.frame()) {
 
   if(inherits(x, "named-plots")) use_names <-  TRUE
 
@@ -253,6 +256,7 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names = FALSE) {
     args$arrange <- arrange
     tag <- args$tag
     args$tag <- NULL
+    args$envir <- envir
     context <- NULL
     if(inherits(x, "needs-context")) {
       context <- args$script
@@ -281,25 +285,27 @@ mrggsave.list <- function(x, ..., arrange = FALSE, use_names = FALSE) {
   cl <- scan_list_cl(x)
 
   if(all(cl$cl == "gg-ggplot")) {
-    return(mrggsave.ggplot(x, arrange = arrange, ...))
+    return(mrggsave.ggplot(x, arrange = arrange, ..., envir = envir))
   }
 
   if(all(cl$cl == "trellis")) {
-    return(mrggsave.trellis(x, arrange = arrange, ...))
+    return(mrggsave.trellis(x, arrange = arrange, ..., envir = envir))
   }
 
   if(all(cl$ggmatrix)) {
-    return(mrggsave.ggmatrix(x, arrange = arrange, ...))
+    return(mrggsave.ggmatrix(x, arrange = arrange, ..., envir = envir))
   }
 
   x <- lapply(x, mrggsave_prep_object)
 
-  mrggsave.ggplot(x, arrange = arrange, ...)
+  mrggsave.ggplot(x, arrange = arrange, ..., envir = envir)
 }
 
 #' @rdname mrggsave
 #' @export
 mrggsave.gg <- function(x, ...) {
+  #NextMethod(generic = "mrggsave", object = x, envir = envir, ...)
+  #mrggsave.ggplot(x, ..., envir = envir)
   NextMethod()
 }
 
@@ -345,7 +351,7 @@ mrggsave_common <- function(x,
                             units = "in",
                             position = getOption("mrggsave.position", "default"),
                             labeller = getOption("mrggsave.label.fun", label.fun),
-                            envir = parent.frame(2),
+                            envir = parent.frame(sys.nframe()),
                             ...) {
 
   stopifnot(is.character(dev))

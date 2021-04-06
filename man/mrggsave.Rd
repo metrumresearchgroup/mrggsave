@@ -17,19 +17,42 @@
 \usage{
 mrggsave(x, ...)
 
-\method{mrggsave}{ggplot}(x, ..., ypad = 2, arrange = FALSE, ncol = 1, onefile = TRUE)
+\method{mrggsave}{ggplot}(
+  x,
+  ...,
+  ypad = 2,
+  arrange = FALSE,
+  ncol = 1,
+  onefile = TRUE,
+  envir = parent.frame()
+)
 
-\method{mrggsave}{ggmatrix}(x, ..., ypad = 4, arrange = FALSE, onefile = TRUE)
+\method{mrggsave}{ggmatrix}(
+  x,
+  ...,
+  ypad = 4,
+  arrange = FALSE,
+  onefile = TRUE,
+  envir = parent.frame()
+)
 
 \method{mrggsave}{gList}(...)
 
 \method{mrggsave}{gtable}(...)
 
-\method{mrggsave}{trellis}(x, ..., ypad = 3, arrange = FALSE, ncol = 1, onefile = TRUE)
+\method{mrggsave}{trellis}(
+  x,
+  ...,
+  ypad = 3,
+  arrange = FALSE,
+  ncol = 1,
+  onefile = TRUE,
+  envir = parent.frame()
+)
 
-\method{mrggsave}{patchwork}(x, ...)
+\method{mrggsave}{patchwork}(x, ..., envir = parent.frame())
 
-\method{mrggsave}{list}(x, ..., arrange = FALSE, use_names = FALSE)
+\method{mrggsave}{list}(x, ..., arrange = FALSE, use_names = FALSE, envir = parent.frame())
 
 \method{mrggsave}{gg}(x, ...)
 
@@ -63,7 +86,7 @@ mrggsave_common(
   units = "in",
   position = getOption("mrggsave.position", "default"),
   labeller = getOption("mrggsave.label.fun", label.fun),
-  envir = parent.frame(2),
+  envir = parent.frame(sys.nframe()),
   ...
 )
 }
@@ -82,6 +105,9 @@ single page with \code{\link[gridExtra:arrangeGrob]{gridExtra::arrangeGrob()}}}
 \item{ncol}{passed to \code{\link[gridExtra:arrangeGrob]{gridExtra::arrangeGrob()}}}
 
 \item{onefile}{passed to \code{\link[=pdf]{pdf()}}}
+
+\item{envir}{environment to be used for string interpolation in
+stem and tag}
 
 \item{use_names}{if \code{TRUE}, the names from a list of plots will be used
 as the stems for output file names}
@@ -138,9 +164,6 @@ comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"})}
 should receive a single argument (\code{x}) which is an environment
 containing various items that might go into the label; pass \code{NULL} to
 omit the label on the plot}
-
-\item{envir}{environment to be used for string interpolation in
-stem and tag}
 }
 \description{
 Save plot objects as .pdf file after labeling with Source graphic and
