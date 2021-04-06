@@ -43,9 +43,7 @@ test_that("vector tag gets collapsed", {
 })
 
 test_that("plots get named by object", {
-  p1 <- ggplot(data) + geom_point(aes(x,y))
-  p2 <- ggplot(data) + geom_point(aes(x,y))
-  p3 <- ggplot(data) + geom_point(aes(x,y))
+  p1 <- p2 <- p3 <- p
   l <- named_plots(p1,p2,p3, tag = "bbb")
   expect_identical(names(l), c("p1-bbb", "p2-bbb", "p3-bbb"))
   expect_length(l,3)
@@ -63,9 +61,7 @@ test_that("change file name separator", {
 })
 
 test_that("named_plots returns an object with class", {
-  p1 <- ggplot(data) + geom_point(aes(x,y))
-  p2 <- ggplot(data) + geom_point(aes(x,y))
-  p3 <- ggplot(data) + geom_point(aes(x,y))
+  p1 <- p2 <- p3 <- p
   ans <- named_plots(p1,p2,p3)
   expect_is(ans, "named-plots")
   ans <- named_plots(p1, add_context = TRUE)
@@ -74,9 +70,7 @@ test_that("named_plots returns an object with class", {
 })
 
 test_that("named_plots input auto uses names", {
-  p1 <- ggplot(data) + geom_point(aes(x,y))
-  p2 <- ggplot(data) + geom_point(aes(x,y))
-  p3 <- ggplot(data) + geom_point(aes(x,y))
+  p1 <- p2 <- p3 <- p
   inpt <- named_plots(a = p1, p2, ggplot(mtcars))
   expect_equal(names(inpt), c("a", "p2", "ggplot"))
   ans <- mrggsave(inpt, script = "test-filename.R")
@@ -105,13 +99,20 @@ test_that("option to make lower", {
 options(mrggsave.file.tolower = NULL)
 
 test_that("passing a named list with use_names set to TRUE", {
-  p1 <- ggplot(data) + geom_point(aes(x,y))
-  p2 <- ggplot(data) + geom_point(aes(x,y))
-  p3 <- ggplot(data) + geom_point(aes(x,y))
+  p1 <- p2 <- p3 <- p
   ans <- mrggsave(list(a = p1, b = p1), script = "blah.R", use_names = TRUE)
   expect_equal(basename(ans), c("a.pdf","b.pdf"))
   ans <- mrggsave(list(a = p1, b = p1), script = "blah.R", use_names = FALSE)
   def_stem <- formals(mrggsave_common)$stem
   check <- paste0(def_stem, ".pdf")
   expect_equal(basename(ans), check)
+})
+
+test_that("glue file name within a function", {
+  fun <- function(x, runno) {
+    mrggsave(p, stem = "plot-{runno}", dir = tempdir(), script = "test.R")
+  }
+  p1 <- p
+  ans <- fun(p1, "112")
+  expect_equal(basename(ans), "plot-112.pdf")
 })
