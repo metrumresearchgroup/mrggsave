@@ -55,3 +55,16 @@ usub <- function(x) gsub(" +", .sep(), x)
 sanitize_filename <- function(x) {
   gsub("[._-]+", .sep(), x)
 }
+
+check_dir <- function(dir0) {
+  dir_norm <- normalizePath(dir0, mustWork = FALSE)
+  if(!dir.exists(dir_norm)) {
+    res <- try(dir.create(dir_norm))
+    if(inherits(res, "try-error")) {
+      msg <- glue("directory {dir0} does not exist and there was an error when trying to create it")
+      stop(msg, call. = FALSE)
+    }
+    message(glue("creating directory {dir0}"))
+  }
+  return(invisible(NULL))
+}

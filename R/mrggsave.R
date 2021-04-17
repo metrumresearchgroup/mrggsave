@@ -354,6 +354,8 @@ mrggsave_common <- function(x,
                             envir = parent.frame(sys.nframe()),
                             ...) {
 
+  check_dir(dir)
+
   stopifnot(is.character(dev))
   dev <- cvec_cs(dev)
   more_dev <- NULL
