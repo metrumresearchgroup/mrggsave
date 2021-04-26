@@ -4,7 +4,12 @@
 \alias{mrggsave_last}
 \title{Save the last plot using mrggsave}
 \usage{
-mrggsave_last(stem, script = getOption("mrg.script", NULL), ...)
+mrggsave_last(
+  stem,
+  script = getOption("mrg.script", NULL),
+  ...,
+  envir = parent.frame()
+)
 }
 \arguments{
 \item{stem}{passed to \code{\link[=mrggsave]{mrggsave()}}}
@@ -12,6 +17,9 @@ mrggsave_last(stem, script = getOption("mrg.script", NULL), ...)
 \item{script}{passed to \code{\link[=mrggsave]{mrggsave()}}}
 
 \item{...}{passed to \code{\link[=mrggsave]{mrggsave()}}}
+
+\item{envir}{environment to be used for string interpolation in
+stem and tag; passed to \code{\link[=mrggsave]{mrggsave()}}}
 }
 \description{
 Save the last plot using mrggsave

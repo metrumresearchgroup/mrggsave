@@ -4,7 +4,7 @@
 \alias{named_plots}
 \title{Generate a list of auto named plots}
 \usage{
-named_plots(..., tag = NULL, add_context = FALSE, envir = sys.frame(-1))
+named_plots(..., tag = NULL, add_context = FALSE, envir = parent.frame())
 }
 \arguments{
 \item{...}{function calls to generate plots or plot objects}
