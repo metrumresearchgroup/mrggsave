@@ -113,10 +113,10 @@ test_that("save to directory that doesn't exist", {
   temp1 <- tempdir()
   temp2 <- file.path(temp1, "foo")
   expect_silent(
-    x <- mrggsave(pg, script = Script, stem = "temp1", dir = temp1)
+    x = mrggsave(pg, script = Script, stem = "temp1", dir = temp1)
   )
   expect_message(
-    y <- mrggsave(pg, script = Script, stem = "temp2", dir = temp2),
+    y = mrggsave(pg, script = Script, stem = "temp2", dir = temp2),
     regexp = "creating directory"
   )
   expect_equal(dirname(x), temp1)
