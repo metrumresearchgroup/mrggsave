@@ -1,5 +1,11 @@
 # mrggsave (development version)
 
+- Refactored how the `glue()` environment was captured so that string 
+  interpolation is more robust when attempted in unique environments (for 
+  example inside function calls) (#26)
+- `mrggsave()` will now create the output directory if it doesn't exist; a 
+  message is issued whenever a new directory is created (#28)
+
 # mrggsave 0.4.2
 
 - Calling the `cairo_pdf` device now allows multiple plots to be written to the 
