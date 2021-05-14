@@ -47,6 +47,8 @@
 #' as the stems for output file names
 #' @param envir environment to be used for string interpolation in
 #' stem and tag
+#' @param create_dir if `TRUE`, the output directory is created if it doesn't
+#' exist
 #' @param ... other arguments passed to `mrggsave_common` and then
 #' on to [pdf()] and [gridExtra::arrangeGrob()]
 #'
@@ -352,9 +354,10 @@ mrggsave_common <- function(x,
                             position = getOption("mrggsave.position", "default"),
                             labeller = getOption("mrggsave.label.fun", label.fun),
                             envir = parent.frame(sys.nframe()),
+                            create_dir = getOption("mrggsave.create.dir", TRUE),
                             ...) {
 
-  check_dir(dir)
+  if(isTRUE(create_dir)) check_dir(dir)
 
   stopifnot(is.character(dev))
   dev <- cvec_cs(dev)

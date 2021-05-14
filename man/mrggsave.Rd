@@ -87,6 +87,7 @@ mrggsave_common(
   position = getOption("mrggsave.position", "default"),
   labeller = getOption("mrggsave.label.fun", label.fun),
   envir = parent.frame(sys.nframe()),
+  create_dir = getOption("mrggsave.create.dir", TRUE),
   ...
 )
 }
@@ -164,6 +165,9 @@ comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"})}
 should receive a single argument (\code{x}) which is an environment
 containing various items that might go into the label; pass \code{NULL} to
 omit the label on the plot}
+
+\item{create_dir}{if \code{TRUE}, the output directory is created if it doesn't
+exist}
 }
 \description{
 Save plot objects as .pdf file after labeling with Source graphic and
