@@ -1,4 +1,4 @@
-# mrggsave (development version)
+# mrggsave 0.4.3
 
 - Refactored how the `glue()` environment was captured so that string 
   interpolation is more robust when attempted in unique environments (for 
