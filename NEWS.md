@@ -1,3 +1,9 @@
+# mrggsave 0.4.3
+
+- Refactored how the `glue()` environment was captured so that string 
+  interpolation is more robust when attempted in unique environments (for 
+  example inside function calls) (#26)
+
 # mrggsave 0.4.2
 
 - Calling the `cairo_pdf` device now allows multiple plots to be written to the 
