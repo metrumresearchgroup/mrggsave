@@ -1,0 +1,60 @@
+MRGS-S001:
+  name: Use hyphen separator
+  description: As a user, I want mrggsave to use a hyphen as a separator when forming
+    output file names
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-015
+  - MRGS-TEST-016
+  - MRGS-TEST-017
+  - MRGS-TEST-013
+  - MRGS-TEST-012
+MRGS-S002:
+  name: Change use_names default to TRUE
+  description: As a user, I want mrggsave to use list names by default when forming
+    output file names
+  ProductRisk: low-risk
+  tests: MRGS-TEST-020
+MRGS-S003:
+  name: Call mrggsave once and save out to multiple devices
+  description: As a user, I want to specify multiple devices in a single `mrggsave`
+    call and get files written for each device
+  ProductRisk: low-risk
+  tests: MRGS-TEST-011
+MRGS-S004:
+  name: Change output file name sep
+  description: As a user, I want to be able to globally change the output file separator
+    character
+  ProductRisk: low-risk
+  tests: MRGS-TEST-018
+MRGS-S005:
+  name: Output file names from named plots are sanitized
+  description: As a user, I want mrggsave to sanitize file names when they are generated
+    from objects
+  ProductRisk: low-risk
+  tests: MRGS-TEST-021
+MRGS-S006:
+  name: Optional to-lower
+  description: As a user, I want mrggsave to optionally change file stem to all lower
+    case characters
+  ProductRisk: low-risk
+  tests: MRGS-TEST-022
+MRGS-S007:
+  name: Don't automatically use names for named list
+  description: As a user, I want to have to opt in to using list names for saving
+    plots
+  ProductRisk: low-risk
+  tests: MRGS-TEST-023
+MRGS-S008:
+  name: Pass onefile to cairo_pdf
+  description: As a user, I want to write multiple plots to cairo pdf output.
+  ProductRisk: low-risk
+  tests: MRGS-TEST-010
+MRGS-S009:
+  name: Change environment for gluing filenames
+  description: As a user, I would like mrggsave to undergo internal refactoring so
+    that the glue environment is robust to calling environment
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-025
+  - MRGS-TEST-024

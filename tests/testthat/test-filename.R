@@ -14,35 +14,35 @@ p3 <- ggplot(data) + geom_point(aes(x,y))
 
 options(mrggsave.dir = normalizePath(tempdir()))
 
-test_that("variable gets glued into stem", {
+test_that("variable gets glued into stem [MRGS-TEST-012]", {
   runn <- 1234
   ans <- mrggsave(p, script = "test-filename.R", stem = "save_{runn}", dir = tempdir())
   expect_equal(basename(ans), "save_1234.pdf")
 })
 
-test_that("variable gets glued into tag", {
+test_that("variable gets glued into tag [MRGS-TEST-013]", {
   runn <- 1234
   ans <- mrggsave(p, script = "file.R", tag = "save_{runn}")
   expect_equal(basename(ans), "file-save_1234.pdf")
 })
 
-test_that("an environment gets passed to glue", {
+test_that("an environment gets passed to glue [MRGS-TEST-014]", {
   env <- list(runn=4321)
   ans <- mrggsave(p, script = "file.R", tag = "save_{runn}", envir = env)
   expect_equal(basename(ans), "file-save_4321.pdf")
 })
 
-test_that("vector stem gets collapsed", {
+test_that("vector stem gets collapsed [MRGS-TEST-015]", {
   ans <- mrggsave(p, script = "test-filename.R", stem = c("a", 101, "b"))
   expect_equal(basename(ans), "a-101-b.pdf")
 })
 
-test_that("vector tag gets collapsed", {
+test_that("vector tag gets collapsed [MRGS-TEST-016]", {
   ans <- mrggsave(p, script = "test-filename.R", tag = c("a", 101, "b"))
   expect_equal(basename(ans), "test-filename-a-101-b.pdf")
 })
 
-test_that("plots get named by object", {
+test_that("plots get named by object [MRGS-TEST-017]", {
   p1 <- p2 <- p3 <- p
   l <- named_plots(p1,p2,p3, tag = "bbb")
   expect_identical(names(l), c("p1-bbb", "p2-bbb", "p3-bbb"))
@@ -51,7 +51,7 @@ test_that("plots get named by object", {
   expect_true(all(cl))
 })
 
-test_that("change file name separator", {
+test_that("change file name separator [MRGS-TEST-018]", {
   out1 <- basename(mrggsave(p1, tag = "1", script = "foo.R", dev = "bmp"))
   expect_equal(out1, "foo-1.bmp")
   mrggsave:::output_file_sep("_")
@@ -60,7 +60,7 @@ test_that("change file name separator", {
   mrggsave:::output_file_sep()
 })
 
-test_that("named_plots returns an object with class", {
+test_that("named_plots returns an object with class [MRGS-TEST-019]", {
   p1 <- p2 <- p3 <- p
   ans <- named_plots(p1,p2,p3)
   expect_is(ans, "named-plots")
@@ -69,7 +69,7 @@ test_that("named_plots returns an object with class", {
   expect_is(ans, "needs-context")
 })
 
-test_that("named_plots input auto uses names", {
+test_that("named_plots input auto uses names [MRGS-TEST-020]", {
   p1 <- p2 <- p3 <- p
   inpt <- named_plots(a = p1, p2, ggplot(mtcars))
   expect_equal(names(inpt), c("a", "p2", "ggplot"))
@@ -82,14 +82,14 @@ test_that("named_plots input auto uses names", {
   expect_equal(ans, "scrname-p1.pdf")
 })
 
-test_that("named_plots names are sanitized", {
+test_that("named_plots names are sanitized [MRGS-TEST-021]", {
   dv_pred <- p1
   inpt <- named_plots(dv_pred, "a b.-c" = p2)
   expect_equal(names(inpt), c("dv-pred", "a-b-c"))
 })
 
 options(mrggsave.file.tolower = TRUE)
-test_that("option to make lower", {
+test_that("option to make lower [MRGS-TEST-022]", {
   inpt <- named_plots(EV.PREd = p1)
   ans <- mrggsave(inpt, script = "test-filename.R")
   expect_equal(basename(ans), "ev-pred.pdf")
@@ -98,7 +98,7 @@ test_that("option to make lower", {
 })
 options(mrggsave.file.tolower = NULL)
 
-test_that("passing a named list with use_names set to TRUE", {
+test_that("passing a named list with use_names set to TRUE [MRGS-TEST-023]", {
   p1 <- p2 <- p3 <- p
   ans <- mrggsave(list(a = p1, b = p1), script = "blah.R", use_names = TRUE)
   expect_equal(basename(ans), c("a.pdf","b.pdf"))
@@ -108,7 +108,7 @@ test_that("passing a named list with use_names set to TRUE", {
   expect_equal(basename(ans), check)
 })
 
-test_that("glue file name within a function", {
+test_that("glue file name within a function [MRGS-TEST-024]", {
   fun <- function(x, runno) {
     mrggsave(p, stem = "plot-{runno}", dir = tempdir(), script = "test.R")
   }
@@ -117,7 +117,7 @@ test_that("glue file name within a function", {
   expect_equal(basename(ans), "plot-112.pdf")
 })
 
-test_that("glue file name with mrggsave_last", {
+test_that("glue file name with mrggsave_last [MRGS-TEST-025]", {
   p <- ggplot(data) + geom_point(aes(x,y))
   runno <- 5678
   ans <- mrggsave_last(
