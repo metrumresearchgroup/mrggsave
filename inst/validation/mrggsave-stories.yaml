@@ -58,3 +58,54 @@ MRGS-S009:
   tests:
   - MRGS-TEST-025
   - MRGS-TEST-024
+MRGS-S010:
+  name: Save lattice plot
+  description: As a user, I would like mrggsave to be able to save a plot (or list of plots) created with the package `lattice`.
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-032
+  - MRGS-TEST-038
+MRGS-S011:
+  name: Save ggplot plot
+  description: As a user, I would like mrggsave to be able to save a plot (or list of plots) created with the package `ggplot`.
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-033
+  - MRGS-TEST-035
+  - MRGS-TEST-037
+  - MRGS-TEST-040
+MRGS-S012:
+  name: Save GGally plot
+  description: As a user, I would like mrggsave to be able to save a ggpairs plot (or list of plots) created with the package `GGally`.
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-034
+  - MRGS-TEST-036
+MRGS-S013:
+  name: Save gtable
+  description: As a user, I would like to be able to save a gtable to PDF
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-039
+MRGS-S014:
+  name: Save different plot types
+  description: As a user, I would like to be able to save different plot types to the same PDF
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-041
+  - MRGS-TEST-042
+MRGS-S015:
+  name: Save plots using different devices
+  description: As a user, I would like to be able to save plots using different types of devices
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-001
+  - MRGS-TEST-002
+  - MRGS-TEST-003
+  - MRGS-TEST-004
+  - MRGS-TEST-005
+  - MRGS-TEST-006
+  - MRGS-TEST-007
+  - MRGS-TEST-008
+  - MRGS-TEST-009
+  - MRGS-TEST-0010
