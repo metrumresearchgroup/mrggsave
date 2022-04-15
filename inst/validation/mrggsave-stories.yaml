@@ -1,0 +1,111 @@
+MRGS-S001:
+  name: Use hyphen separator
+  description: As a user, I want mrggsave to use a hyphen as a separator when forming
+    output file names
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-015
+  - MRGS-TEST-016
+  - MRGS-TEST-017
+  - MRGS-TEST-013
+  - MRGS-TEST-012
+MRGS-S002:
+  name: Change use_names default to TRUE
+  description: As a user, I want mrggsave to use list names by default when forming
+    output file names
+  ProductRisk: low-risk
+  tests: MRGS-TEST-020
+MRGS-S003:
+  name: Call mrggsave once and save out to multiple devices
+  description: As a user, I want to specify multiple devices in a single `mrggsave`
+    call and get files written for each device
+  ProductRisk: low-risk
+  tests: MRGS-TEST-011
+MRGS-S004:
+  name: Change output file name sep
+  description: As a user, I want to be able to globally change the output file separator
+    character
+  ProductRisk: low-risk
+  tests: MRGS-TEST-018
+MRGS-S005:
+  name: Output file names from named plots are sanitized
+  description: As a user, I want mrggsave to sanitize file names when they are generated
+    from objects
+  ProductRisk: low-risk
+  tests: MRGS-TEST-021
+MRGS-S006:
+  name: Optional to-lower
+  description: As a user, I want mrggsave to optionally change file stem to all lower
+    case characters
+  ProductRisk: low-risk
+  tests: MRGS-TEST-022
+MRGS-S007:
+  name: Don't automatically use names for named list
+  description: As a user, I want to have to opt in to using list names for saving
+    plots
+  ProductRisk: low-risk
+  tests: MRGS-TEST-023
+MRGS-S008:
+  name: Pass onefile to cairo_pdf
+  description: As a user, I want to write multiple plots to cairo pdf output.
+  ProductRisk: low-risk
+  tests: MRGS-TEST-010
+MRGS-S009:
+  name: Change environment for gluing filenames
+  description: As a user, I would like mrggsave to undergo internal refactoring so
+    that the glue environment is robust to calling environment
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-025
+  - MRGS-TEST-024
+MRGS-S010:
+  name: Save lattice plot
+  description: As a user, I would like mrggsave to be able to save a plot (or list of plots) created with the package `lattice`.
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-032
+  - MRGS-TEST-038
+MRGS-S011:
+  name: Save ggplot plot
+  description: As a user, I would like mrggsave to be able to save a plot (or list of plots) created with the package `ggplot`.
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-033
+  - MRGS-TEST-035
+  - MRGS-TEST-037
+  - MRGS-TEST-040
+MRGS-S012:
+  name: Save GGally plot
+  description: As a user, I would like mrggsave to be able to save a ggpairs plot (or list of plots) created with the package `GGally`.
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-034
+  - MRGS-TEST-036
+MRGS-S013:
+  name: Save gtable
+  description: As a user, I would like to be able to save a gtable to PDF
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-039
+MRGS-S014:
+  name: Save different plot types
+  description: As a user, I would like to be able to save different plot types to the same PDF
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-041
+  - MRGS-TEST-042
+MRGS-S015:
+  name: Save plots using different devices
+  description: As a user, I would like to be able to save plots using different types of devices
+  ProductRisk: low-risk
+  tests:
+  - MRGS-TEST-001
+  - MRGS-TEST-002
+  - MRGS-TEST-003
+  - MRGS-TEST-004
+  - MRGS-TEST-005
+  - MRGS-TEST-006
+  - MRGS-TEST-007
+  - MRGS-TEST-008
+  - MRGS-TEST-009
+  - MRGS-TEST-0010

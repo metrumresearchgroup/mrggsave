@@ -11,7 +11,7 @@ options(mrggsave.dir = tempdir())
 
 p <- ggplot(data, aes(x = x, y = y)) + geom_point()
 
-test_that("save a list", {
+test_that("save a list [MRGS-TEST-028]", {
   x <- mrggsave_list(list(p,p,p), script = Script, stem = "testlist")
   expect_identical(basename(x),"testlist.pdf")
 })
