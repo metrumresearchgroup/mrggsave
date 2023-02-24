@@ -92,7 +92,13 @@ format_path <- function(file, dir, path.type = c("proj", "none", "raw")) {
 
   path.type <- match.arg(path.type)
 
-  if(path.type=="none" || isFALSE(.global$has_root)) return(file)
+  if(isFALSE(.global$has_root)) {
+    return(file)
+  }
+
+  if(path.type=="none") {
+    return(file)
+  }
 
   if(path.type=="raw") {
     return(path(dir, file))
