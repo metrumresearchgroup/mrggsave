@@ -12,7 +12,6 @@ Description: Plots are annotated with the name of the generating
 License: GPL (>=2)
 Language: en-US
 Encoding: UTF-8
-LazyData: true
 Imports: 
   ggplot2 (>= 2.2.1), 
   grid, 
@@ -21,6 +20,8 @@ Imports:
   gridGraphics,
   assertthat, 
   rlang (>= 0.3.4), 
-  glue
+  glue, 
+  fs, 
+  rprojroot
 Suggests: GGally, gtable, testthat, lattice, survminer, patchwork, survival
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3

@@ -68,6 +68,7 @@ mrggsave_common(
   height = 5,
   stem = "Rplot",
   dir = getOption("mrggsave.dir", "../deliv/figure"),
+  path.type = getOption("mrggsave.path.type", "proj"),
   prefix = NULL,
   onefile = TRUE,
   arrange = FALSE,
@@ -91,79 +92,83 @@ mrggsave_common(
 )
 }
 \arguments{
-\item{x}{an object or list of objects of class \code{gg}}
+\item{x}{an object or list of objects of class \code{gg}.}
 
 \item{...}{other arguments passed to \code{mrggsave_common} and then
-on to \code{\link[=pdf]{pdf()}} and \code{\link[gridExtra:arrangeGrob]{gridExtra::arrangeGrob()}}}
+on to \code{\link[=pdf]{pdf()}} and \code{\link[gridExtra:arrangeGrob]{gridExtra::arrangeGrob()}}.}
 
 \item{ypad}{integer number of newlines to separate annotation
-from x-axis title}
+from x-axis title.}
 
 \item{arrange}{logical; if \code{TRUE}, arrange the ggplot objects on a
-single page with \code{\link[gridExtra:arrangeGrob]{gridExtra::arrangeGrob()}}}
+single page with \code{\link[gridExtra:arrangeGrob]{gridExtra::arrangeGrob()}}.}
 
-\item{ncol}{passed to \code{\link[gridExtra:arrangeGrob]{gridExtra::arrangeGrob()}}}
+\item{ncol}{passed to \code{\link[gridExtra:arrangeGrob]{gridExtra::arrangeGrob()}}.}
 
-\item{onefile}{passed to \code{\link[=pdf]{pdf()}}}
+\item{onefile}{passed to \code{\link[=pdf]{pdf()}}.}
 
 \item{envir}{environment to be used for string interpolation in
-stem and tag}
+stem and tag.}
 
 \item{use_names}{if \code{TRUE}, the names from a list of plots will be used
-as the stems for output file names}
+as the stems for output file names.}
 
-\item{draw}{if \code{TRUE}, the plot is drawn using \code{\link[=draw_newpage]{draw_newpage()}}}
+\item{draw}{if \code{TRUE}, the plot is drawn using \code{\link[=draw_newpage]{draw_newpage()}}.}
 
-\item{.save}{logical; if \code{FALSE}, return the labeled objects}
+\item{.save}{logical; if \code{FALSE}, return the labeled objects.}
 
-\item{script}{the name of the script generating the \code{gg} objects}
+\item{script}{the name of the script generating the \code{gg} objects.}
 
 \item{tag}{if specified, stem is overwritten by pasting \code{script}
-and \code{tag} together}
+and \code{tag} together.}
 
 \item{width}{passed to \code{\link[=pdf]{pdf()}}; should be less than 5 in.
-for portrait figure}
+for portrait figure.}
 
 \item{height}{passed to \code{\link[=pdf]{pdf()}}; should be less than 7 in.
-for portrait figure}
+for portrait figure.}
 
-\item{stem}{to form the name of the output \code{.pdf} file}
+\item{stem}{to form the name of the output \code{.pdf} file.}
 
-\item{dir}{output directory for \code{.pdf} file}
+\item{dir}{output directory for \code{.pdf} file.}
+
+\item{path.type}{a character string indicating how the path to the image
+file should be rendered in the figure annotation; see \code{\link[=format_path]{format_path()}}
+for details.}
 
 \item{prefix}{gets prepended to the output file path in the Source
-graphic, label}
+graphic, label.}
 
 \item{labsep}{character separator (or newline) for Source code and
-Source graphic labels}
+Source graphic labels.}
 
 \item{pre_label}{text to include before annotation; separate lines prior
-to Source code label; see details}
+to Source code label; see details.}
 
 \item{post_label}{text to include after annotation; separate lines after
-Source graphic; see details}
+Source graphic; see details.}
 
-\item{fontsize}{for Source graphic and Source code labels}
+\item{fontsize}{for Source graphic and Source code labels.}
 
-\item{textGrob.x}{passed to \code{\link[grid:grid.text]{grid::textGrob()}} (as \code{x})}
+\item{textGrob.x}{passed to \code{\link[grid:grid.text]{grid::textGrob()}} (as \code{x}).}
 
-\item{textGrob.y}{passed to \code{textGrob} (as \code{y})}
+\item{textGrob.y}{passed to \code{textGrob} (as \code{y}).}
 
-\item{just}{passed to \code{\link[grid:grid.text]{grid::textGrob()}} (as \code{just})}
+\item{just}{passed to \code{\link[grid:grid.text]{grid::textGrob()}} (as \code{just}).}
 
 \item{dev}{one or more devices to use; can pass a character vector or a
-comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"})}
+comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"}).}
 
-\item{res}{passed to \code{\link[=png]{png()}}}
+\item{res}{passed to \code{\link[=png]{png()}}.}
 
-\item{units}{passed to \code{\link[=png]{png()}}}
+\item{units}{passed to \code{\link[=png]{png()}}.}
 
 \item{position}{force the graphic annotation to locate to the left or right}
 
 \item{labeller}{a function that creates the plot annotation; the function
 should receive a single argument (\code{x}) which is an environment
 containing various items that might go into the label; pass \code{NULL} to
-omit the label on the plot}
+omit the label on the plot.}
 }
 \description{
 Save plot objects as .pdf file after labeling with Source graphic and

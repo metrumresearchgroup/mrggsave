@@ -9,6 +9,8 @@
 #' @importFrom glue glue
 #' @importFrom stats rnorm
 #' @importFrom graphics plot
+#' @importFrom fs path_rel path
+#' @importFrom rprojroot find_root is_rstudio_project
 NULL
 
 .global <- new.env()
@@ -38,3 +40,20 @@ output_file_sep <- function(sep = c("-", "_", ".")) {
   return(invisible(NULL))
 }
 .sep <- function() .global$SEP
+
+.internal <- new.env(parent = emptyenv())
+.internal$root <- ""
+.internal$has_root <- FALSE
+
+.onLoad <- function(libname, pkgname) {
+  root <- try(
+    find_root(is_rstudio_project),
+    silent = TRUE
+  )
+  if(inherits(root, "try-error")) {
+    return(NULL)
+  }
+  .internal$root <- root
+  .internal$has_root <- TRUE
+  return(NULL)
+}
