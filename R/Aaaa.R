@@ -10,7 +10,7 @@
 #' @importFrom stats rnorm
 #' @importFrom graphics plot
 #' @importFrom fs path_rel path
-#' @importFrom rprojroot find_root is_rstudio_project is_testthat
+#' @importFrom rprojroot find_root is_rstudio_project is_testthat is_r_package
 NULL
 
 .global <- new.env()
@@ -50,7 +50,7 @@ output_file_sep <- function(sep = c("-", "_", ".")) {
   )
   if(inherits(root, "try-error")) {
     root <- try(
-      find_root(is_testthat),
+      find_root(is_r_package),
       silent = TRUE
     )
     if(inherits(root, "try-error")) {
