@@ -15,6 +15,8 @@ NULL
 
 .global <- new.env()
 .global$SEP <- "-"
+.global$root <- ""
+.global$has_root <- FALSE
 
 #' Change the output file name separator
 #'
@@ -41,9 +43,7 @@ output_file_sep <- function(sep = c("-", "_", ".")) {
 }
 .sep <- function() .global$SEP
 
-.internal <- new.env(parent = emptyenv())
-.internal$root <- ""
-.internal$has_root <- FALSE
+
 
 .onLoad <- function(libname, pkgname) {
   root <- try(
@@ -53,7 +53,7 @@ output_file_sep <- function(sep = c("-", "_", ".")) {
   if(inherits(root, "try-error")) {
     return(NULL)
   }
-  .internal$root <- root
-  .internal$has_root <- TRUE
+  .global$root <- root
+  .global$has_root <- TRUE
   return(NULL)
 }

@@ -98,9 +98,9 @@ format_path <- function(file, dir, path.type = c("proj", "none", "raw")) {
     return(path(dir, file))
   }
 
-  if(isFALSE(.internal$has_root)) {
+  if(isFALSE(.global$has_root)) {
     stop("path.type is \"proj\", but could not find project root.", call. = FALSE)
   }
 
-  path_rel(file.path(dir, file), start = .internal$root)
+  path_rel(file.path(dir, file), start = .global$root)
 }
