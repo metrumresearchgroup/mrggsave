@@ -45,7 +45,7 @@ output_file_sep <- function(sep = c("-", "_", ".")) {
 
 .onLoad <- function(libname, pkgname) {
   root <- try(
-    find_root(is_rstudio_project | is_testthat | is_r_package),
+    find_root(is_rstudio_project | is_r_package),
     silent = TRUE
   )
   if(inherits(root, "try-error")) {
