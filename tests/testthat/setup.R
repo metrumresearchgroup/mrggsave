@@ -1,2 +1,2 @@
-.global$root <- getwd()
-.global$has_root <- TRUE
+mrggsave:::.global$root <- getwd()
+mrggsave:::.global$has_root <- TRUE
