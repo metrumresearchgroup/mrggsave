@@ -92,21 +92,14 @@ format_path <- function(file, dir, path.type = c("proj", "none", "raw")) {
 
   path.type <- match.arg(path.type)
 
-  if(path.type=="none") {
-    return(file)
+  if(path.type=="proj" && isTRUE(.global$has_root)) {
+    ans <- path_rel(file.path(dir, file), start = .global$root)
+    return(ans)
   }
 
   if(path.type=="raw") {
     return(path(dir, file))
   }
 
-  if(isFALSE(.global$has_root)) {
-    return(file)
-  }
-
-  #if(isFALSE(.global$has_root)) {
-  #  stop("path.type is \"proj\", but could not find project root.", call. = FALSE)
-  #}
-
-  path_rel(file.path(dir, file), start = .global$root)
+  return(file)
 }
