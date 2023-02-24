@@ -45,17 +45,11 @@ output_file_sep <- function(sep = c("-", "_", ".")) {
 
 .onLoad <- function(libname, pkgname) {
   root <- try(
-    find_root(is_rstudio_project),
+    find_root(is_rstudio_project | is_testthat | is_r_package),
     silent = TRUE
   )
   if(inherits(root, "try-error")) {
-    root <- try(
-      find_root(is_r_package),
-      silent = TRUE
-    )
-    if(inherits(root, "try-error")) {
-      return(NULL)
-    }
+    return(NULL)
   }
   .global$root <- root
   .global$has_root <- TRUE

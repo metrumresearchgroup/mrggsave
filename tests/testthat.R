@@ -3,4 +3,3 @@ library(testthat)
 library(mrggsave)
 
 test_check("mrggsave", reporter="summary")
-
