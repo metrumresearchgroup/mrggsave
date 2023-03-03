@@ -15,7 +15,9 @@ test_that("path is formatted", {
 })
 
 test_that("path is formatted: path.type = proj", {
-  tdir <- withr::local_tempdir()
+  tdir <- tempfile("mrggsave-test-")
+  fs::dir_create(tdir)
+  on.exit(unlink(tdir, recursive = TRUE), add = TRUE)
 
   file <- "bar.png"
   dir <- "images/foo"
