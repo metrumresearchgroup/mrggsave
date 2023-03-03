@@ -70,11 +70,11 @@ sanitize_filename <- function(x) {
 #' Note that the default value for `path.type` is `"proj"`. This requires
 #' that an Rstudio project file is able to be found using
 #' [rprojroot::find_root()] with the [rprojroot::is_rstudio_project] criterion.
-#' mrggsave will only look for the project root _when the package is loaded_.
-#' An error will be generated if an image is attempted to be saved using
-#' `path.type="proj"` but an Rstudio project file was not able to be located
-#' when mrggsave was loaded.
 #'
+#' Once mrggsave finds a root for a given working directory, it caches the value
+#' for the remainder of the R session. An error will be generated if an image is
+#' attempted to be saved using `path.type="proj"` but an Rstudio project file
+#' was not able to be located.
 #'
 #' @return
 #' A string with the formatted image file path.
@@ -89,12 +89,25 @@ sanitize_filename <- function(x) {
 #' @md
 #' @export
 format_path <- function(file, dir, path.type = c("proj", "none", "raw")) {
+  if (!(is.character(dir) && length(dir) == 1)) {
+    stop("dir must be a character scalar")
+  }
 
   path.type <- match.arg(path.type)
 
-  if(path.type=="proj" && isTRUE(.global$has_root)) {
-    ans <- path_rel(file.path(dir, file), start = .global$root)
-    return(ans)
+  if (path.type == "proj") {
+    root <- find_cached_root()
+    if (is.null(root)) {
+      stop("No RStudio project root found for ", getwd())
+    }
+
+    if (!fs::path_has_parent(dir, root)) {
+      stop("dir is not under root\n",
+           paste("dir: ", dir, "\n"),
+           paste("root:", root))
+    }
+
+    return(path(path_rel(dir, start = root), file))
   }
 
   if(path.type=="raw") {
@@ -102,4 +115,17 @@ format_path <- function(file, dir, path.type = c("proj", "none", "raw")) {
   }
 
   return(file)
+}
+
+roots <- new.env(parent = emptyenv())
+
+find_cached_root <- function() {
+  wd <- getwd()
+  res <- get0(wd, envir = roots)
+  if (is.null(res)) {
+    res <- tryCatch(find_root(is_rstudio_project | is_r_package),
+                    error = function(e) NULL)
+    assign(wd, res, envir = roots)
+  }
+  return(res)
 }

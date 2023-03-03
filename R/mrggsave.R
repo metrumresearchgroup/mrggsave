@@ -110,7 +110,8 @@
 #' # for project work
 #'
 #' # Changing it here only for the example
-#' options(mrggsave.dir = tempdir())
+#' options(mrggsave.dir = tempdir(),
+#'         mrggsave.path.type = "none")
 #'
 #'
 #' p1 <- ggplot(data=Theoph) +

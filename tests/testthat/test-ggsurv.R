@@ -3,6 +3,8 @@ library(mrggsave)
 
 testthat::context("test-ggsurv")
 
+withr::local_options(list(mrggsave.path.type = "none"))
+
 test_that("ggsurvplot [MRGS-TEST-026]", {
   skip_if_not(requireNamespace("survminer",quietly=TRUE))
 

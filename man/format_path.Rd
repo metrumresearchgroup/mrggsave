@@ -27,10 +27,11 @@ Format the path to an image file
 Note that the default value for \code{path.type} is \code{"proj"}. This requires
 that an Rstudio project file is able to be found using
 \code{\link[rprojroot:find_root]{rprojroot::find_root()}} with the \link[rprojroot:criteria]{rprojroot::is_rstudio_project} criterion.
-mrggsave will only look for the project root \emph{when the package is loaded}.
-An error will be generated if an image is attempted to be saved using
-\code{path.type="proj"} but an Rstudio project file was not able to be located
-when mrggsave was loaded.
+
+Once mrggsave finds a root for a given working directory, it caches the value
+for the remainder of the R session. An error will be generated if an image is
+attempted to be saved using \code{path.type="proj"} but an Rstudio project file
+was not able to be located.
 }
 \examples{
 \dontrun{

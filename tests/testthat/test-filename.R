@@ -5,6 +5,8 @@ library(glue)
 
 testthat::context("test-filename")
 
+withr::local_options(list(mrggsave.path.type = "none"))
+
 data <- data.frame(x = c(1,2,3), y = c(4,5,6))
 
 p  <- ggplot(data) + geom_point(aes(x,y))
