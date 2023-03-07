@@ -123,7 +123,7 @@ find_cached_root <- function() {
   wd <- getwd()
   res <- get0(wd, envir = roots)
   if (is.null(res)) {
-    res <- tryCatch(find_root(is_rstudio_project | is_r_package),
+    res <- tryCatch(find_root(is_rstudio_project),
                     error = function(e) NULL)
     assign(wd, res, envir = roots)
   }

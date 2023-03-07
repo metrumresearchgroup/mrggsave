@@ -10,7 +10,7 @@
 #' @importFrom stats rnorm
 #' @importFrom graphics plot
 #' @importFrom fs path_rel path
-#' @importFrom rprojroot find_root is_rstudio_project is_testthat is_r_package
+#' @importFrom rprojroot find_root is_rstudio_project is_testthat
 NULL
 
 .global <- new.env()
