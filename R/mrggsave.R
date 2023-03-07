@@ -4,51 +4,54 @@
 #' Save plot objects as .pdf file after labeling with Source graphic and
 #' Source code labels.
 #'
-#' @param x an object or list of objects of class `gg`
-#' @param script the name of the script generating the `gg` objects
-#' @param stem to form the name of the output `.pdf` file
+#' @param x an object or list of objects of class `gg`.
+#' @param script the name of the script generating the `gg` objects.
+#' @param stem to form the name of the output `.pdf` file.
 #' @param tag if specified, stem is overwritten by pasting `script`
-#' and `tag` together
-#' @param dir output directory for `.pdf` file
+#' and `tag` together.
+#' @param dir output directory for `.pdf` file.
+#' @param path.type a character string indicating how the path to the image
+#' file should be rendered in the figure annotation; see [format_path()]
+#' for details.
 #' @param prefix gets prepended to the output file path in the Source
-#' graphic, label
-#' @param onefile passed to [pdf()]
-#' @param fontsize for Source graphic and Source code labels
-#' @param textGrob.x passed to [grid::textGrob()] (as `x`)
-#' @param textGrob.y passed to `textGrob` (as `y`)
-#' @param just passed to [grid::textGrob()] (as `just`)
+#' graphic, label.
+#' @param onefile passed to [pdf()].
+#' @param fontsize for Source graphic and Source code labels.
+#' @param textGrob.x passed to [grid::textGrob()] (as `x`).
+#' @param textGrob.y passed to `textGrob` (as `y`).
+#' @param just passed to [grid::textGrob()] (as `just`).
 #' @param ypad integer number of newlines to separate annotation
-#' from x-axis title
+#' from x-axis title.
 #' @param width passed to [pdf()]; should be less than 5 in.
-#' for portrait figure
+#' for portrait figure.
 #' @param height passed to [pdf()]; should be less than 7 in.
-#' for portrait figure
+#' for portrait figure.
 #' @param dev one or more devices to use; can pass a character vector or a
-#' comma-separated string (e.g. `c("pdf", "png")` or `"pdf,png"`)
-#' @param res passed to [png()]
-#' @param units passed to [png()]
+#' comma-separated string (e.g. `c("pdf", "png")` or `"pdf,png"`).
+#' @param res passed to [png()].
+#' @param units passed to [png()].
 #' @param position force the graphic annotation to locate to the left or right
 #' @param labeller a function that creates the plot annotation; the function
 #' should receive a single argument (\code{x}) which is an environment
 #' containing various items that might go into the label; pass `NULL` to
-#' omit the label on the plot
-#' @param .save logical; if `FALSE`, return the labeled objects
+#' omit the label on the plot.
+#' @param .save logical; if `FALSE`, return the labeled objects.
 #' @param arrange logical; if `TRUE`, arrange the ggplot objects on a
-#' single page with [gridExtra::arrangeGrob()]
-#' @param ncol passed to [gridExtra::arrangeGrob()]
+#' single page with [gridExtra::arrangeGrob()].
+#' @param ncol passed to [gridExtra::arrangeGrob()].
 #' @param labsep character separator (or newline) for Source code and
-#' Source graphic labels
+#' Source graphic labels.
 #' @param pre_label text to include before annotation; separate lines prior
-#' to Source code label; see details
+#' to Source code label; see details.
 #' @param post_label text to include after annotation; separate lines after
-#' Source graphic; see details
-#' @param draw if `TRUE`, the plot is drawn using [draw_newpage()]
+#' Source graphic; see details.
+#' @param draw if `TRUE`, the plot is drawn using [draw_newpage()].
 #' @param use_names if `TRUE`, the names from a list of plots will be used
-#' as the stems for output file names
+#' as the stems for output file names.
 #' @param envir environment to be used for string interpolation in
-#' stem and tag
+#' stem and tag.
 #' @param ... other arguments passed to `mrggsave_common` and then
-#' on to [pdf()] and [gridExtra::arrangeGrob()]
+#' on to [pdf()] and [gridExtra::arrangeGrob()].
 #'
 #' @details
 #' Methods are provided for `ggplot` output, `lattice`
@@ -107,7 +110,8 @@
 #' # for project work
 #'
 #' # Changing it here only for the example
-#' options(mrggsave.dir = tempdir())
+#' options(mrggsave.dir = tempdir(),
+#'         mrggsave.path.type = "none")
 #'
 #'
 #' p1 <- ggplot(data=Theoph) +
@@ -333,7 +337,8 @@ mrggsave_common <- function(x,
                             width = 5, height = 5,
                             stem = "Rplot",
                             dir = getOption("mrggsave.dir","../deliv/figure"),
-                            prefix = NULL,#gsub("^\\.\\./","./",dir),
+                            path.type = getOption("mrggsave.path.type", "proj"),
+                            prefix = NULL,
                             onefile = TRUE,
                             arrange = FALSE,
                             draw = FALSE,
@@ -416,7 +421,7 @@ mrggsave_common <- function(x,
       post_label = post_label,
       source_code = script,
       labsep = labsep,
-      source_graphic = file,
+      source_graphic = format_path(file, dir, path.type),
       n = n,
       file = pdffile,
       position = position,

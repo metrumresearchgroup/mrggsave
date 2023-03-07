@@ -10,7 +10,7 @@ p <- ggplot(data = data, aes(x,y)) + geom_point()
 Script <- "test-mrggsave"
 options(mrggsave.dir = tempdir())
 
-test_that("plots are arranged on a single page", {
+test_that("plots are arranged on a single page [MRGS-TEST-029]", {
   x <- list(p,p,p,p)
   y <- mrggpage(x, ncol = 2)
   expect_is(y, "gtable")
@@ -18,7 +18,7 @@ test_that("plots are arranged on a single page", {
 
 })
 
-test_that("plots are arranged on a multiple pages", {
+test_that("plots are arranged on a multiple pages [MRGS-TEST-030]", {
   x <- list(p,p,p,p)
   y <- mrggpage(x, ncol = 2, nrow = 1, multiple = TRUE)
   expect_is(y, "arrangelist")

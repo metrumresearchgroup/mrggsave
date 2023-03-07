@@ -1,3 +1,14 @@
+# mrggsave 0.4.4
+
+- `mrggsave()` gains an argument called `path.type` which controls how the 
+  path to the figure file is rendered in the figure annotation; the default 
+  is `"proj"`, which will render the path relative to an RStudio project 
+  file, if it can be found; alternatives are `"none"` and `"raw"`; `path.type`
+  can be set through the `mrggsave.path.type` option (#38, #39).
+
+- Unit tests were numbered and user stories added to build validation 
+  documents (#35, #37).
+
 # mrggsave 0.4.3
 
 - Refactored how the `glue()` environment was captured so that string 

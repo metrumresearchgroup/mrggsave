@@ -3,7 +3,9 @@ library(mrggsave)
 
 testthat::context("test-ggsurv")
 
-test_that("ggsurvplot", {
+withr::local_options(list(mrggsave.path.type = "none"))
+
+test_that("ggsurvplot [MRGS-TEST-026]", {
   skip_if_not(requireNamespace("survminer",quietly=TRUE))
 
   data(cancer, package = "survival")

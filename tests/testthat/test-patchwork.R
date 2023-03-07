@@ -3,7 +3,9 @@ library(mrggsave)
 
 testthat::context("patchwork objects")
 
-test_that("patchwork issue-26", {
+withr::local_options(list(mrggsave.path.type = "none"))
+
+test_that("patchwork issue-26 [MRGS-TEST-046]", {
   skip_if_not_installed("patchwork")
   pg <- ggplot2::ggplot()
   pat <- pg+pg/(pg+pg)

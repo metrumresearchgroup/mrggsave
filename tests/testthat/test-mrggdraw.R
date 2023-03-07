@@ -11,7 +11,7 @@ options(mrggsave.dir = tempdir())
 
 p <- ggplot(data, aes(x = x, y = y)) + geom_point()
 
-test_that("save a list", {
+test_that("save a list [MRGS-TEST-028]", {
   l <- list(p,p,p)
   x <- mrggdraw(l)
   expect_length(x,3)
