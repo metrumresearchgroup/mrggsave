@@ -3,7 +3,7 @@
 - `mrggsave()` gains an argument called `path.type` that controls how the 
   path to the figure file is rendered in the figure annotation; the default 
   is `"proj"`, which will render the path relative to an RStudio project 
-  file, if it can be found; other options are `"none"` and `"raw"`; `path.type`
+  file, if it can be found; alternatives are `"none"` and `"raw"`; `path.type`
   can also be set through the `mrggsave.path.type` option (#38, #39).
 
 # mrggsave 0.4.3
