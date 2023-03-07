@@ -25,7 +25,7 @@ Format the path to an image file
 }
 \details{
 Note that the default value for \code{path.type} is \code{"proj"}. This requires
-that an Rstudio project file is able to be found using
+that an RStudio project file is able to be found using
 \code{\link[rprojroot:find_root]{rprojroot::find_root()}} with the \link[rprojroot:criteria]{rprojroot::is_rstudio_project} criterion.
 
 Once mrggsave finds a root for a given working directory, it caches the value
