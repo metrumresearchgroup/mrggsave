@@ -5,6 +5,8 @@ library(grid)
 
 testthat::context("test-mrggsave")
 
+withr::local_options(list(mrggsave.path.type = "none"))
+
 set.seed(1100022)
 data <- data.frame(x = rnorm(10), y = rnorm(10))
 Script <- "test-mrggsave"
