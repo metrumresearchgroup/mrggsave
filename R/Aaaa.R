@@ -10,13 +10,11 @@
 #' @importFrom stats rnorm
 #' @importFrom graphics plot
 #' @importFrom fs path_rel path
-#' @importFrom rprojroot find_root is_rstudio_project is_testthat is_r_package
+#' @importFrom rprojroot find_root is_rstudio_project is_testthat
 NULL
 
 .global <- new.env()
 .global$SEP <- "-"
-.global$root <- ""
-.global$has_root <- FALSE
 
 #' Change the output file name separator
 #'
@@ -42,16 +40,3 @@ output_file_sep <- function(sep = c("-", "_", ".")) {
   return(invisible(NULL))
 }
 .sep <- function() .global$SEP
-
-.onLoad <- function(libname, pkgname) {
-  root <- try(
-    find_root(is_rstudio_project | is_r_package),
-    silent = TRUE
-  )
-  if(inherits(root, "try-error")) {
-    return(NULL)
-  }
-  .global$root <- root
-  .global$has_root <- TRUE
-  return(NULL)
-}
