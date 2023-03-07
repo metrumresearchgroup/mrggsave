@@ -13,7 +13,7 @@ format_path(file, dir, path.type = c("proj", "none", "raw"))
 
 \item{path.type}{a character string indicating how the path to the image
 file should be formatted; use \code{"proj"} to have the path expressed relative
-to the Rstudio project file; use \code{"none"} to format without any directory
+to the RStudio project file; use \code{"none"} to format without any directory
 information (just the image file name); use \code{"raw"} to print the complete
 path to the file using \code{dir} as-is.}
 }
@@ -30,7 +30,7 @@ that an Rstudio project file is able to be found using
 
 Once mrggsave finds a root for a given working directory, it caches the value
 for the remainder of the R session. An error will be generated if an image is
-attempted to be saved using \code{path.type="proj"} but an Rstudio project file
+attempted to be saved using \code{path.type="proj"} but an RStudio project file
 was not able to be located.
 }
 \examples{

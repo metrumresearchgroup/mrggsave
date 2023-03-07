@@ -62,7 +62,7 @@ sanitize_filename <- function(x) {
 #' @param dir the directory where the image file is stored.
 #' @param path.type a character string indicating how the path to the image
 #' file should be formatted; use `"proj"` to have the path expressed relative
-#' to the Rstudio project file; use `"none"` to format without any directory
+#' to the RStudio project file; use `"none"` to format without any directory
 #' information (just the image file name); use `"raw"` to print the complete
 #' path to the file using `dir` as-is.
 #'
@@ -73,7 +73,7 @@ sanitize_filename <- function(x) {
 #'
 #' Once mrggsave finds a root for a given working directory, it caches the value
 #' for the remainder of the R session. An error will be generated if an image is
-#' attempted to be saved using `path.type="proj"` but an Rstudio project file
+#' attempted to be saved using `path.type="proj"` but an RStudio project file
 #' was not able to be located.
 #'
 #' @return
