@@ -1,5 +1,8 @@
 # mrggsave (development version)
 
+- New option `mrggsave.res` to set default resolution for devices 
+  like `png()` and `jpeg()` (#42).
+
 # mrggsave 0.4.4
 
 - `mrggsave()` gains an argument called `path.type` which controls how the 
