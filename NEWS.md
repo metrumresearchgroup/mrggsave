@@ -1,3 +1,5 @@
+# mrggsave (development version)
+
 # mrggsave 0.4.5
 
 - New option `mrggsave.res` to set default resolution for devices 
