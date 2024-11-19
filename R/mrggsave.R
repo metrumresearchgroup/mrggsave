@@ -393,7 +393,9 @@ mrggsave_common <- function(x,
     stem <- paste0(stem, collapse = .sep())
   }
 
-  stem <- glue(stem, .envir = envir)
+  # Note: Use glue_data and pass envir as .x rather than .envir to retain glue
+  # <1.8.0 behavior of allowing a list for .envir.
+  stem <- glue::glue_data(envir, stem, .envir = emptyenv())
 
   if(isTRUE(getOption("mrggsave.file.tolower", FALSE))) {
     stem <- tolower(stem)
