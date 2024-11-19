@@ -12,7 +12,6 @@ Makefile
 test.R
 ^.*\.Rproj$
 ^\.Rproj\.user$
-\.drone\.jsonnet
 WORDLIST
-\.drone\.yml
+^\.github$
 temp
