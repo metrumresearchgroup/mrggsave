@@ -29,9 +29,14 @@ test_that("variable gets glued into tag [MRGS-TEST-013]", {
 })
 
 test_that("an environment gets passed to glue [MRGS-TEST-014]", {
-  env <- list(runn=4321)
-  ans <- mrggsave(p, script = "file.R", tag = "save_{runn}", envir = env)
+  lst <- list(runn = 4321)
+  ans <- mrggsave(p, script = "file.R", tag = "save_{runn}", envir = lst)
   expect_equal(basename(ans), "file-save_4321.pdf")
+  # mrggsave accepts either a list or environment for envir.
+  expect_identical(
+    ans,
+    mrggsave(p, script = "file.R", tag = "save_{runn}", envir = list2env(lst))
+  )
 })
 
 test_that("vector stem gets collapsed [MRGS-TEST-015]", {
