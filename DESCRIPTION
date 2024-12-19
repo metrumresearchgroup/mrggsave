@@ -12,6 +12,8 @@ Description: Plots are annotated with the name of the generating
 License: GPL (>=2)
 Language: en-US
 Encoding: UTF-8
+URL: https://metrumresearchgroup.github.io/mrggsave, https://github.com/metrumresearchgroup/mrggsave
+BugReports: https://github.com/metrumresearchgroup/mrggsave/issues
 Imports: 
   ggplot2 (>= 2.2.1), 
   grid, 
