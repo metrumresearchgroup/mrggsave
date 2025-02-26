@@ -5,6 +5,8 @@
 - Fixed a bug where an error was encountered when trying to save a list 
   of plots with no annotation (`labeller = NULL`) (#49).
 
+- Updates for compatibility with glue 1.8.0 (#44).
+
 # mrggsave 0.4.5
 
 - New option `mrggsave.res` to set default resolution for devices 
