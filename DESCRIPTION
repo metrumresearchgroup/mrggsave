@@ -27,4 +27,4 @@ Imports:
   rprojroot,
   withr
 Suggests: GGally, gtable, testthat, lattice, survminer, patchwork, survival
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
