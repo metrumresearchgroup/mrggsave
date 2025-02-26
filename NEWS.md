@@ -1,4 +1,9 @@
-# mrggsave (development version)
+# mrggsave 0.4.6
+
+## Bugs Fixed
+
+- Fixed a bug where an error was encountered when trying to save a list 
+  of plots with no annotation (`labeller = NULL`) (#49).
 
 # mrggsave 0.4.5
 
