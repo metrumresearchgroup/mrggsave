@@ -435,13 +435,6 @@ mrggsave_common <- function(x,
     parent = .GlobalEnv
   )
 
-  label <- labeller(d)
-
-  if(length(label) != n) {
-    nn <- length(label)
-    stop("'label' must be length ",n ," (not ",nn,")", call.=FALSE)
-  }
-
   position <- match.arg(d$position, c("default", "left", "right"))
   if(position != "default") {
     if(position=="left") {

@@ -18,3 +18,33 @@ test_that("save a list [MRGS-TEST-028]", {
   expect_identical(basename(x),"testlist.pdf")
 })
 
+test_that("save a list of plots with no labels gh-48", {
+
+  out <- mrggsave(
+    list(p,p),
+    script = Script,
+    stem = "testlist-nolabel",
+    onefile = FALSE,
+    labeller = NULL
+  )
+  out <- basename(out)
+  expect_length(out,2)
+  expect_equal(out[[1]], "testlist-nolabel001.pdf")
+  expect_equal(out[[2]], "testlist-nolabel002.pdf")
+})
+
+test_that("error for improper label function return", {
+
+  f <- function(d) return("a")
+
+  expect_error(
+    mrggsave(
+      list(p,p,p),
+      script = Script,
+      stem = "testlist-badlabel",
+      onefile = FALSE,
+      labeller = f
+    ),
+    "`label` must be length 3"
+  )
+})
