@@ -24,8 +24,7 @@ Imports:
   rlang (>= 0.3.4), 
   glue, 
   fs, 
-  rprojroot,
-  withr
+  rprojroot
 Suggests:
   GGally,
   gtable,
@@ -33,5 +32,6 @@ Suggests:
   patchwork,
   survival,
   survminer,
-  testthat
+  testthat,
+  withr
 RoxygenNote: 7.3.2
