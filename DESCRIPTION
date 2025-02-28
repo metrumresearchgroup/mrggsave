@@ -24,7 +24,14 @@ Imports:
   rlang (>= 0.3.4), 
   glue, 
   fs, 
-  rprojroot,
+  rprojroot
+Suggests:
+  GGally,
+  gtable,
+  lattice,
+  patchwork,
+  survival,
+  survminer,
+  testthat,
   withr
-Suggests: GGally, gtable, testthat, lattice, survminer, patchwork, survival
 RoxygenNote: 7.3.2
