@@ -26,5 +26,12 @@ Imports:
   fs, 
   rprojroot,
   withr
-Suggests: GGally, gtable, testthat, lattice, survminer, patchwork, survival
+Suggests:
+  GGally,
+  gtable,
+  lattice,
+  patchwork,
+  survival,
+  survminer,
+  testthat
 RoxygenNote: 7.3.2
