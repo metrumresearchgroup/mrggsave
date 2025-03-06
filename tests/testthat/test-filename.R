@@ -49,6 +49,15 @@ test_that("vector tag gets collapsed [MRGS-TEST-016]", {
   expect_equal(basename(ans), "test-filename-a-101-b.pdf")
 })
 
+test_that("use tag with full script path", {
+  ans <- mrggsave(
+    p,
+    script = "foo/bar/test-filename.R",
+    tag = "use-tag-full-path"
+  )
+  expect_equal(basename(ans), "test-filename-use-tag-full-path.pdf")
+})
+
 test_that("plots get named by object [MRGS-TEST-017]", {
   p1 <- p2 <- p3 <- p
   l <- named_plots(p1,p2,p3, tag = "bbb")
