@@ -387,7 +387,7 @@ mrggsave_common <- function(x,
   }
 
   if(!is.null(tag)) {
-    context <- getOption("mrggsave.use.context", script)
+    context <- getOption("mrggsave.use.context", basename(script))
     stem <- make_stem(context, tag)
   } else {
     stem <- paste0(stem, collapse = .sep())
