@@ -1,3 +1,10 @@
+# mrggsave 0.4.7
+
+## Bugs Fixed
+
+- Fixed bug when using a `tag` to name plots when a full path to `script` was
+  provided (#53).
+
 # mrggsave 0.4.6
 
 ## Bugs Fixed
