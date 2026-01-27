@@ -482,7 +482,7 @@ mrggsave_common <- function(x,
 
   do.call(dev, args)
   for(i in seq_along(x)) {
-    grid.arrange(x[[i]])
+    grid.draw(x[[i]])
   }
   grDevices::dev.off()
 
