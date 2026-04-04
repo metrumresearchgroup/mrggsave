@@ -70,3 +70,6 @@ tag-version:
 	git tag $(VERSION)
 	git push origin $(VERSION)
 
+report:
+	cd inst/report && pdflatex report
+

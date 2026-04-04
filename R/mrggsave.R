@@ -357,6 +357,7 @@ mrggsave_common <- function(x,
                             position = getOption("mrggsave.position", "default"),
                             labeller = getOption("mrggsave.label.fun", label.fun),
                             envir = parent.frame(sys.nframe()),
+                            details = list(),
                             ...) {
 
   stopifnot(is.character(dev))
@@ -495,8 +496,12 @@ mrggsave_common <- function(x,
     }
   }
 
+  message("saving packet")
+  tex_save(d, details = details, envir = envir)
+
   if(getOption("mrggsave.return.more", FALSE)) {
     x <- list(
+      file = file,
       outfile = outfile,
       label = d$label,
       source_graphic = d$source_graphic,
@@ -504,6 +509,7 @@ mrggsave_common <- function(x,
     )
     return(invisible(x))
   }
+
   return(invisible(outfile))
 }
 
