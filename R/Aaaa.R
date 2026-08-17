@@ -1,5 +1,5 @@
 #' @importFrom grDevices pdf dev.off graphics.off postscript
-#' @importFrom ggplot2 theme margin ggplotGrob last_plot
+#' @importFrom ggplot2 theme margin ggplotGrob last_plot ggplot_add
 #' @importFrom gridExtra grid.arrange arrangeGrob marrangeGrob
 #' @importFrom grid grid.draw gpar grid.newpage
 #' @importFrom grid textGrob gList unit grid.grab
