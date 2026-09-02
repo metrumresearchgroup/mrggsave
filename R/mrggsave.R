@@ -50,6 +50,8 @@
 #' as the stems for output file names.
 #' @param envir environment to be used for string interpolation in
 #' stem and tag.
+#' @param timestamp passed to [pdf()].
+#' @param producer passed to [pdf()].
 #' @param ... other arguments passed to `mrggsave_common` and then
 #' on to [pdf()] and [gridExtra::arrangeGrob()].
 #'
@@ -357,6 +359,8 @@ mrggsave_common <- function(x,
                             position = getOption("mrggsave.position", "default"),
                             labeller = getOption("mrggsave.label.fun", label.fun),
                             envir = parent.frame(sys.nframe()),
+                            timestamp = getOption("mrggsave.timestamp", FALSE),
+                            producer = getOption("mrggsave.producer", FALSE),
                             ...) {
 
   stopifnot(is.character(dev))
@@ -463,7 +467,8 @@ mrggsave_common <- function(x,
 
   args <- list(
     onefile = onefile, width = width, height = height, res = res,
-    units = units, file = pdffile, filename = pdffile
+    units = units, file = pdffile, filename = pdffile,
+    producer = producer, timestamp = timestamp
   )
 
   if(dev=="eps") {
