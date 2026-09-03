@@ -485,7 +485,16 @@ mrggsave_common <- function(x,
   args <- c(args, list(...))
   args <- args[names(args) %in% names(formals(dev))]
 
+  # Temporarily set device to pdf   # ---------------
+  olddev <- getOption("device", NULL)
+  if(!is.null(olddev)) {
+    on.exit(options(device = olddev), add = TRUE)
+  }
+  options(device = pdf)
+  # ------------------------------------------------
+
   do.call(dev, args)
+
   for(i in seq_along(x)) {
     grid.arrange(x[[i]])
   }
