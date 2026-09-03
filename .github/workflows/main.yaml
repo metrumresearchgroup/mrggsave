@@ -27,12 +27,14 @@ jobs:
             # The latest versions of several dependencies require
             # newer R versions.
             rspm: 'https://packagemanager.posit.co/cran/__linux__/jammy/2024-07-22'
+            pinned: true
           - os: ubuntu-22.04
-            r: 4.2.3
-            matrix_pkg: 'url::https://mpn.metworx.com/snapshots/stable/2024-09-23/src/contrib/Matrix_1.6-5.tar.gz'
+            r: 4.4.2
+            # Later Deriv versions require R 4.5.
+            deriv_pkg: 'url::https://mpn.metworx.com/snapshots/stable/2026-08-24/src/contrib/Deriv_4.2.0.tar.gz'
+            pinned: true
           - os: ubuntu-22.04
-            r: 4.3.1
-            matrix_pkg: 'url::https://mpn.metworx.com/snapshots/stable/2024-09-23/src/contrib/Matrix_1.6-5.tar.gz'
+            r: 4.5.1
           - os: ubuntu-latest
             r: release
     env:
@@ -52,7 +54,8 @@ jobs:
             any::rcmdcheck
             ${{ matrix.config.pbkrtest_pkg }}
             ${{ matrix.config.matrix_pkg }}
-          upgrade: ${{ matrix.config.r == 'release' && 'TRUE' || 'FALSE' }}
+            ${{ matrix.config.deriv_pkg }}
+          upgrade: ${{ matrix.config.r == 'pinned' && 'TRUE' || 'FALSE' }}
       - uses: r-lib/actions/check-r-package@v2
       - name: Check pkgdown
         shell: Rscript {0}
