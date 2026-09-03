@@ -24,7 +24,7 @@ mrggsave_list <- function(x, flatten = TRUE, ...) {
     x <- flatten_plots(x)
   }
 
-  x <- lapply(x,mrggsave_prep_object)
+  x <- with_plot_metrics(lapply(x,mrggsave_prep_object))
 
   mrggsave_common(x,...)
 }
