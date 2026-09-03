@@ -16,17 +16,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Reason for source compatibility kludges:
-        #  * pbkrtest 0.5.2 requires R 4.1.
-        #  * Matrix v1.7-0 requires R 4.4.
         config:
           - os: ubuntu-22.04
             r: 4.1.3
-            pbkrtest_pkg: 'url::https://mpn.metworx.com/snapshots/stable/2023-12-05/src/contrib/pbkrtest_0.5.1.tar.gz'
-            matrix_pkg: 'url::https://mpn.metworx.com/snapshots/stable/2024-09-23/src/contrib/Matrix_1.6-5.tar.gz'
-            # The latest versions of several dependencies require
-            # newer R versions.
-            rspm: 'https://packagemanager.posit.co/cran/__linux__/jammy/2024-07-22'
+            cran_override: 'https://mpn.metworx.com/snapshots/stable/2023-12-05'
+            rspm: 'https://packagemanager.posit.co/cran/__linux__/jammy/2023-12-04'
             pinned: true
           - os: ubuntu-22.04
             r: 4.4.2
@@ -47,13 +41,12 @@ jobs:
           use-public-rspm: true
         env:
           RSPM: ${{ matrix.config.rspm }}
+          CRAN: ${{ matrix.config.cran_override }}
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
             any::pkgdown
             any::rcmdcheck
-            ${{ matrix.config.pbkrtest_pkg }}
-            ${{ matrix.config.matrix_pkg }}
             ${{ matrix.config.deriv_pkg }}
           upgrade: ${{ matrix.config.r == 'pinned' && 'TRUE' || 'FALSE' }}
       - uses: r-lib/actions/check-r-package@v2
