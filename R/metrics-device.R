@@ -1,18 +1,17 @@
-## Converting a plot to a grob (e.g. with ggplot2::ggplotGrob()) resolves text
-## sizes against whatever graphics device happens to be open at the time and
-## bakes the answer into the layout as absolute units.  That makes the saved
-## file depend on the session: RStudioGD in the IDE versus the device opened by
-## getOption("device") under Rscript.  Building grobs with a null pdf() device
-## current makes the layout - and so the bytes written to the file - the same
-## either way.
-##
-## The device that was current on entry is recorded in `dev_state` so that
-## draw_newpage() can still draw to it; the metrics device is invisible and
-## drawing to it would just discard the plot.  Only the outermost call records
-## the device, so nested calls can't overwrite it.
+# Converting a plot to a grob (e.g. with ggplot2::ggplotGrob()) resolves text
+# sizes against whatever graphics device happens to be open at the time and
+# bakes the answer into the layout as absolute units.  That makes the saved
+# file depend on the session: RStudioGD in the IDE versus the device opened by
+# getOption("device") under Rscript.  Building grobs with a null pdf() device
+# current makes the layout - and so the bytes written to the file - the same
+# either way.
+#
+# The device that was current on entry is recorded in `dev_state` so that
+# draw_newpage() can still draw to it; the metrics device is invisible and
+# drawing to it would just discard the plot.  Only the outermost call records
+# the device, so nested calls can't overwrite it.
 
-dev_state <- new.env(parent = emptyenv())
-dev_state$usr <- NULL
+# dev_state environment is initialized in Aaaa.R
 
 #' Open a device for measuring text
 #'

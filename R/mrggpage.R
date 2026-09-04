@@ -22,6 +22,8 @@ mrggpage <- function(x, ..., ncol = 2, nrow = NULL, multiple = FALSE,
   }
   x <- c(x,list(...))
   x <- flatten_plots(x)
+  # See metrics-device.R; we must wrap in with_plot_metrics() because
+  # we are bypassing the mrggsave() generic.
   x <- with_plot_metrics(lapply(x, mrggsave_prep_object))
   if(multiple) {
     if(is.null(nrow)) nrow <- 2
