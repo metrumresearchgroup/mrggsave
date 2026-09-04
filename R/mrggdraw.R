@@ -18,7 +18,7 @@ mrggdraw <- function(x,  ncol = 1, arrange = FALSE, ...) {
   } else {
     x <- flatten_if(x, function(.x) inherits(.x, "list"))
   }
-  x <- lapply(x,mrggsave_prep_object)
+  x <- with_plot_metrics(lapply(x,mrggsave_prep_object))
   if(ncol > 1 | (arrange)) {
     x <- arrangeGrob(grobs = x, ncol = ncol, ...)
     x <- gList(x)

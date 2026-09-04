@@ -50,6 +50,8 @@
 #' as the stems for output file names.
 #' @param envir environment to be used for string interpolation in
 #' stem and tag.
+#' @param timestamp passed to [pdf()].
+#' @param producer passed to [pdf()].
 #' @param ... other arguments passed to `mrggsave_common` and then
 #' on to [pdf()] and [gridExtra::arrangeGrob()].
 #'
@@ -166,7 +168,7 @@ mrggsave.ggplot <- function(x, ..., ypad = 2,
 
   if(arrange) {
     onefile <- TRUE
-    x <- gList(arrangeGrob(grobs=x, ncol = ncol, ...))
+    x <- with_plot_metrics(gList(arrangeGrob(grobs=x, ncol = ncol, ...)))
   }
 
   mrggsave_common(
@@ -184,11 +186,11 @@ mrggsave.ggmatrix <- function(x, ..., ypad = 4, arrange = FALSE,
     x <- list(x)
   }
 
-  x <- lapply(x, mrggsave_prep_object.ggmatrix)
+  x <- with_plot_metrics(lapply(x, mrggsave_prep_object.ggmatrix))
 
   if(arrange) {
     onefile <- TRUE
-    x <- gList(arrangeGrob(grobs=x,...))
+    x <- with_plot_metrics(gList(arrangeGrob(grobs=x,...)))
   }
 
   mrggsave_common(
@@ -221,8 +223,10 @@ mrggsave.trellis <- function(x, ..., ypad = 3, arrange = FALSE, ncol = 1,
 
   if(arrange) {
     onefile <- TRUE
-    x <- lapply(x, arrangeGrob)
-    x <- gList(arrangeGrob(grobs = x, ncol = ncol, ...))
+    x <- with_plot_metrics({
+      x <- lapply(x, arrangeGrob)
+      gList(arrangeGrob(grobs = x, ncol = ncol, ...))
+    })
   }
 
   mrggsave_common(
@@ -240,7 +244,7 @@ mrggsave.patchwork <- function(x,  ..., envir = parent.frame()) {
 
 #' @export
 mrggsave.ggsurvplot <- function(x, ..., envir = parent.frame()) {
-  mrggsave_common(mrggsave_prep_object(x), ..., envir = envir)
+  mrggsave_common(with_plot_metrics(mrggsave_prep_object(x)), ..., envir = envir)
 }
 
 #' @rdname mrggsave
@@ -302,7 +306,7 @@ mrggsave.list <- function(x, ..., arrange = FALSE,
     return(mrggsave.ggmatrix(x, arrange = arrange, ..., envir = envir))
   }
 
-  x <- lapply(x, mrggsave_prep_object)
+  x <- with_plot_metrics(lapply(x, mrggsave_prep_object))
 
   mrggsave.ggplot(x, arrange = arrange, ..., envir = envir)
 }
@@ -316,7 +320,7 @@ mrggsave.gg <- function(x, ...) {
 #' @rdname mrggsave
 #' @export
 mrggsave.gTree <- function(x, ..., envir = parent.frame()) {
-  mrggsave_common(mrggsave_prep_object(x), ..., envir = envir)
+  mrggsave_common(with_plot_metrics(mrggsave_prep_object(x)), ..., envir = envir)
 }
 
 #' @export
@@ -357,6 +361,8 @@ mrggsave_common <- function(x,
                             position = getOption("mrggsave.position", "default"),
                             labeller = getOption("mrggsave.label.fun", label.fun),
                             envir = parent.frame(sys.nframe()),
+                            timestamp = getOption("mrggsave.timestamp", FALSE),
+                            producer = getOption("mrggsave.producer", FALSE),
                             ...) {
 
   stopifnot(is.character(dev))
@@ -447,7 +453,7 @@ mrggsave_common <- function(x,
     }
   }
 
-  x <- annotate_graphic(x, d, labeller)
+  x <- with_plot_metrics(annotate_graphic(x, d, labeller))
 
   if(draw) {
     if(is_glist(x)) {
@@ -463,7 +469,8 @@ mrggsave_common <- function(x,
 
   args <- list(
     onefile = onefile, width = width, height = height, res = res,
-    units = units, file = pdffile, filename = pdffile
+    units = units, file = pdffile, filename = pdffile,
+    producer = producer, timestamp = timestamp
   )
 
   if(dev=="eps") {
@@ -481,6 +488,7 @@ mrggsave_common <- function(x,
   args <- args[names(args) %in% names(formals(dev))]
 
   do.call(dev, args)
+
   for(i in seq_along(x)) {
     grid.arrange(x[[i]])
   }
