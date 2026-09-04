@@ -95,11 +95,13 @@
 #' supplied by the user, allowing multiple lines to be added before or
 #' after the standard annotation.
 #'
-#' Starting with mrggsave version 1.0.0, default `producer`, `timestamp`,
-#' and  `author` arguments to [pdf()] are provided by `mrggsave_common()`
-#' and passed through to the device. Defaults are chosen to chosen with the
-#' goal enhancing output file reproducibility when the code is run at different
-#' times or by different users. Because these are formal arguments provided by
+#' R 4.5.0 introduced the following arguments to [pdf()]: `producer`,
+#' `timestamp` and `author` to give callers control over how this information
+#' is included in pdf output files.  Starting with mrggsave version 1.0.0,
+#' defaults for these arguments are provided by `mrggsave_common()`
+#' and passed through to [pdf()]. Defaults are chosen with the goal of enhancing
+#' output file reproducibility when the code is run at different times or by
+#' different users. Because these are formal arguments provided by
 #' mrggsave, controlling them via [pdf.options()] will no longer work.
 #' Rather, users should use the global options `mrggsave.producer`,
 #' `mrggsave.timestamp`, or `mrggsave.author`. Alternatively, the arguments can

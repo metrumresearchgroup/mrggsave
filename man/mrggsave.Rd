@@ -222,11 +222,13 @@ returns the annotated plots as table grob.
 supplied by the user, allowing multiple lines to be added before or
 after the standard annotation.
 
-Starting with mrggsave version 1.0.0, default \code{producer}, \code{timestamp},
-and  \code{author} arguments to \code{\link[=pdf]{pdf()}} are provided by \code{mrggsave_common()}
-and passed through to the device. Defaults are chosen to chosen with the
-goal enhancing output file reproducibility when the code is run at different
-times or by different users. Because these are formal arguments provided by
+R 4.5.0 introduced the following arguments to \code{\link[=pdf]{pdf()}}: \code{producer},
+\code{timestamp} and \code{author} to give callers control over how this information
+is included in pdf output files.  Starting with mrggsave version 1.0.0,
+defaults for these arguments are provided by \code{mrggsave_common()}
+and passed through to \code{\link[=pdf]{pdf()}}. Defaults are chosen with the goal of enhancing
+output file reproducibility when the code is run at different times or by
+different users. Because these are formal arguments provided by
 mrggsave, controlling them via \code{\link[=pdf.options]{pdf.options()}} will no longer work.
 Rather, users should use the global options \code{mrggsave.producer},
 \code{mrggsave.timestamp}, or \code{mrggsave.author}. Alternatively, the arguments can
