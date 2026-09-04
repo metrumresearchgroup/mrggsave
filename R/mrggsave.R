@@ -148,6 +148,12 @@
 #' }
 #' @export
 mrggsave <- function(x, ...) {
+  # Build grobs against pdf() metrics so that output doesn't depend on which
+  # device the session happens to have open; see R/metrics-device.R.  The
+  # device is opened here rather than in the methods so that it is current for
+  # every path through dispatch.
+  .metrics_dev <- open_metrics_device()
+  on.exit(close_metrics_device(.metrics_dev), add = TRUE)
   UseMethod("mrggsave")
 }
 
@@ -451,7 +457,9 @@ mrggsave_common <- function(x,
     }
   }
 
-  x <- annotate_graphic(x, d, labeller)
+  # covers direct mrggsave_common() calls, where arrangeGrob() converts any
+  # ggplot objects that have not been through mrggsave_prep_object()
+  x <- with_plot_metrics(annotate_graphic(x, d, labeller))
 
   if(draw) {
     if(is_glist(x)) {

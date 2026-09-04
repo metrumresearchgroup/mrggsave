@@ -39,6 +39,8 @@ mrggdraw <- function(x,  ncol = 1, arrange = FALSE, ...) {
 ##'
 ##' @export
 draw_newpage <- function(x) {
-  grid.newpage()
-  grid.draw(x)
+  on_user_device({
+    grid.newpage()
+    grid.draw(x)
+  })
 }
