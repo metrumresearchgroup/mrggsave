@@ -52,6 +52,7 @@
 #' stem and tag.
 #' @param timestamp passed to [pdf()].
 #' @param producer passed to [pdf()].
+#' @param author passed to [pdf()].
 #' @param ... other arguments passed to `mrggsave_common` and then
 #' on to [pdf()] and [gridExtra::arrangeGrob()].
 #'
@@ -367,6 +368,7 @@ mrggsave_common <- function(x,
                             envir = parent.frame(sys.nframe()),
                             timestamp = getOption("mrggsave.timestamp", FALSE),
                             producer = getOption("mrggsave.producer", FALSE),
+                            author = getOption("mrggsave.author", "mrggsave"),
                             ...) {
 
   stopifnot(is.character(dev))
@@ -476,7 +478,7 @@ mrggsave_common <- function(x,
   args <- list(
     onefile = onefile, width = width, height = height, res = res,
     units = units, file = pdffile, filename = pdffile,
-    producer = producer, timestamp = timestamp
+    producer = producer, timestamp = timestamp, author = author
   )
 
   if(dev=="eps") {

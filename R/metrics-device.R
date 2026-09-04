@@ -16,7 +16,7 @@
 #' Open a device for measuring text
 #'
 #' @return a list describing the devices to be passed to
-#' [close_metrics_device()].
+#' `close_metrics_device()`.
 #'
 #' @md
 #' @noRd
@@ -30,7 +30,7 @@ open_metrics_device <- function() {
 
 #' Close a measuring device and restore the one that was in use
 #'
-#' @param state the value returned by [open_metrics_device()].
+#' @param state the value returned by `open_metrics_device()`.
 #'
 #' @md
 #' @noRd

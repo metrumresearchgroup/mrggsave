@@ -90,6 +90,7 @@ mrggsave_common(
   envir = parent.frame(sys.nframe()),
   timestamp = getOption("mrggsave.timestamp", FALSE),
   producer = getOption("mrggsave.producer", FALSE),
+  author = getOption("mrggsave.author", "mrggsave"),
   ...
 )
 }
@@ -175,6 +176,8 @@ omit the label on the plot.}
 \item{timestamp}{passed to \code{\link[=pdf]{pdf()}}.}
 
 \item{producer}{passed to \code{\link[=pdf]{pdf()}}.}
+
+\item{author}{passed to \code{\link[=pdf]{pdf()}}.}
 }
 \description{
 Save plot objects as .pdf file after labeling with Source graphic and
