@@ -24,7 +24,9 @@ mrggsave_list <- function(x, flatten = TRUE, ...) {
     x <- flatten_plots(x)
   }
 
-  x <- lapply(x,mrggsave_prep_object)
+  # See metrics-device.R; must wrap in with_plot_metrics() because 
+  # we are bypassing the mrggsave() generic.
+  x <- with_plot_metrics(lapply(x,mrggsave_prep_object))
 
   mrggsave_common(x,...)
 }

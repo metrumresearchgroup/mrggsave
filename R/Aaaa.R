@@ -16,6 +16,10 @@ NULL
 .global <- new.env()
 .global$SEP <- "-"
 
+# See metrics-device.R
+dev_state <- new.env(parent = emptyenv())
+dev_state$usr <- NULL
+
 #' Change the output file name separator
 #'
 #' @param sep a file separator character; this is limited to hyphen

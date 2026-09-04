@@ -39,6 +39,10 @@ mrggdraw <- function(x,  ncol = 1, arrange = FALSE, ...) {
 ##'
 ##' @export
 draw_newpage <- function(x) {
-  grid.newpage()
-  grid.draw(x)
+  # Temporarily restore the users device if appropriate
+  # See metrics-device.R
+  on_user_device({
+    grid.newpage()
+    grid.draw(x)
+  })
 }

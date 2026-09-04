@@ -88,6 +88,9 @@ mrggsave_common(
   position = getOption("mrggsave.position", "default"),
   labeller = getOption("mrggsave.label.fun", label.fun),
   envir = parent.frame(sys.nframe()),
+  timestamp = getOption("mrggsave.timestamp", FALSE),
+  producer = getOption("mrggsave.producer", FALSE),
+  author = getOption("mrggsave.author", "mrggsave"),
   ...
 )
 }
@@ -169,6 +172,12 @@ comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"}).}
 should receive a single argument (\code{x}) which is an environment
 containing various items that might go into the label; pass \code{NULL} to
 omit the label on the plot.}
+
+\item{timestamp}{passed to \code{\link[=pdf]{pdf()}}.}
+
+\item{producer}{passed to \code{\link[=pdf]{pdf()}}.}
+
+\item{author}{passed to \code{\link[=pdf]{pdf()}}.}
 }
 \description{
 Save plot objects as .pdf file after labeling with Source graphic and
@@ -212,6 +221,18 @@ returns the annotated plots as table grob.
 \code{pre_label} and \code{post_label} are collapsed with newline if
 supplied by the user, allowing multiple lines to be added before or
 after the standard annotation.
+
+R 4.5.0 introduced arguments \code{producer}, \code{timestamp}, and \code{author} to \code{\link[=pdf]{pdf()}}
+to give callers control over how this information is included in pdf output
+files.  Starting with mrggsave version 1.0.0, defaults for these arguments
+are provided by \code{mrggsave_common()} and passed through to \code{\link[=pdf]{pdf()}}. Defaults
+are chosen with the goal of enhancing output file reproducibility when the
+code is run at different times or by different users. Because these are
+formal arguments provided by mrggsave, controlling them via \code{\link[=pdf.options]{pdf.options()}}
+will no longer work. Rather, users should use the global options
+\code{mrggsave.producer}, \code{mrggsave.timestamp}, or \code{mrggsave.author}.
+Alternatively, the arguments can be included directly in calls to
+\code{mrggsave()}.
 }
 \examples{
 data(Theoph)
