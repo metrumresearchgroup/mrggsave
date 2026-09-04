@@ -14,6 +14,8 @@ Language: en-US
 Encoding: UTF-8
 URL: https://metrumresearchgroup.github.io/mrggsave, https://github.com/metrumresearchgroup/mrggsave
 BugReports: https://github.com/metrumresearchgroup/mrggsave/issues
+Depends:
+  R (>= 4.1.0)
 Imports: 
   ggplot2 (>= 2.2.1), 
   grid, 
