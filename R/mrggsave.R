@@ -95,7 +95,7 @@
 #' supplied by the user, allowing multiple lines to be added before or
 #' after the standard annotation.
 #' 
-#' Starting with mrggsave version 1.0, default `producer`, `timestamp`, 
+#' Starting with mrggsave version 1.0.0, default `producer`, `timestamp`, 
 #' and  `author` arguments to `pdf()` are provided by `mrggsave_common()` 
 #' and passed through to the device. Defaults are chosen to ensure 
 #' output files are reproducible when run at different times or by 

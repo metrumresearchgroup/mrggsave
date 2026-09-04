@@ -222,7 +222,7 @@ returns the annotated plots as table grob.
 supplied by the user, allowing multiple lines to be added before or
 after the standard annotation.
 
-Starting with mrggsave version 1.0, default \code{producer}, \code{timestamp},
+Starting with mrggsave version 1.0.0, default \code{producer}, \code{timestamp},
 and  \code{author} arguments to \code{pdf()} are provided by \code{mrggsave_common()}
 and passed through to the device. Defaults are chosen to ensure
 output files are reproducible when run at different times or by
