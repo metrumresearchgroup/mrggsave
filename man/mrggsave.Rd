@@ -221,6 +221,16 @@ returns the annotated plots as table grob.
 \code{pre_label} and \code{post_label} are collapsed with newline if
 supplied by the user, allowing multiple lines to be added before or
 after the standard annotation.
+
+Starting with mrggsave version 1.0, default \code{producer}, \code{timestamp},
+and  \code{author} arguments to \code{pdf()} are provided by \code{mrggsave_common()}
+and passed through to the device. Defaults are chosen to ensure
+output files are reproducible when run at different times or by
+different users. Because these are formal arguments provided by
+mrggsave, controlling them via \code{\link[=pdf.options]{pdf.options()}} will no longer work.
+Rather, users should use the global options \code{mrggsave.producer},
+\code{mrggsave.timestamp}, and \code{mrggsave.author} or include those arguments
+in calls to \code{mrggsave()}.
 }
 \examples{
 data(Theoph)

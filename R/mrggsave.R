@@ -94,6 +94,16 @@
 #' `pre_label` and `post_label` are collapsed with newline if
 #' supplied by the user, allowing multiple lines to be added before or
 #' after the standard annotation.
+#' 
+#' Starting with mrggsave version 1.0, default `producer`, `timestamp`, 
+#' and  `author` arguments to `pdf()` are provided by `mrggsave_common()` 
+#' and passed through to the device. Defaults are chosen to ensure 
+#' output files are reproducible when run at different times or by 
+#' different users. Because these are formal arguments provided by 
+#' mrggsave, controlling them via [pdf.options()] will no longer work. 
+#' Rather, users should use the global options `mrggsave.producer`, 
+#' `mrggsave.timestamp`, and `mrggsave.author` or include those arguments
+#' in calls to `mrggsave()`.
 #'
 #' @seealso [mrggdraw()], [mrggsave_list()]
 #'
