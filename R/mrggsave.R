@@ -509,7 +509,10 @@ mrggsave_common <- function(x,
   args <- c(args, list(...))
   args <- args[names(args) %in% names(formals(dev))]
 
+  # This has to happen after we retain formals for the device
+  # CairoPDF() has a bunch of "backend" arguments
   if(dev=="CairoPDF") {
+    require_Cairo()
     args <- convert_to_CairoPDF(args)
   }
 
