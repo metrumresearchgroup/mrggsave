@@ -16,3 +16,5 @@ WORDLIST
 ^\.github$
 temp
 ^_pkgdown\.yml$
+^\.positai$
+^\.claude$
