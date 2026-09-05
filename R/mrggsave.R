@@ -177,7 +177,7 @@ mrggsave.ggplot <- function(x, ..., ypad = 2,
                             ncol = 1,
                             onefile = TRUE,
                             envir = parent.frame()
-                            ) {
+) {
 
   if(ncol > 1) arrange <- TRUE
 
@@ -393,13 +393,16 @@ mrggsave_common <- function(x,
 
   n  <- length(x)
 
-  if(dev %in% c("pdf", "cairo_pdf")) {
+  if(dev %in% c("pdf", "cairo_pdf", "CairoPDF")) {
     onefile <- onefile | n==1
   } else {
     onefile <- length(x)==1
   }
 
-  ext <- gsub("cairo_pdf", "pdf", dev, fixed = TRUE)
+  ext <- dev
+  if(dev %in% c("cairo_pdf", "CairoPDF")) {
+    ext <- "pdf"
+  }
   ext <- paste0(".", ext)
 
   if(is.null(script)) {
@@ -506,6 +509,10 @@ mrggsave_common <- function(x,
 
   args <- c(args, list(...))
   args <- args[names(args) %in% names(formals(dev))]
+
+  if(dev=="CairoPDF") {
+    args <- convert_to_CairoPDF(args)
+  }
 
   do.call(dev, args)
   for(i in seq_along(x)) {
