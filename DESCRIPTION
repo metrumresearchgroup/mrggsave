@@ -35,5 +35,6 @@ Suggests:
   survival,
   survminer,
   testthat,
-  withr
+  withr, 
+  Cairo
 RoxygenNote: 7.3.3

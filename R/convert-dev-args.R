@@ -1,4 +1,5 @@
 convert_to_CairoPDF <- function(args) {
+  require_Cairo()
   defaults <- list(
     author = "mrggsave",
     subject = "",
