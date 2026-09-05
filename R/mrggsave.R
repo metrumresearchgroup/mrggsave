@@ -176,8 +176,7 @@ mrggsave.ggplot <- function(x, ..., ypad = 2,
                             arrange = FALSE,
                             ncol = 1,
                             onefile = TRUE,
-                            envir = parent.frame()
-) {
+                            envir = parent.frame()) {
 
   if(ncol > 1) arrange <- TRUE
 
