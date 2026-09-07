@@ -9,9 +9,9 @@
 #' @importFrom glue glue
 #' @importFrom stats rnorm
 #' @importFrom graphics plot
-#' @importFrom Cairo CairoPDF
 #' @importFrom fs path_rel path
 #' @importFrom rprojroot find_root is_rstudio_project is_testthat
+#' @importFrom utils modifyList
 NULL
 
 .global <- new.env()

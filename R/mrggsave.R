@@ -507,16 +507,26 @@ mrggsave_common <- function(x,
   }
 
   args <- c(args, list(...))
-  args <- args[names(args) %in% names(formals(dev))]
+
+  # Resolve the device to a function before looking at its formals.  Cairo is
+  # a suggested package, so CairoPDF can't be found by name from this
+  # namespace; the other devices come from grDevices.
+  if(dev=="CairoPDF") {
+    require_Cairo()
+    dev_fun <- getExportedValue("Cairo", "CairoPDF")
+  } else {
+    dev_fun <- match.fun(dev)
+  }
+
+  args <- args[names(args) %in% names(formals(dev_fun))]
 
   # This has to happen after we retain formals for the device
   # CairoPDF() has a bunch of "backend" arguments
   if(dev=="CairoPDF") {
-    require_Cairo()
     args <- convert_to_CairoPDF(args)
   }
 
-  do.call(dev, args)
+  do.call(dev_fun, args)
   for(i in seq_along(x)) {
     grid.arrange(x[[i]])
   }
