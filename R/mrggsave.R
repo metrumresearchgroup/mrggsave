@@ -514,6 +514,9 @@ mrggsave_common <- function(x,
   if(dev=="CairoPDF") {
     require_Cairo()
     dev_fun <- getExportedValue("Cairo", "CairoPDF")
+    # CairoPDF() takes its metadata arguments through `...`, so they are not
+    # formals and the filter below would drop them; see R/convert-dev-args.R.
+    cairo_meta <- args[names(args) %in% CAIRO_PDF_META]
   } else {
     dev_fun <- match.fun(dev)
   }
@@ -523,7 +526,7 @@ mrggsave_common <- function(x,
   # This has to happen after we retain formals for the device
   # CairoPDF() has a bunch of "backend" arguments
   if(dev=="CairoPDF") {
-    args <- convert_to_CairoPDF(args)
+    args <- convert_to_CairoPDF(c(args, cairo_meta))
   }
 
   do.call(dev_fun, args)

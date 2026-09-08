@@ -107,11 +107,11 @@ test_that("CairoPDF writes fixed document metadata", {
   foo <- mrggsave(pg, stem = "cairo-meta", dev = "CairoPDF")
   info <- pdf_info(foo)
 
-  expect_equal(info$Author, "mrggsave")
+  expect_equal(info$Author, "mrggsave") # getOption("mrggsave.author")
   expect_equal(info$Title, "")
   expect_equal(info$Subject, "")
   expect_equal(info$Keywords, "")
-  expect_equal(info$Creator, "")
+  expect_null(info$Creator)
 })
 
 test_that("CairoPDF output carries no time stamp", {
@@ -149,6 +149,36 @@ test_that("title can be set for CairoPDF output", {
 # Reproducibility
 # ---------------------------------------------------------------------------
 
+test_that("author can be set for CairoPDF output", {
+  skip_no_cairo()
+  skip_no_pdfinfo()
+  foo <- mrggsave(pg, stem = "cairo-author", dev = "CairoPDF", author = "Kyle")
+  expect_equal(pdf_info(foo)$Author, "Kyle")
+})
+
+test_that("mrggsave.author is honored for CairoPDF output", {
+  skip_no_cairo()
+  skip_no_pdfinfo()
+  foo <- withr::with_options(
+    list(mrggsave.author = "Metrum"),
+    mrggsave(pg, stem = "cairo-author-opt", dev = "CairoPDF")
+  )
+  expect_equal(pdf_info(foo)$Author, "Metrum")
+})
+
+test_that("CairoPDF metadata passed through ... reaches the device", {
+  skip_no_cairo()
+  skip_no_pdfinfo()
+  # these are not formals of CairoPDF(), so they only arrive if they are held
+  # aside before args is filtered down to the device formals
+  foo <- mrggsave(pg, stem = "cairo-meta-args", dev = "CairoPDF",
+                  subject = "PK", keywords = "conc time", creator = "my-script")
+  info <- pdf_info(foo)
+  expect_equal(info$Subject, "PK")
+  expect_equal(info$Keywords, "conc time")
+  expect_equal(info$Creator, "my-script")
+})
+
 test_that("saving the same plot twice with CairoPDF gives the same bytes", {
   skip_no_cairo()
   a <- save_in_new_dir(pg, "repro", dev = "CairoPDF")
@@ -185,10 +215,11 @@ test_that("convert_to_CairoPDF fills in metadata defaults", {
   ans <- mrggsave:::convert_to_CairoPDF(list(width = 5, height = 5))
   expect_equal(ans$width, 5)
   expect_equal(ans$height, 5)
-  expect_equal(ans$author, "mrggsave")
   expect_equal(ans$subject, "")
-  expect_equal(ans$creator, "")
   expect_equal(ans$keywords, "")
+  # author is not defaulted here; it reaches the device from mrggsave_common
+  expect_null(ans$author)
+  expect_null(ans$creator)
   expect_equal(ans$title, "")
   # Blank rather than a fixed date: Cairo wants ISO-8601 here and drops
   # anything it can't parse, which is what keeps /CreationDate and /ModDate

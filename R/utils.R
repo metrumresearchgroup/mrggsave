@@ -131,7 +131,7 @@ find_cached_root <- function() {
 }
 
 require_Cairo <- function() {
-  if(!requireNamespace("Cairo")) {
+  if(!requireNamespace("Cairo", quietly = TRUE)) {
     stop("Cairo must be installed to execute this code.")
   }
 }
