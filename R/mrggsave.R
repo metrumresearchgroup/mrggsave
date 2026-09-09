@@ -489,28 +489,31 @@ mrggsave_common <- function(x,
 
   args <- c(args, list(...))
 
-  # Resolve the device to a function before looking at its formals.  Cairo is
-  # a suggested package, so CairoPDF can't be found by name from this
-  # namespace; the other devices come from grDevices.
   if(dev=="CairoPDF") {
     require_Cairo()
-    dev_fun <- getExportedValue("Cairo", "CairoPDF")
-    # CairoPDF() takes its metadata arguments through `...`, so they are not
-    # formals and the filter below would drop them; see R/convert-dev-args.R.
-    cairo_meta <- args[names(args) %in% CAIRO_PDF_META]
+    dev_fun <- Cairo::CairoPDF
   } else {
     dev_fun <- match.fun(dev)
   }
 
   args <- args[names(args) %in% names(formals(dev_fun))]
 
-  # This has to happen after we retain formals for the device
-  # CairoPDF() has a bunch of "backend" arguments
   if(dev=="CairoPDF") {
-    args <- convert_to_CairoPDF(c(args, cairo_meta))
+    args$author <- getOption("mrggsave.author", "mrggsave")
+    args$subject <- ""
+    args$creator <- ""
+    args$keywords <- ""
+    args$create.date <- getOption("mrggsave.Cairo.create.date", "")
+    args$modify.date <- getOption("mrggsave.Cairo.modify.date", "")
+  }
+  if(dev=="pdf") {
+    args$author    <- getOption("mrggsave.author", "mrggsave")
+    args$producer  <- getOption("mrggsave.pdf.producer", FALSE)
+    args$timestamp <- getOption("mrggsave.pdf.timestamp", FALSE)
   }
 
   do.call(dev_fun, args)
+
   for(i in seq_along(x)) {
     grid.arrange(x[[i]])
   }

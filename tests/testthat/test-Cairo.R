@@ -108,10 +108,12 @@ test_that("CairoPDF writes fixed document metadata", {
   info <- pdf_info(foo)
 
   expect_equal(info$Author, "mrggsave") # getOption("mrggsave.author")
-  expect_equal(info$Title, "")
   expect_equal(info$Subject, "")
   expect_equal(info$Keywords, "")
-  expect_null(info$Creator)
+  expect_equal(info$Creator, "")
+  # title is a formal of CairoPDF(), so it keeps the device default unless the
+  # caller asks for something else
+  expect_equal(info$Title, "R Graphics Output")
 })
 
 test_that("CairoPDF output carries no time stamp", {
@@ -126,6 +128,32 @@ test_that("CairoPDF output carries no time stamp", {
 
   base <- mrggsave(pg, stem = "base-date", dev = "cairo_pdf")
   expect_match(pdf_info(base)$CreationDate, "[0-9]{4}") # a year
+})
+
+test_that("CairoPDF dates come from mrggsave.Cairo.* options", {
+  skip_no_cairo()
+  skip_no_pdfinfo()
+  # Cairo wants ISO-8601 here and silently drops anything it can't parse; the
+  # default of "" is what keeps /CreationDate and /ModDate out of the file.
+  foo <- withr::with_options(
+    list(
+      mrggsave.Cairo.create.date = "2024-01-01T12:00:00",
+      mrggsave.Cairo.modify.date = "2024-02-02T12:00:00"
+    ),
+    mrggsave(pg, stem = "cairo-date-opt", dev = "CairoPDF")
+  )
+  info <- pdf_info(foo)
+  expect_match(info$CreationDate, "2024")
+  expect_match(info$ModDate, "2024")
+})
+
+test_that("a fixed date option keeps CairoPDF output reproducible", {
+  skip_no_cairo()
+  op <- list(mrggsave.Cairo.create.date = "2024-01-01T12:00:00")
+  a <- withr::with_options(op, save_in_new_dir(pg, "repro-date", dev = "CairoPDF"))
+  Sys.sleep(1.1)
+  b <- withr::with_options(op, save_in_new_dir(pg, "repro-date", dev = "CairoPDF"))
+  expect_equal(unname(tools::md5sum(a)), unname(tools::md5sum(b)))
 })
 
 test_that("the only metadata left in CairoPDF output is the cairo version", {
@@ -145,17 +173,6 @@ test_that("title can be set for CairoPDF output", {
   expect_equal(pdf_info(foo)$Title, "Concentration vs. time")
 })
 
-# ---------------------------------------------------------------------------
-# Reproducibility
-# ---------------------------------------------------------------------------
-
-test_that("author can be set for CairoPDF output", {
-  skip_no_cairo()
-  skip_no_pdfinfo()
-  foo <- mrggsave(pg, stem = "cairo-author", dev = "CairoPDF", author = "Kyle")
-  expect_equal(pdf_info(foo)$Author, "Kyle")
-})
-
 test_that("mrggsave.author is honored for CairoPDF output", {
   skip_no_cairo()
   skip_no_pdfinfo()
@@ -166,18 +183,31 @@ test_that("mrggsave.author is honored for CairoPDF output", {
   expect_equal(pdf_info(foo)$Author, "Metrum")
 })
 
-test_that("CairoPDF metadata passed through ... reaches the device", {
+test_that("CairoPDF author cannot be set through ...", {
   skip_no_cairo()
   skip_no_pdfinfo()
-  # these are not formals of CairoPDF(), so they only arrive if they are held
-  # aside before args is filtered down to the device formals
+  # author is set from the option only; anything passed by the caller is
+  # overwritten so that output stays under mrggsave's control
+  foo <- mrggsave(pg, stem = "cairo-author", dev = "CairoPDF", author = "Kyle")
+  expect_equal(pdf_info(foo)$Author, "mrggsave")
+})
+
+test_that("CairoPDF metadata passed through ... does not reach the device", {
+  skip_no_cairo()
+  skip_no_pdfinfo()
+  # these are pinned to "" after args is filtered down to the device formals,
+  # so caller values are dropped
   foo <- mrggsave(pg, stem = "cairo-meta-args", dev = "CairoPDF",
                   subject = "PK", keywords = "conc time", creator = "my-script")
   info <- pdf_info(foo)
-  expect_equal(info$Subject, "PK")
-  expect_equal(info$Keywords, "conc time")
-  expect_equal(info$Creator, "my-script")
+  expect_equal(info$Subject, "")
+  expect_equal(info$Keywords, "")
+  expect_equal(info$Creator, "")
 })
+
+# ---------------------------------------------------------------------------
+# Reproducibility
+# ---------------------------------------------------------------------------
 
 test_that("saving the same plot twice with CairoPDF gives the same bytes", {
   skip_no_cairo()
@@ -211,31 +241,12 @@ test_that("multi-page CairoPDF output is reproducible", {
 # Argument handling
 # ---------------------------------------------------------------------------
 
-test_that("convert_to_CairoPDF fills in metadata defaults", {
-  ans <- mrggsave:::convert_to_CairoPDF(list(width = 5, height = 5))
-  expect_equal(ans$width, 5)
-  expect_equal(ans$height, 5)
-  expect_equal(ans$subject, "")
-  expect_equal(ans$keywords, "")
-  # author is not defaulted here; it reaches the device from mrggsave_common
-  expect_null(ans$author)
-  expect_null(ans$creator)
-  expect_equal(ans$title, "")
-  # Blank rather than a fixed date: Cairo wants ISO-8601 here and drops
-  # anything it can't parse, which is what keeps /CreationDate and /ModDate
-  # out of the file; see the time stamp test above.
-  expect_equal(ans$create.date, "")
-  expect_equal(ans$modify.date, "")
-})
-
-test_that("convert_to_CairoPDF lets the caller win", {
-  ans <- mrggsave:::convert_to_CairoPDF(
-    list(title = "mine", author = "me", create.date = "D:20240101")
-  )
-  expect_equal(ans$title, "mine")
-  expect_equal(ans$author, "me")
-  expect_equal(ans$create.date, "D:20240101")
-  expect_equal(ans$subject, "")
+test_that("device arguments still reach CairoPDF", {
+  skip_no_cairo()
+  skip_no_pdfinfo()
+  foo <- mrggsave(pg, stem = "cairo-size", dev = "CairoPDF",
+                  width = 4, height = 3)
+  expect_match(pdf_info(foo)$`Page size`, "^288 x 216")
 })
 
 test_that("require_Cairo passes when Cairo is installed", {
