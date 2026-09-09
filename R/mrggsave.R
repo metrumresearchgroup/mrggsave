@@ -503,13 +503,13 @@ mrggsave_common <- function(x,
     args$subject <- ""
     args$creator <- ""
     args$keywords <- ""
-    args$create.date <- getOption("mrggsave.Cairo.create.date", "")
-    args$modify.date <- getOption("mrggsave.Cairo.modify.date", "")
+    args$create.date <- getOption("mrggsave.create.date", "")
+    args$modify.date <- getOption("mrggsave.modify.date", "")
   }
   if(dev=="pdf") {
     args$author    <- getOption("mrggsave.author", "mrggsave")
-    args$producer  <- getOption("mrggsave.pdf.producer", FALSE)
-    args$timestamp <- getOption("mrggsave.pdf.timestamp", FALSE)
+    args$producer  <- getOption("mrggsave.producer", FALSE)
+    args$timestamp <- getOption("mrggsave.timestamp", FALSE)
   }
 
   do.call(dev_fun, args)

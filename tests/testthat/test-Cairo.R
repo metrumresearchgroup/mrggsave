@@ -130,15 +130,15 @@ test_that("CairoPDF output carries no time stamp", {
   expect_match(pdf_info(base)$CreationDate, "[0-9]{4}") # a year
 })
 
-test_that("CairoPDF dates come from mrggsave.Cairo.* options", {
+test_that("CairoPDF dates come from mrggsave.create/modify.date options", {
   skip_no_cairo()
   skip_no_pdfinfo()
   # Cairo wants ISO-8601 here and silently drops anything it can't parse; the
   # default of "" is what keeps /CreationDate and /ModDate out of the file.
   foo <- withr::with_options(
     list(
-      mrggsave.Cairo.create.date = "2024-01-01T12:00:00",
-      mrggsave.Cairo.modify.date = "2024-02-02T12:00:00"
+      mrggsave.create.date = "2024-01-01T12:00:00",
+      mrggsave.modify.date = "2024-02-02T12:00:00"
     ),
     mrggsave(pg, stem = "cairo-date-opt", dev = "CairoPDF")
   )
@@ -149,7 +149,7 @@ test_that("CairoPDF dates come from mrggsave.Cairo.* options", {
 
 test_that("a fixed date option keeps CairoPDF output reproducible", {
   skip_no_cairo()
-  op <- list(mrggsave.Cairo.create.date = "2024-01-01T12:00:00")
+  op <- list(mrggsave.create.date = "2024-01-01T12:00:00")
   a <- withr::with_options(op, save_in_new_dir(pg, "repro-date", dev = "CairoPDF"))
   Sys.sleep(1.1)
   b <- withr::with_options(op, save_in_new_dir(pg, "repro-date", dev = "CairoPDF"))
