@@ -496,6 +496,12 @@ mrggsave_common <- function(x,
     dev_fun <- match.fun(dev)
   }
 
+  if(dev=="pdf") {
+    args$author    <- getOption("mrggsave.author", "mrggsave")
+    args$producer  <- getOption("mrggsave.producer", FALSE)
+    args$timestamp <- getOption("mrggsave.timestamp", FALSE)
+  }
+
   args <- args[names(args) %in% names(formals(dev_fun))]
 
   if(dev=="CairoPDF") {
@@ -505,11 +511,6 @@ mrggsave_common <- function(x,
     args$keywords <- ""
     args$create.date <- getOption("mrggsave.create.date", "")
     args$modify.date <- getOption("mrggsave.modify.date", "")
-  }
-  if(dev=="pdf") {
-    args$author    <- getOption("mrggsave.author", "mrggsave")
-    args$producer  <- getOption("mrggsave.producer", FALSE)
-    args$timestamp <- getOption("mrggsave.timestamp", FALSE)
   }
 
   do.call(dev_fun, args)
