@@ -27,7 +27,9 @@
 #' @param height passed to [pdf()]; should be less than 7 in.
 #' for portrait figure.
 #' @param dev one or more devices to use; can pass a character vector or a
-#' comma-separated string (e.g. `c("pdf", "png")` or `"pdf,png"`).
+#' comma-separated string (e.g. `c("pdf", "png")` or `"pdf,png"`); passing
+#' `"CairoPDF"` will invoke Cairo-based pdf outputs via [Cairo::CairoPDF()]
+#' (see **Details**).
 #' @param res passed to [png()].
 #' @param units passed to [png()].
 #' @param position force the graphic annotation to locate to the left or right
@@ -50,9 +52,6 @@
 #' as the stems for output file names.
 #' @param envir environment to be used for string interpolation in
 #' stem and tag.
-#' @param timestamp passed to [pdf()].
-#' @param producer passed to [pdf()].
-#' @param author passed to [pdf()].
 #' @param ... other arguments passed to `mrggsave_common` and then
 #' on to [pdf()] and [gridExtra::arrangeGrob()].
 #'
@@ -95,17 +94,40 @@
 #' supplied by the user, allowing multiple lines to be added before or
 #' after the standard annotation.
 #'
-#' R 4.5.0 introduced arguments `producer`, `timestamp`, and `author` to [pdf()]
-#' to give callers control over how this information is included in pdf output
-#' files.  Starting with mrggsave version 1.0.0, defaults for these arguments
-#' are provided by `mrggsave_common()` and passed through to [pdf()]. Defaults
-#' are chosen with the goal of enhancing output file reproducibility when the
-#' code is run at different times or by different users. Because these are
-#' formal arguments provided by mrggsave, controlling them via [pdf.options()]
-#' will no longer work. Rather, users should use the global options
-#' `mrggsave.producer`, `mrggsave.timestamp`, or `mrggsave.author`.
-#' Alternatively, the arguments can be included directly in calls to
-#' `mrggsave()`.
+#' @section Reproducible pdf output:
+#' Starting with R 4.5.0, [pdf()] accepts arguments `timestamp`, `author` and
+#' `producer`. These arguments are set by `mrggsave_common()` to sensible
+#' default values that encourage reproducibility of pdf outputs.
+#'
+#' - The `timestamp` argument defaults to `FALSE`; setting the
+#'   `mrggsave.timestamp` option to `TRUE` lets [pdf()] generate and set the
+#'   timestamp in the output file.
+#' - The `author` argument defaults to `"mrggsave"` and can be overridden
+#'   through the `mrggsave.author` global option.
+#' - The `producer` argument defaults to `FALSE` and cannot be overridden at
+#'   this time.
+#'
+#' Because these arguments are set internally by `mrggsave_common()`, using
+#' [pdf.options()] will have no effect on the values passed to [pdf()]; users
+#' should use the mrggsave global options instead.
+#'
+#'
+#' @section Cairo pdf output:
+#' Users can pass `dev = "CairoPDF"` to invoke Cairo-based pdf outputs via
+#' [Cairo::CairoPDF()].  Any formal argument can be passed through to the
+#' device call, but "back-end" arguments (passed through `...`) cannot.
+#' However, `author`, `create.date`, and `modify.date`, can be set by the user
+#' via global [options()]:
+#'
+#' - The `author` argument can be set via `mrggsave.author`; defaults to
+#'   `"mrggsave"`.
+#' - Both `create.date` and `modify.date` are controlled by the
+#'   `mrggsave.timestamp` option; when the option is `FALSE`, both arguments are
+#'   set to `""`, resulting in no timestamp getting written into the output;
+#'   setting the `mrggsave.timestamp` option to `TRUE` lets [Cairo::CairoPDF()]
+#'   create and set these dates in the pdf output file.
+#' - No other back-end arguments to [Cairo::CairoPDF()] are set by mrggsave
+#'   and no other back-end arguments can be manipulated by the user.
 #'
 #' @seealso [mrggdraw()], [mrggsave_list()]
 #'
@@ -176,8 +198,7 @@ mrggsave.ggplot <- function(x, ..., ypad = 2,
                             arrange = FALSE,
                             ncol = 1,
                             onefile = TRUE,
-                            envir = parent.frame()
-                            ) {
+                            envir = parent.frame()) {
 
   if(ncol > 1) arrange <- TRUE
 
@@ -378,9 +399,6 @@ mrggsave_common <- function(x,
                             position = getOption("mrggsave.position", "default"),
                             labeller = getOption("mrggsave.label.fun", label.fun),
                             envir = parent.frame(sys.nframe()),
-                            timestamp = getOption("mrggsave.timestamp", FALSE),
-                            producer = getOption("mrggsave.producer", FALSE),
-                            author = getOption("mrggsave.author", "mrggsave"),
                             ...) {
 
   stopifnot(is.character(dev))
@@ -393,13 +411,16 @@ mrggsave_common <- function(x,
 
   n  <- length(x)
 
-  if(dev %in% c("pdf", "cairo_pdf")) {
+  if(dev %in% c("pdf", "cairo_pdf", "CairoPDF")) {
     onefile <- onefile | n==1
   } else {
     onefile <- length(x)==1
   }
 
-  ext <- gsub("cairo_pdf", "pdf", dev, fixed = TRUE)
+  ext <- dev
+  if(dev %in% c("cairo_pdf", "CairoPDF")) {
+    ext <- "pdf"
+  }
   ext <- paste0(".", ext)
 
   if(is.null(script)) {
@@ -489,8 +510,7 @@ mrggsave_common <- function(x,
 
   args <- list(
     onefile = onefile, width = width, height = height, res = res,
-    units = units, file = pdffile, filename = pdffile,
-    producer = producer, timestamp = timestamp, author = author
+    units = units, file = pdffile, filename = pdffile
   )
 
   if(dev=="eps") {
@@ -504,10 +524,41 @@ mrggsave_common <- function(x,
     dev <- "postscript"
   }
 
-  args <- c(args, list(...))
-  args <- args[names(args) %in% names(formals(dev))]
+  if(dev=="CairoPDF") {
+    require_Cairo()
+    dev_fun <- Cairo::CairoPDF
+  } else {
+    dev_fun <- match.fun(dev)
+  }
 
-  do.call(dev, args)
+  # Options related to pdf reproducibility
+  author <- getOption("mrggsave.author", "mrggsave")
+  include_timestamp <- isTRUE(getOption("mrggsave.timestamp", FALSE))
+
+  # Collect other args passed through ...
+  args <- c(args, list(...))
+
+  # Must be run prior to formals filter
+  if(dev=="pdf") {
+    args$author    <- author
+    args$producer  <- FALSE
+    args$timestamp <- include_timestamp
+  }
+
+  # Filter arguments based on formals of chosen device
+  args <- args[names(args) %in% names(formals(dev_fun))]
+
+  # Must be run after formals filter
+  if(dev=="CairoPDF") {
+    args$author <- author
+    if (!include_timestamp) {
+      args$create.date <- ""
+      args$modify.date <- ""
+    }
+  }
+
+  do.call(dev_fun, args)
+
   for(i in seq_along(x)) {
     grid.arrange(x[[i]])
   }
