@@ -250,7 +250,8 @@ via global \code{\link[=options]{options()}}:
 set to \code{""}, resulting in no timestamp getting written into the output;
 setting the \code{mrggsave.timestamp} option to \code{TRUE} lets \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}}
 create and set these dates in the pdf output file.
-\item No other back-end arguments to \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}} are set.
+\item No other back-end arguments to \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}} are set by mrggsave
+and no other back-end arguments can be manipulated by the user.
 }
 
 Users will be prompted to install the \code{Cairo} package if it cannot be found.
