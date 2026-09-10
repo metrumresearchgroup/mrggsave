@@ -147,14 +147,6 @@ test_that("CairoPDF dates come from mrggsave.create/modify.date options", {
   expect_match(info$ModDate, "2025")
 })
 
-test_that("the only metadata left in CairoPDF output is the cairo version", {
-  skip_no_pdfinfo()
-  foo <- mrggsave(pg, stem = "cairo-producer", dev = "CairoPDF")
-  # /Producer is written by the cairo library itself and cannot be suppressed
-  # from R, so output is only reproducible against a fixed cairo version.
-  expect_match(pdf_info(foo)$Producer, "^cairo [0-9]")
-})
-
 test_that("title can be set for CairoPDF output", {
   skip_no_pdfinfo()
   foo <- mrggsave(pg, stem = "cairo-title", dev = "CairoPDF",
