@@ -58,7 +58,7 @@ mrggsave(x, ...)
 
 \method{mrggsave}{gTree}(x, ..., envir = parent.frame())
 
-mrgglabel(..., draw = FALSE, .save = FALSE)
+mrgglabel(..., draw = FALSE)
 
 mrggsave_common(
   x,
@@ -115,8 +115,6 @@ as the stems for output file names.}
 
 \item{draw}{if \code{TRUE}, the plot is drawn using \code{\link[=draw_newpage]{draw_newpage()}}.}
 
-\item{.save}{logical; if \code{FALSE}, return the labeled objects.}
-
 \item{script}{the name of the script generating the \code{gg} objects.}
 
 \item{tag}{if specified, stem is overwritten by pasting \code{script}
@@ -138,6 +136,8 @@ for details.}
 
 \item{prefix}{gets prepended to the output file path in the Source
 graphic, label.}
+
+\item{.save}{logical; if \code{FALSE}, return the labeled objects.}
 
 \item{labsep}{character separator (or newline) for Source code and
 Source graphic labels.}

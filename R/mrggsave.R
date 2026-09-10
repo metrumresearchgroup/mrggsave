@@ -363,7 +363,7 @@ mrggsave.gTree <- function(x, ..., envir = parent.frame()) {
 
 #' @export
 #' @rdname mrggsave
-mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
+mrgglabel <- function(..., draw = FALSE) {
   mrggsave(..., draw = FALSE, .save = FALSE)
 }
 
