@@ -58,7 +58,7 @@ mrggsave(x, ...)
 
 \method{mrggsave}{gTree}(x, ..., envir = parent.frame())
 
-mrgglabel(..., draw = FALSE)
+mrgglabel(...)
 
 mrggsave_common(
   x,
@@ -72,7 +72,6 @@ mrggsave_common(
   prefix = NULL,
   onefile = TRUE,
   arrange = FALSE,
-  draw = FALSE,
   .save = TRUE,
   ypad = 3,
   labsep = "\\n",
@@ -112,8 +111,6 @@ stem and tag.}
 
 \item{use_names}{if \code{TRUE}, the names from a list of plots will be used
 as the stems for output file names.}
-
-\item{draw}{if \code{TRUE}, the plot is drawn using \code{\link[=draw_newpage]{draw_newpage()}}.}
 
 \item{script}{the name of the script generating the \code{gg} objects.}
 
@@ -207,9 +204,8 @@ always returns a list of table grobs.  If a single
 plot was passed, the return value in this case
 is a list of length 1.
 
-\code{\link[=mrgglabel]{mrgglabel()}} calls \code{\link[=mrggsave]{mrggsave()}} and
-neither draws nor saves the plot, but
-returns the annotated plots as table grob.
+\code{\link[=mrgglabel]{mrgglabel()}} calls \code{\link[=mrggsave]{mrggsave()}} but returns the annotated plots as table
+grob instead of saving the plot.
 
 \code{pre_label} and \code{post_label} are collapsed with newline if
 supplied by the user, allowing multiple lines to be added before or
@@ -305,5 +301,5 @@ mrggsave(p3, Script, "ggally_plot")
 }
 }
 \seealso{
-\code{\link[=mrggdraw]{mrggdraw()}}, \code{\link[=mrggsave_list]{mrggsave_list()}}
+\code{\link[=mrggsave_list]{mrggsave_list()}}
 }
