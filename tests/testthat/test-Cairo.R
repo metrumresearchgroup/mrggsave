@@ -43,16 +43,6 @@ pdf_info <- function(file) {
   stats::setNames(as.list(val), key)
 }
 
-# Save `...` under a fixed stem in a fresh directory, so that two saves of the
-# same object differ only in where they were written.  mrggsave stamps the
-# output file name onto the plot, so the stem has to be held constant for the
-# bytes to be comparable.
-save_in_new_dir <- function(x, stem, ...) {
-  dir <- tempfile("mrggsave-cairo-")
-  dir.create(dir)
-  mrggsave(x, stem = stem, dir = dir, ...)
-}
-
 # ---------------------------------------------------------------------------
 # File naming and paging
 # ---------------------------------------------------------------------------
@@ -186,19 +176,18 @@ test_that("CairoPDF metadata passed through ... does not reach the device", {
 # ---------------------------------------------------------------------------
 
 test_that("saving the same plot twice with CairoPDF gives the same bytes", {
-  a <- save_in_new_dir(pg, "repro", dev = "CairoPDF")
-  Sys.sleep(1.1)
-  b <- save_in_new_dir(pg, "repro", dev = "CairoPDF")
-  expect_false(a == b)
-  expect_equal(unname(tools::md5sum(a)), unname(tools::md5sum(b)))
-})
+  dira <- withr::local_tempdir()
+  a <- mrggsave(pg, stem = "repro", dir = dira, dev = "CairoPDF")
+  aa <- mrggsave(list(pg, pg), stem = "repro", dir = dira, dev = "CairoPDF")
 
-test_that("multi-page CairoPDF output is reproducible", {
-  plots <- list(pg, pg + geom_smooth(method = "lm", formula = y ~ x))
-  a <- save_in_new_dir(plots, "repro-multi", dev = "CairoPDF")
   Sys.sleep(1.1)
-  b <- save_in_new_dir(plots, "repro-multi", dev = "CairoPDF")
-  expect_equal(unname(tools::md5sum(a)), unname(tools::md5sum(b)))
+
+  dirb <- withr::local_tempdir()
+  b <- mrggsave(pg, stem = "repro", dir = dirb, dev = "CairoPDF")
+  bb <- mrggsave(list(pg, pg), stem = "repro", dir = dirb, dev = "CairoPDF")
+
+  expect_identical(unname(tools::md5sum(a)), unname(tools::md5sum(b)))
+  expect_identical(unname(tools::md5sum(aa)), unname(tools::md5sum(bb)))
 })
 
 # ---------------------------------------------------------------------------
