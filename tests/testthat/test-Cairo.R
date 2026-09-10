@@ -7,11 +7,16 @@ testthat::context("test-Cairo")
 
 skip_if_not_installed("Cairo")
 
-withr::local_options(list(mrggsave.path.type = "none"))
+withr::local_options(
+  list(
+    mrggsave.path.type = "none",
+    mrggsave.dir = tempdir(),
+    mrg.script = "test.R"
+  )
+)
 
 set.seed(1100022)
 data <- data.frame(x = rnorm(100), y = rnorm(100))
-options(mrggsave.dir = tempdir(), mrg.script = "test.R")
 
 pg <- ggplot(data, aes(x = x, y = y)) + geom_point()
 
