@@ -27,7 +27,9 @@
 #' @param height passed to [pdf()]; should be less than 7 in.
 #' for portrait figure.
 #' @param dev one or more devices to use; can pass a character vector or a
-#' comma-separated string (e.g. `c("pdf", "png")` or `"pdf,png"`).
+#' comma-separated string (e.g. `c("pdf", "png")` or `"pdf,png"`); passing
+#' `"CairoPDF"` will invoke Cairo-based pdf outputs via [Cairo::CairoPDF()]
+#' (see **Details**).
 #' @param res passed to [png()].
 #' @param units passed to [png()].
 #' @param position force the graphic annotation to locate to the left or right
@@ -91,6 +93,38 @@
 #' `pre_label` and `post_label` are collapsed with newline if
 #' supplied by the user, allowing multiple lines to be added before or
 #' after the standard annotation.
+#'
+#' @section Reproducible pdf output:
+#' Starting with R 4.5.0, [pdf()] accepts arguments `timestamp`, `author` and
+#' `producer`. These arguments are set by `mrggsave_common()` to sensible
+#' default values that encourage reproducibility of pdf outputs.
+#'
+#' - The `timestamp` argument defaults to `FALSE` and can be overridden through
+#'   the `mrggsave.timestamp` global option (set via [options()]).
+#' - The `author` argument defaults to `"mrggsave"` and can be overridden
+#'   through the `mrggsave.author` global option.
+#' - The `producer` argument defaults to `FALSE` and cannot be overridden at
+#'   this time.
+#'
+#' Because these arguments are set internally by `mrggsave_common()`, using
+#' [pdf.options()] will have no effect on the values passed to [pdf()]; users
+#' should use the mrggsave global options instead.
+#'
+#'
+#' @section Cairo pdf output:
+#' Users can pass `dev = "CairoPDF"` to invoke Cairo-based pdf outputs via
+#' [Cairo::CairoPDF()].  Any formal argument can be passed through to the
+#' device call, but "back-end" arguments (passed through `...`) cannot.
+#' However, `author`, `create.date`, and `modify.date`, can be set by the user
+#' via global [options()]:
+#'
+#' - The `author` argument can be set via `mrggsave.author`; defaults to
+#'   `"mrggsave"`.
+#' - Both `create.date` and `modify.date` can be set via `mrggsave.timestamp`;
+#'   both default to `FALSE`.
+#' - No other back-end arguments to [Cairo::CairoPDF()] are set.
+#'
+#' Users will be prompted to install the `Cairo` package if it cannot be found.
 #'
 #' @seealso [mrggdraw()], [mrggsave_list()]
 #'

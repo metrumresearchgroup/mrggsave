@@ -157,7 +157,9 @@ Source graphic; see details.}
 \item{just}{passed to \code{\link[grid:grid.text]{grid::textGrob()}} (as \code{just}).}
 
 \item{dev}{one or more devices to use; can pass a character vector or a
-comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"}).}
+comma-separated string (e.g. \code{c("pdf", "png")} or \code{"pdf,png"}); passing
+\code{"CairoPDF"} will invoke Cairo-based pdf outputs via \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}}
+(see \strong{Details}).}
 
 \item{res}{passed to \code{\link[=png]{png()}}.}
 
@@ -213,6 +215,43 @@ returns the annotated plots as table grob.
 supplied by the user, allowing multiple lines to be added before or
 after the standard annotation.
 }
+\section{Reproducible pdf output}{
+
+Starting with R 4.5.0, \code{\link[=pdf]{pdf()}} accepts arguments \code{timestamp}, \code{author} and
+\code{producer}. These arguments are set by \code{mrggsave_common()} to sensible
+default values that encourage reproducibility of pdf outputs.
+\itemize{
+\item The \code{timestamp} argument defaults to \code{FALSE} and can be overridden through
+the \code{mrggsave.timestamp} global option (set via \code{\link[=options]{options()}}).
+\item The \code{author} argument defaults to \code{"mrggsave"} and can be overridden
+through the \code{mrggsave.author} global option.
+\item The \code{producer} argument defaults to \code{FALSE} and cannot be overridden at
+this time.
+}
+
+Because these arguments are set internally by \code{mrggsave_common()}, using
+\code{\link[=pdf.options]{pdf.options()}} will have no effect on the values passed to \code{\link[=pdf]{pdf()}}; users
+should use the mrggsave global options instead.
+}
+
+\section{Cairo pdf output}{
+
+Users can pass \code{dev = "CairoPDF"} to invoke Cairo-based pdf outputs via
+\code{\link[Cairo:Cairo]{Cairo::CairoPDF()}}.  Any formal argument can be passed through to the
+device call, but "back-end" arguments (passed through \code{...}) cannot.
+However, \code{author}, \code{create.date}, and \code{modify.date}, can be set by the user
+via global \code{\link[=options]{options()}}:
+\itemize{
+\item The \code{author} argument can be set via \code{mrggsave.author}; defaults to
+\code{"mrggsave"}.
+\item Both \code{create.date} and \code{modify.date} can be set via \code{mrggsave.timestamp};
+both default to \code{FALSE}.
+\item No other back-end arguments to \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}} are set.
+}
+
+Users will be prompted to install the \code{Cairo} package if it cannot be found.
+}
+
 \examples{
 data(Theoph)
 require(ggplot2)
