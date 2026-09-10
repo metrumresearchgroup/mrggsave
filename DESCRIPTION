@@ -36,6 +36,5 @@ Suggests:
   survminer,
   testthat,
   withr, 
-  Cairo, 
-  qpdf
+  Cairo
 RoxygenNote: 7.3.3

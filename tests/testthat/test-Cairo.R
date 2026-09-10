@@ -30,8 +30,7 @@ skip_no_pdfinfo <- function() {
 
 # Named list of the fields pdfinfo reports.  Fields absent from the document
 # are absent from the list, so a pdf carrying no /CreationDate reads back as
-# NULL; one carrying an empty /CreationDate reads back as "".  Page counts
-# come from qpdf::pdf_length() instead, which needs nothing external.
+# NULL; one carrying an empty /CreationDate reads back as "".
 pdf_info <- function(file) {
   out <- system2("pdfinfo", shQuote(file), stdout = TRUE, stderr = FALSE)
   out <- out[grepl(":", out, fixed = TRUE)]
@@ -71,11 +70,15 @@ test_that("save multiple plots to a single file with CairoPDF", {
 
 test_that("CairoPDF writes one page per plot", {
   skip_no_cairo()
-  skip_if_not_installed("qpdf")
+  skip_no_pdfinfo()
+
   one <- mrggsave(pg, stem = "cairo-page1", dev = "CairoPDF")
-  expect_equal(qpdf::pdf_length(one), 1)
+  info1 <- pdf_info(one)
+  expect_identical(info1[["Pages"]], "1")
+
   three <- mrggsave(list(pg, pg, pg), stem = "cairo-page3", dev = "CairoPDF")
-  expect_equal(qpdf::pdf_length(three), 3)
+  info3 <- pdf_info(three)
+  expect_identical(info3[["Pages"]], "3")
 })
 
 test_that("CairoPDF can be combined with other devices", {
