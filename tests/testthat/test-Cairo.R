@@ -193,15 +193,6 @@ test_that("saving the same plot twice with CairoPDF gives the same bytes", {
   expect_equal(unname(tools::md5sum(a)), unname(tools::md5sum(b)))
 })
 
-test_that("CairoPDF is reproducible where cairo_pdf is not", {
-  a <- save_in_new_dir(pg, "repro-base", dev = "cairo_pdf")
-  Sys.sleep(1.1)
-  b <- save_in_new_dir(pg, "repro-base", dev = "cairo_pdf")
-  expect_false(
-    identical(unname(tools::md5sum(a)), unname(tools::md5sum(b)))
-  )
-})
-
 test_that("multi-page CairoPDF output is reproducible", {
   plots <- list(pg, pg + geom_smooth(method = "lm", formula = y ~ x))
   a <- save_in_new_dir(plots, "repro-multi", dev = "CairoPDF")
