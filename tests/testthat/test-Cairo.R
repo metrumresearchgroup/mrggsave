@@ -5,6 +5,8 @@ library(grid)
 
 testthat::context("test-Cairo")
 
+skip_if_not_installed("Cairo")
+
 withr::local_options(list(mrggsave.path.type = "none"))
 
 set.seed(1100022)
@@ -12,8 +14,6 @@ data <- data.frame(x = rnorm(100), y = rnorm(100))
 options(mrggsave.dir = tempdir(), mrg.script = "test.R")
 
 pg <- ggplot(data, aes(x = x, y = y)) + geom_point()
-
-skip_no_cairo <- function() skip_if_not_installed("Cairo")
 
 # ---------------------------------------------------------------------------
 # Reading back what was written into the pdf.
@@ -55,21 +55,18 @@ save_in_new_dir <- function(x, stem, ...) {
 # ---------------------------------------------------------------------------
 
 test_that("CairoPDF writes a pdf file", {
-  skip_no_cairo()
   foo <- mrggsave(pg, stem = "cairo-single", dev = "CairoPDF")
   expect_equal(basename(foo), "cairo-single.pdf")
   expect_true(file.exists(foo))
 })
 
 test_that("save multiple plots to a single file with CairoPDF", {
-  skip_no_cairo()
   foo <- mrggsave(list(pg, pg, pg), stem = "cairo-multi", dev = "CairoPDF")
   expect_identical(basename(foo), "cairo-multi.pdf")
   expect_true(file.exists(foo))
 })
 
 test_that("CairoPDF writes one page per plot", {
-  skip_no_cairo()
   skip_no_pdfinfo()
 
   one <- mrggsave(pg, stem = "cairo-page1", dev = "CairoPDF")
@@ -82,14 +79,12 @@ test_that("CairoPDF writes one page per plot", {
 })
 
 test_that("CairoPDF can be combined with other devices", {
-  skip_no_cairo()
   foo <- mrggsave(pg, stem = "cairo-multidev", dev = "CairoPDF,png")
   expect_equal(basename(foo), c("cairo-multidev.pdf", "cairo-multidev.png"))
   expect_true(all(file.exists(foo)))
 })
 
 test_that("CairoPDF backend requires onefile", {
-  skip_no_cairo()
   # Unlike pdf() and cairo_pdf(), the Cairo pdf backend cannot write one file
   # per page.  onefile is forced to TRUE for a single plot, so this only bites
   # when more than one plot is saved.
@@ -105,7 +100,6 @@ test_that("CairoPDF backend requires onefile", {
 # ---------------------------------------------------------------------------
 
 test_that("CairoPDF writes fixed document metadata", {
-  skip_no_cairo()
   skip_no_pdfinfo()
   foo <- mrggsave(pg, stem = "cairo-meta", dev = "CairoPDF")
   info <- pdf_info(foo)
@@ -120,7 +114,6 @@ test_that("CairoPDF writes fixed document metadata", {
 })
 
 test_that("CairoPDF output carries no time stamp", {
-  skip_no_cairo()
   skip_no_pdfinfo()
   # The reason for using CairoPDF at all: cairo_pdf() stamps the file with the
   # time it was written, which makes the bytes differ from run to run.
@@ -134,7 +127,6 @@ test_that("CairoPDF output carries no time stamp", {
 })
 
 test_that("CairoPDF dates come from mrggsave.create/modify.date options", {
-  skip_no_cairo()
   skip_no_pdfinfo()
   # Cairo wants ISO-8601 here and silently drops anything it can't parse; the
   # default of "" is what keeps /CreationDate and /ModDate out of the file.
@@ -151,7 +143,6 @@ test_that("CairoPDF dates come from mrggsave.create/modify.date options", {
 })
 
 test_that("a fixed date option keeps CairoPDF output reproducible", {
-  skip_no_cairo()
   op <- list(mrggsave.create.date = "2024-01-01T12:00:00")
   a <- withr::with_options(op, save_in_new_dir(pg, "repro-date", dev = "CairoPDF"))
   Sys.sleep(1.1)
@@ -160,7 +151,6 @@ test_that("a fixed date option keeps CairoPDF output reproducible", {
 })
 
 test_that("the only metadata left in CairoPDF output is the cairo version", {
-  skip_no_cairo()
   skip_no_pdfinfo()
   foo <- mrggsave(pg, stem = "cairo-producer", dev = "CairoPDF")
   # /Producer is written by the cairo library itself and cannot be suppressed
@@ -169,7 +159,6 @@ test_that("the only metadata left in CairoPDF output is the cairo version", {
 })
 
 test_that("title can be set for CairoPDF output", {
-  skip_no_cairo()
   skip_no_pdfinfo()
   foo <- mrggsave(pg, stem = "cairo-title", dev = "CairoPDF",
                   title = "Concentration vs. time")
@@ -177,7 +166,6 @@ test_that("title can be set for CairoPDF output", {
 })
 
 test_that("mrggsave.author is honored for CairoPDF output", {
-  skip_no_cairo()
   skip_no_pdfinfo()
   foo <- withr::with_options(
     list(mrggsave.author = "Metrum"),
@@ -187,7 +175,6 @@ test_that("mrggsave.author is honored for CairoPDF output", {
 })
 
 test_that("CairoPDF author cannot be set through ...", {
-  skip_no_cairo()
   skip_no_pdfinfo()
   # author is set from the option only; anything passed by the caller is
   # overwritten so that output stays under mrggsave's control
@@ -196,7 +183,6 @@ test_that("CairoPDF author cannot be set through ...", {
 })
 
 test_that("CairoPDF metadata passed through ... does not reach the device", {
-  skip_no_cairo()
   skip_no_pdfinfo()
   # these are pinned to "" after args is filtered down to the device formals,
   # so caller values are dropped
@@ -213,7 +199,6 @@ test_that("CairoPDF metadata passed through ... does not reach the device", {
 # ---------------------------------------------------------------------------
 
 test_that("saving the same plot twice with CairoPDF gives the same bytes", {
-  skip_no_cairo()
   a <- save_in_new_dir(pg, "repro", dev = "CairoPDF")
   Sys.sleep(1.1)
   b <- save_in_new_dir(pg, "repro", dev = "CairoPDF")
@@ -222,7 +207,6 @@ test_that("saving the same plot twice with CairoPDF gives the same bytes", {
 })
 
 test_that("CairoPDF is reproducible where cairo_pdf is not", {
-  skip_no_cairo()
   a <- save_in_new_dir(pg, "repro-base", dev = "cairo_pdf")
   Sys.sleep(1.1)
   b <- save_in_new_dir(pg, "repro-base", dev = "cairo_pdf")
@@ -232,7 +216,6 @@ test_that("CairoPDF is reproducible where cairo_pdf is not", {
 })
 
 test_that("multi-page CairoPDF output is reproducible", {
-  skip_no_cairo()
   plots <- list(pg, pg + geom_smooth(method = "lm", formula = y ~ x))
   a <- save_in_new_dir(plots, "repro-multi", dev = "CairoPDF")
   Sys.sleep(1.1)
@@ -245,14 +228,11 @@ test_that("multi-page CairoPDF output is reproducible", {
 # ---------------------------------------------------------------------------
 
 test_that("device arguments still reach CairoPDF", {
-  skip_no_cairo()
-  skip_no_pdfinfo()
   foo <- mrggsave(pg, stem = "cairo-size", dev = "CairoPDF",
                   width = 4, height = 3)
   expect_match(pdf_info(foo)$`Page size`, "^288 x 216")
 })
 
 test_that("require_Cairo passes when Cairo is installed", {
-  skip_no_cairo()
   expect_error(mrggsave:::require_Cairo(), NA)
 })
