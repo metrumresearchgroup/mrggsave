@@ -141,13 +141,13 @@ test_that("CairoPDF dates come from mrggsave.create/modify.date options", {
   foo <- withr::with_options(
     list(
       mrggsave.create.date = "2024-01-01T12:00:00",
-      mrggsave.modify.date = "2024-02-02T12:00:00"
+      mrggsave.modify.date = "2025-01-01T12:00:00"
     ),
     mrggsave(pg, stem = "cairo-date-opt", dev = "CairoPDF")
   )
   info <- pdf_info(foo)
   expect_match(info$CreationDate, "2024")
-  expect_match(info$ModDate, "2024")
+  expect_match(info$ModDate, "2025")
 })
 
 test_that("a fixed date option keeps CairoPDF output reproducible", {
