@@ -221,8 +221,9 @@ Starting with R 4.5.0, \code{\link[=pdf]{pdf()}} accepts arguments \code{timesta
 \code{producer}. These arguments are set by \code{mrggsave_common()} to sensible
 default values that encourage reproducibility of pdf outputs.
 \itemize{
-\item The \code{timestamp} argument defaults to \code{FALSE} and can be overridden through
-the \code{mrggsave.timestamp} global option (set via \code{\link[=options]{options()}}).
+\item The \code{timestamp} argument defaults to \code{FALSE}; setting the
+\code{mrggsave.timestamp} option to \code{TRUE} lets \code{\link[=pdf]{pdf()}} generate and set the
+timestamp in the output file.
 \item The \code{author} argument defaults to \code{"mrggsave"} and can be overridden
 through the \code{mrggsave.author} global option.
 \item The \code{producer} argument defaults to \code{FALSE} and cannot be overridden at
@@ -244,8 +245,11 @@ via global \code{\link[=options]{options()}}:
 \itemize{
 \item The \code{author} argument can be set via \code{mrggsave.author}; defaults to
 \code{"mrggsave"}.
-\item Both \code{create.date} and \code{modify.date} can be set via \code{mrggsave.timestamp};
-both default to \code{FALSE}.
+\item Both \code{create.date} and \code{modify.date} are controlled by the
+\code{mrggsave.timestamp} option; when the option is \code{FALSE}, both arguments are
+set to \code{""}, resulting in no timestamp getting written into the output;
+setting the \code{mrggsave.timestamp} option to \code{TRUE} lets \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}}
+create and set these dates in the pdf output file.
 \item No other back-end arguments to \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}} are set.
 }
 

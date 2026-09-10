@@ -99,8 +99,9 @@
 #' `producer`. These arguments are set by `mrggsave_common()` to sensible
 #' default values that encourage reproducibility of pdf outputs.
 #'
-#' - The `timestamp` argument defaults to `FALSE` and can be overridden through
-#'   the `mrggsave.timestamp` global option (set via [options()]).
+#' - The `timestamp` argument defaults to `FALSE`; setting the
+#'   `mrggsave.timestamp` option to `TRUE` lets [pdf()] generate and set the
+#'   timestamp in the output file.
 #' - The `author` argument defaults to `"mrggsave"` and can be overridden
 #'   through the `mrggsave.author` global option.
 #' - The `producer` argument defaults to `FALSE` and cannot be overridden at
@@ -120,8 +121,11 @@
 #'
 #' - The `author` argument can be set via `mrggsave.author`; defaults to
 #'   `"mrggsave"`.
-#' - Both `create.date` and `modify.date` can be set via `mrggsave.timestamp`;
-#'   both default to `FALSE`.
+#' - Both `create.date` and `modify.date` are controlled by the
+#'   `mrggsave.timestamp` option; when the option is `FALSE`, both arguments are
+#'   set to `""`, resulting in no timestamp getting written into the output;
+#'   setting the `mrggsave.timestamp` option to `TRUE` lets [Cairo::CairoPDF()]
+#'   create and set these dates in the pdf output file.
 #' - No other back-end arguments to [Cairo::CairoPDF()] are set.
 #'
 #' Users will be prompted to install the `Cairo` package if it cannot be found.
