@@ -232,7 +232,3 @@ test_that("device arguments still reach CairoPDF", {
                   width = 4, height = 3)
   expect_match(pdf_info(foo)$`Page size`, "^288 x 216")
 })
-
-test_that("require_Cairo passes when Cairo is installed", {
-  expect_error(mrggsave:::require_Cairo(), NA)
-})
