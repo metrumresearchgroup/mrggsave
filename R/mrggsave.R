@@ -129,8 +129,6 @@
 #' - No other back-end arguments to [Cairo::CairoPDF()] are set by mrggsave
 #'   and no other back-end arguments can be manipulated by the user.
 #'
-#' Users will be prompted to install the `Cairo` package if it cannot be found.
-#'
 #' @seealso [mrggdraw()], [mrggsave_list()]
 #'
 #' @md
