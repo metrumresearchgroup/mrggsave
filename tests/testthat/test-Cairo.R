@@ -98,9 +98,6 @@ test_that("CairoPDF writes fixed document metadata", {
   info <- pdf_info(foo)
 
   expect_equal(info$Author, "mrggsave") # getOption("mrggsave.author")
-  expect_equal(info$Subject, "")
-  expect_equal(info$Keywords, "")
-  expect_equal(info$Creator, "")
   # title is a formal of CairoPDF(), so it keeps the device default unless the
   # caller asks for something else
   expect_equal(info$Title, "R Graphics Output")
@@ -115,24 +112,14 @@ test_that("CairoPDF output carries no time stamp", {
   expect_null(info$CreationDate)
   expect_null(info$ModDate)
 
+  cairo_ts <- withr::with_options(
+    list(mrggsave.timestamp = TRUE),
+    mrggsave(pg, stem = "cairo-ts", dev = "CairoPDF")
+  )
+  expect_match(pdf_info(cairo_ts)$CreationDate, "[0-9]{4}")
+
   base <- mrggsave(pg, stem = "base-date", dev = "cairo_pdf")
   expect_match(pdf_info(base)$CreationDate, "[0-9]{4}") # a year
-})
-
-test_that("CairoPDF dates come from mrggsave.create/modify.date options", {
-  skip_no_pdfinfo()
-  # Cairo wants ISO-8601 here and silently drops anything it can't parse; the
-  # default of "" is what keeps /CreationDate and /ModDate out of the file.
-  foo <- withr::with_options(
-    list(
-      mrggsave.create.date = "2024-01-01T12:00:00",
-      mrggsave.modify.date = "2025-01-01T12:00:00"
-    ),
-    mrggsave(pg, stem = "cairo-date-opt", dev = "CairoPDF")
-  )
-  info <- pdf_info(foo)
-  expect_match(info$CreationDate, "2024")
-  expect_match(info$ModDate, "2025")
 })
 
 test_that("title can be set for CairoPDF output", {
@@ -161,14 +148,12 @@ test_that("CairoPDF author cannot be set through ...", {
 
 test_that("CairoPDF metadata passed through ... does not reach the device", {
   skip_no_pdfinfo()
-  # these are pinned to "" after args is filtered down to the device formals,
-  # so caller values are dropped
   foo <- mrggsave(pg, stem = "cairo-meta-args", dev = "CairoPDF",
                   subject = "PK", keywords = "conc time", creator = "my-script")
   info <- pdf_info(foo)
-  expect_equal(info$Subject, "")
-  expect_equal(info$Keywords, "")
-  expect_equal(info$Creator, "")
+  expect_null(info$Subject)
+  expect_null(info$Keywords)
+  expect_null(info$Creator)
 })
 
 # ---------------------------------------------------------------------------

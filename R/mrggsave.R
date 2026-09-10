@@ -487,8 +487,6 @@ mrggsave_common <- function(x,
     dev <- "postscript"
   }
 
-  args <- c(args, list(...))
-
   if(dev=="CairoPDF") {
     require_Cairo()
     dev_fun <- Cairo::CairoPDF
@@ -496,21 +494,30 @@ mrggsave_common <- function(x,
     dev_fun <- match.fun(dev)
   }
 
+  # Options related to pdf reproducibility
+  author <- getOption("mrggsave.author", "mrggsave")
+  include_timestamp <- isTRUE(getOption("mrggsave.timestamp", FALSE))
+
+  # Collect other args passed through ...
+  args <- c(args, list(...))
+
+  # Must be run prior to formals filter
   if(dev=="pdf") {
-    args$author    <- getOption("mrggsave.author", "mrggsave")
-    args$producer  <- getOption("mrggsave.producer", FALSE)
-    args$timestamp <- getOption("mrggsave.timestamp", FALSE)
+    args$author    <- author
+    args$producer  <- FALSE
+    args$timestamp <- include_timestamp
   }
 
+  # Filter arguments based on formals of chosen device
   args <- args[names(args) %in% names(formals(dev_fun))]
 
+  # Must be run after formals filter
   if(dev=="CairoPDF") {
-    args$author <- getOption("mrggsave.author", "mrggsave")
-    args$subject <- ""
-    args$creator <- ""
-    args$keywords <- ""
-    args$create.date <- getOption("mrggsave.create.date", "")
-    args$modify.date <- getOption("mrggsave.modify.date", "")
+    args$author <- author
+    if (!include_timestamp) {
+      args$create.date <- ""
+      args$modify.date <- ""
+    }
   }
 
   do.call(dev_fun, args)
