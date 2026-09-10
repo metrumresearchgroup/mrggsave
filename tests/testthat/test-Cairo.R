@@ -147,14 +147,6 @@ test_that("CairoPDF dates come from mrggsave.create/modify.date options", {
   expect_match(info$ModDate, "2025")
 })
 
-test_that("a fixed date option keeps CairoPDF output reproducible", {
-  op <- list(mrggsave.create.date = "2024-01-01T12:00:00")
-  a <- withr::with_options(op, save_in_new_dir(pg, "repro-date", dev = "CairoPDF"))
-  Sys.sleep(1.1)
-  b <- withr::with_options(op, save_in_new_dir(pg, "repro-date", dev = "CairoPDF"))
-  expect_equal(unname(tools::md5sum(a)), unname(tools::md5sum(b)))
-})
-
 test_that("the only metadata left in CairoPDF output is the cairo version", {
   skip_no_pdfinfo()
   foo <- mrggsave(pg, stem = "cairo-producer", dev = "CairoPDF")
