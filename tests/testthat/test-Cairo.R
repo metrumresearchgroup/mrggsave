@@ -3,8 +3,6 @@ library(mrggsave)
 library(ggplot2)
 library(grid)
 
-testthat::context("test-Cairo")
-
 skip_if_not_installed("Cairo")
 
 withr::local_options(
