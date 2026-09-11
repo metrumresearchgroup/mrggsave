@@ -14,6 +14,22 @@
   restore timestamps (`create.date` and `modify.date`) or to override the 
   mrggsave `author` default (#64).
 
+- Internal device state tracking that was introduced to support drawing on the
+  user's device has been dropped; it became dead code once the drawing
+  functionality was removed (#68).
+
+## Deprecated functionality
+
+- Drawing-related functionality has been removed: the `mrggdraw()` and
+  `draw_newpage()` functions are gone, as is the `draw` argument to
+  `mrggsave()`. This functionality carried extra complexity, but is not 
+  directly related to the core purpose of mrggsave (#67).
+
+- The `mrggpage()` function has been removed; use patchwork to arrange
+  plots instead (#66).
+
+- The `.save` argument has been dropped from `mrgglabel()`; it was always
+  passed as `FALSE` and could not be set by the user (#67).
 
 
 # mrggsave 0.4.7
