@@ -47,7 +47,6 @@
 #' to Source code label; see details.
 #' @param post_label text to include after annotation; separate lines after
 #' Source graphic; see details.
-#' @param draw if `TRUE`, the plot is drawn using [draw_newpage()].
 #' @param use_names if `TRUE`, the names from a list of plots will be used
 #' as the stems for output file names.
 #' @param envir environment to be used for string interpolation in
@@ -86,9 +85,8 @@
 #' plot was passed, the return value in this case
 #' is a list of length 1.
 #'
-#' [mrgglabel()] calls [mrggsave()] and
-#' neither draws nor saves the plot, but
-#' returns the annotated plots as table grob.
+#' [mrgglabel()] calls [mrggsave()] but returns the annotated plots as table
+#' grob instead of saving the plot.
 #'
 #' `pre_label` and `post_label` are collapsed with newline if
 #' supplied by the user, allowing multiple lines to be added before or
@@ -129,7 +127,7 @@
 #' - No other back-end arguments to [Cairo::CairoPDF()] are set by mrggsave
 #'   and no other back-end arguments can be manipulated by the user.
 #'
-#' @seealso [mrggdraw()], [mrggsave_list()]
+#' @seealso [mrggsave_list()]
 #'
 #' @md
 #'
@@ -363,8 +361,8 @@ mrggsave.gTree <- function(x, ..., envir = parent.frame()) {
 
 #' @export
 #' @rdname mrggsave
-mrgglabel <- function(..., draw = FALSE, .save = FALSE) {
-  mrggsave(..., draw = FALSE, .save = FALSE)
+mrgglabel <- function(...) {
+  mrggsave(..., .save = FALSE)
 }
 
 eps <- function(...) {
@@ -383,7 +381,6 @@ mrggsave_common <- function(x,
                             prefix = NULL,
                             onefile = TRUE,
                             arrange = FALSE,
-                            draw = FALSE,
                             .save = TRUE,
                             ypad = 3,
                             labsep = "\n",
@@ -495,14 +492,6 @@ mrggsave_common <- function(x,
   # covers direct mrggsave_common() calls, where arrangeGrob() converts any
   # ggplot objects that have not been through mrggsave_prep_object()
   x <- with_plot_metrics(annotate_graphic(x, d, labeller))
-
-  if(draw) {
-    if(is_glist(x)) {
-      draw_newpage(x)
-    } else {
-      .foo <- lapply(x,draw_newpage)
-    }
-  }
 
   if(!.save) {
     return(invisible(x))
