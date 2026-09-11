@@ -8,9 +8,7 @@
 #' @details
 #' No arrangement is done; the objects are just labeled and save.
 #'
-#' The objects could be ggplot objects or ggplot
-#' objects that have been arranged on a page
-#' with [mrggpage()].
+#' The objects could be ggplot objects or a list of ggplot objects.
 #'
 #' @md
 #' @export

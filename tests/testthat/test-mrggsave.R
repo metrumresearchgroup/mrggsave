@@ -82,9 +82,7 @@ test_that("named list [MRGS-TEST-041]", {
 test_that("mixed list [MRGS-TEST-042]", {
   l1 <- list(pg,pg,pg)
   l2 <- list(pg,pl)
-  p3 <- mrggpage(l1)
-  p4 <- mrggpage(l1, nrow = 1, ncol = 2, multiple = TRUE)
-  plots <- list(pg,l1,l2,pG,gt,p3,p4)
+  plots <- list(pg, l1, l2, pG, gt)
   ans <- mrggsave(plots, Script, stem = "mixed")
   expect_equal(basename(ans), "mixed.pdf")
 })
