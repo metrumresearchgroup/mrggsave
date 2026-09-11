@@ -236,8 +236,9 @@ should use the mrggsave global options instead.
 Users can pass \code{dev = "CairoPDF"} to invoke Cairo-based pdf outputs via
 \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}}.  Any formal argument can be passed through to the
 device call, but "back-end" arguments (passed through \code{...}) cannot.
-However, \code{author}, \code{create.date}, and \code{modify.date}, can be set by the user
-via global \code{\link[=options]{options()}}:
+By default, the \code{author}, \code{create.date}, and \code{modify.date} back-end arguments
+are set by mrggsave to enable reproducible outputs. These overrides can be
+tweaked or disabled via global \code{\link[=options]{options()}}:
 \itemize{
 \item The \code{author} argument can be set via \code{mrggsave.author}; defaults to
 \code{"mrggsave"}.
@@ -246,9 +247,10 @@ via global \code{\link[=options]{options()}}:
 set to \code{""}, resulting in no timestamp getting written into the output;
 setting the \code{mrggsave.timestamp} option to \code{TRUE} lets \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}}
 create and set these dates in the pdf output file.
-\item No other back-end arguments to \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}} are set by mrggsave
-and no other back-end arguments can be manipulated by the user.
 }
+
+No other back-end arguments to \code{\link[Cairo:Cairo]{Cairo::CairoPDF()}} are set by mrggsave and no
+other back-end arguments can be manipulated by the user.
 }
 
 \examples{
