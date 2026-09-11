@@ -1,9 +1,9 @@
-pandoc: 3.1.11
-pkgdown: 2.1.1
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   mrggsave: mrggsave.html
-last_built: 2025-03-21T13:28Z
+last_built: 2026-09-11T17:56Z
 urls:
   reference: https://metrumresearchgroup.github.io/mrggsave/reference
   article: https://metrumresearchgroup.github.io/mrggsave/articles
