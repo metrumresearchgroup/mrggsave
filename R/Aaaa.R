@@ -1,4 +1,4 @@
-#' @importFrom grDevices pdf dev.off graphics.off postscript
+#' @importFrom grDevices pdf dev.off postscript
 #' @importFrom ggplot2 theme margin ggplotGrob last_plot
 #' @importFrom gridExtra grid.arrange arrangeGrob marrangeGrob
 #' @importFrom grid gpar
@@ -15,10 +15,6 @@ NULL
 
 .global <- new.env()
 .global$SEP <- "-"
-
-# See metrics-device.R
-dev_state <- new.env(parent = emptyenv())
-dev_state$usr <- NULL
 
 #' Change the output file name separator
 #'

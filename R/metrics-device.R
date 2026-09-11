@@ -6,10 +6,8 @@
 # current makes the layout - and so the bytes written to the file - the same
 # either way.
 #
-# The device that was current on entry is recorded in `dev_state` so that it can
-# be restored on exit.
-
-# dev_state environment is initialized in Aaaa.R
+# The device that was current on entry is recorded so that it can be restored
+# on exit.
 
 #' Open a device for measuring text
 #'
@@ -20,10 +18,8 @@
 #' @noRd
 open_metrics_device <- function() {
   usr_dev <- grDevices::dev.cur()
-  outermost <- is.null(dev_state$usr)
-  if(outermost) dev_state$usr <- usr_dev
   grDevices::pdf(NULL)
-  list(usr = usr_dev, metrics = grDevices::dev.cur(), outermost = outermost)
+  list(usr = usr_dev, metrics = grDevices::dev.cur())
 }
 
 #' Close a measuring device and restore the one that was in use
@@ -33,7 +29,6 @@ open_metrics_device <- function() {
 #' @md
 #' @noRd
 close_metrics_device <- function(state) {
-  if(state$outermost) dev_state$usr <- NULL
   if(state$metrics %in% grDevices::dev.list()) grDevices::dev.off(state$metrics)
   if(state$usr > 1) grDevices::dev.set(state$usr)
   invisible(NULL)
