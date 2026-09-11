@@ -9,8 +9,7 @@
   invokes the `Cairo::CairoPDF()` device; the output file is given a `.pdf` 
   extension. Any formal argument of `Cairo::CairoPDF()` can be passed through, 
   but "back-end" arguments cannot. Global options are exposed to let users
-  restore timestamps (`create.date` and `modify.date`) or to override the 
-  mrggsave `author` default (#64).
+  restore timestamps or override the mrggsave `author` default (#64).
 
 ## Deprecated functionality
 
