@@ -114,8 +114,9 @@
 #' Users can pass `dev = "CairoPDF"` to invoke Cairo-based pdf outputs via
 #' [Cairo::CairoPDF()].  Any formal argument can be passed through to the
 #' device call, but "back-end" arguments (passed through `...`) cannot.
-#' However, `author`, `create.date`, and `modify.date`, can be set by the user
-#' via global [options()]:
+#' By default, the `author`, `create.date`, and `modify.date` back-end arguments
+#' are set by mrggsave to enable reproducible outputs. These overrides can be
+#' tweaked or disabled via global [options()]:
 #'
 #' - The `author` argument can be set via `mrggsave.author`; defaults to
 #'   `"mrggsave"`.
@@ -124,8 +125,9 @@
 #'   set to `""`, resulting in no timestamp getting written into the output;
 #'   setting the `mrggsave.timestamp` option to `TRUE` lets [Cairo::CairoPDF()]
 #'   create and set these dates in the pdf output file.
-#' - No other back-end arguments to [Cairo::CairoPDF()] are set by mrggsave
-#'   and no other back-end arguments can be manipulated by the user.
+#'
+#' No other back-end arguments to [Cairo::CairoPDF()] are set by mrggsave and no
+#' other back-end arguments can be manipulated by the user.
 #'
 #' @seealso [mrggsave_list()]
 #'
