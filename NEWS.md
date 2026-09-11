@@ -1,5 +1,7 @@
 # mrggsave 1.0.0
 
+- mrggsave now requires R >= 4.1 (#58).
+
 - When using R 4.5.0 or greater, plots saved via the `pdf()` device are now
   written without timestamps or author information by default. Global options
   are included to enable the timestamp or to override the mrggsave `author` 
